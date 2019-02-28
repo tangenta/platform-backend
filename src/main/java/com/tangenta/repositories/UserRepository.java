@@ -1,6 +1,6 @@
 package com.tangenta.repositories;
 
-import com.tangenta.types.User;
+import com.tangenta.data.pojo.User;
 
 import java.util.List;
 

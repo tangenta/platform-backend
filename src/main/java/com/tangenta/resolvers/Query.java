@@ -2,11 +2,9 @@ package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.tangenta.repositories.UserRepository;
-import com.tangenta.types.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tangenta.data.pojo.User;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
