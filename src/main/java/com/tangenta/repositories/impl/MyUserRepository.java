@@ -19,4 +19,10 @@ public class MyUserRepository implements UserRepository {
     public List<User> getAllUsers() {
         return mUserMapper.getAllUsers();
     }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return mUserMapper.findByUserName(username);
+    }
+
 }

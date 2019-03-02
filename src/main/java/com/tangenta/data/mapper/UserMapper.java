@@ -9,11 +9,12 @@ import java.util.List;
 public interface UserMapper {
 
     @Select("select * from user")
-    @Results(value = {
-            @Result(property = "studentId", column = "student_id", id = true),
-            @Result(property = "creationDate", column = "creation_time"),
-    })
+    @ResultMap("baseResultMap")
     List<User> getAllUsers();
+
+    @Select("select * from user where username = #{username}")
+    @ResultMap("baseResultMap")
+    User findByUserName(String username);
 //
 //    @Select("select * from user where student_id = #{id}")
 //    @Results(

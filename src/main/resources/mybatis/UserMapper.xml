@@ -11,7 +11,7 @@
 
     </resultMap>
 
-    <select id="getAllUsers" resultMap="baseResultMap">
-        select * from user
-    </select>
+    <!--<select id="getAllUsers" resultMap="baseResultMap">-->
+        <!--select * from user-->
+    <!--</select>-->
 </mapper>
