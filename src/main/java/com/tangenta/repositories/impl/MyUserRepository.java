@@ -21,7 +21,7 @@ public class MyUserRepository implements UserRepository {
     }
 
     @Override
-    public User findUserByUsername(String username) {
+    public User findByUsername(String username) {
         return mUserMapper.findByUserName(username);
     }
 
