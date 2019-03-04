@@ -2,7 +2,7 @@ package com.tangenta.data.pojo;
 
 public class User {
     private Long studentId;
-    private  String username;
+    private String username;
     private String password;
     private String email;
     private String creationDate;

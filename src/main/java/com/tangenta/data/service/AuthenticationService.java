@@ -2,8 +2,6 @@ package com.tangenta.data.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +18,16 @@ public class AuthenticationService {
     public boolean authenticate(Long studentId, String token) {
         if (token == null) return false;
         return tokens.get(studentId).equals(token);
+    }
+
+    public boolean hasLoggedIn(Long studentId) {
+        return tokens.containsKey(studentId);
+    }
+
+    public boolean logout(Long studentId, String token) {
+        if (!tokens.containsKey(studentId) || !tokens.get(studentId).equals(token)) return false;
+        tokens.remove(studentId);
+        return true;
     }
 
     public void clear() {

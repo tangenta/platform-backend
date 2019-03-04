@@ -1,0 +1,9 @@
+
+type Post {
+    postId: Long!
+    publishTime: String!
+    content: String!
+    viewNumber: Long!
+    replyNumber: Long!
+    studentId: Long!
+}

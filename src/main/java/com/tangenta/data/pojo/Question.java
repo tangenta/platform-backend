@@ -3,7 +3,7 @@ package com.tangenta.data.pojo;
 public class Question {
     private Long questionId;
     private String description;
-    private Integer type;
+    private QuestionType type;
     private String correctAnswer;
     private String answerDescription;
     private Boolean isPass;
@@ -11,7 +11,7 @@ public class Question {
 
     public Question() {}
 
-    public Question(Long questionId, String description, Integer type,
+    public Question(Long questionId, String description, QuestionType type,
                     String correctAnswer, String answerDescription, Boolean isPass,
                     Long belongToStudentId) {
         this.questionId = questionId;
@@ -31,7 +31,7 @@ public class Question {
         return description;
     }
 
-    public Integer getType() {
+    public QuestionType getType() {
         return type;
     }
 

@@ -24,10 +24,4 @@ public class Application {
                 .add(LoginPayload.class)
                 .add(ErrorContainer.class);
     }
-//
-//    @Bean
-//    UserMapper userMapper(SqlSessionFactory sqlSessionFactory) {
-//        SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
-//        return sessionTemplate.getMapper(UserMapper.class);
-//    }
 }

@@ -1,0 +1,16 @@
+enum QuestionType {
+    Lilunjichu,
+    Jilvxing,
+    Jiazhiguan,
+    Daodepingjia,
+    Sixiangxianjinxing
+}
+
+type Question {
+    questionId: Long!
+    description: String!
+    type: QuestionType!
+    correctAnswer: String!
+    isPass: Boolean!
+    belongToStudentId: Long!
+}
