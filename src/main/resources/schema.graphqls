@@ -2,12 +2,22 @@
 type Query {
     users: [User!]!
     posts: [Post!]!
-    questions: [Question!]!
+#    questions(class: QuestionClassification, number: Int!): [Question!]!
 }
 
 type Mutation {
-    login(username: String!, password: String!): LoginResult
-    logout(sutdentId: Int!): Boolean
+    login(username: String!, password: String!): LoginResult!
+    logout(sutdentId: Int!): Boolean!
+    register(username: String!, password: String!, email: String!): RegisterResult
+
+    # TODO: implement
+#    createQuestion(): Question!
+#    createPost(): Post!
+
+#    handInAnswers(answers: [Answer!]!)
+#    postComment()
+#    postPost()
+#    deletePost()
 }
 
 schema {
@@ -21,7 +31,12 @@ type ErrorContainer {
 
 type LoginPayload {
     user: User!
-    token: String
+    token: String!
+}
+
+type RegisterPayload {
+    token: String!
 }
 
 union LoginResult = LoginPayload | ErrorContainer
+union RegisterResult = RegisterPayload | ErrorContainer

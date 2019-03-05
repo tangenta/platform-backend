@@ -5,24 +5,38 @@ import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public class MyUserRepository implements UserRepository {
-    private final UserMapper mUserMapper;
+    private final UserMapper userMapper;
 
     public MyUserRepository(UserMapper userMapper) {
-        mUserMapper = userMapper;
+        this.userMapper = userMapper;
     }
 
     @Override
     public List<User> getAllUsers() {
-        return mUserMapper.getAllUsers();
+        return userMapper.getAllUsers();
     }
 
     @Override
     public User findByUsername(String username) {
-        return mUserMapper.findByUserName(username);
+        return userMapper.findByUserName(username);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userMapper.findByEmail(email);
+    }
+
+    @Override
+    public void createUser(User partialUser) {
+        userMapper.createUser(partialUser.getUsername(),
+                partialUser.getPassword(),
+                partialUser.getEmail(),
+                new Date().toString());
     }
 
 }

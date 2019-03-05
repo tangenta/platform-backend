@@ -16,4 +16,12 @@ public interface UserMapper {
     @ResultMap("baseResultMap")
     User findByUserName(String username);
 
+    @Select("select * from user where username = #{email}")
+    @ResultMap("baseResultMap")
+    User findByEmail(String email);
+
+    void createUser(@Param("username") String username,
+                    @Param("password") String password,
+                    @Param("email") String email,
+                    @Param("creationDate") String creationDate);
 }

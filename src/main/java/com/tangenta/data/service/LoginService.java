@@ -27,19 +27,13 @@ public class LoginService {
         User user = userRepository.findByUsername(username);
         System.out.println(user);
         if (user == null) {
-            List<String> messages = new LinkedList<>();
-            messages.add("找不到该用户名");
-            return new ErrorContainer(messages);
+            return new ErrorContainer("找不到该用户名");
         }
         if (!user.getPassword().equals(password)) {
-            List<String> messages = new LinkedList<>();
-            messages.add("密码不正确");
-            return new ErrorContainer(messages);
+            return new ErrorContainer("密码不正确");
         }
         if (authenticationService.hasLoggedIn(user.getStudentId())) {
-            List<String> messages = new LinkedList<>();
-            messages.add("该用户已经登录");
-            return new ErrorContainer(messages);
+            return new ErrorContainer("该用户已经登录");
         }
         String token = authenticationService.allocateToken(user.getStudentId());
         return new LoginPayload(user, token);

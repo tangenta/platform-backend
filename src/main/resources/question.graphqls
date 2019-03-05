@@ -1,4 +1,4 @@
-enum QuestionType {
+enum QuestionClassification {
     Lilunjichu,
     Jilvxing,
     Jiazhiguan,
@@ -6,11 +6,26 @@ enum QuestionType {
     Sixiangxianjinxing
 }
 
+enum QuestionType {
+    SingleChoice,
+    MultiChoice,
+    TrueOrFalse,
+    BlanksFilling,
+}
+
 type Question {
     questionId: Long!
     description: String!
-    type: QuestionType!
+    type: QuestionClassification!
+}
+
+type Answer {
+    questionId: Long!
+    answer: String!
+}
+
+type Feedback {
+    questionId: Long!
+    answerDescription: String!
     correctAnswer: String!
-    isPass: Boolean!
-    belongToStudentId: Long!
 }

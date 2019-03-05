@@ -6,4 +6,12 @@ type Post {
     viewNumber: Long!
     replyNumber: Long!
     studentId: Long!
+    title: String!
+}
+
+type Comment {
+    postId: Long!
+    username: String!
+    content: String!
+    creationTime: String!
 }

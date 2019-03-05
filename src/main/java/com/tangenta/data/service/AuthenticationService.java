@@ -2,12 +2,15 @@ package com.tangenta.data.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class AuthenticationService {
-    private static ConcurrentHashMap<Long, String> tokens = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Long, String> tokens = new ConcurrentHashMap<>();
 
     public String allocateToken(Long forStudentId) {
         String newToken = UUID.randomUUID().toString();
@@ -16,8 +19,9 @@ public class AuthenticationService {
     }
 
     public boolean authenticate(Long studentId, String token) {
-        if (token == null) return false;
-        return tokens.get(studentId).equals(token);
+        String studentToken = tokens.get(studentId);
+        if (studentToken == null) return false;
+        return studentToken.equals(token);
     }
 
     public boolean hasLoggedIn(Long studentId) {
