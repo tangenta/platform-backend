@@ -3,12 +3,14 @@ package com.tangenta.repositories.impl;
 import com.tangenta.data.mapper.UserMapper;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
+@Profile("dev")
 public class MyUserRepository implements UserRepository {
     private final UserMapper userMapper;
 
