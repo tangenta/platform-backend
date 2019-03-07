@@ -44,7 +44,6 @@ class MyBatisConnectionFactory {
 
     static {
         try {
-
             String resource = "config-test.xml";
             Reader reader = Resources.getResourceAsReader(resource);
 

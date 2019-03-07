@@ -25,7 +25,6 @@ public class LoginService {
 
     public LoginResult login(String username, String password) {
         User user = userRepository.findByUsername(username);
-        System.out.println(user);
         if (user == null) {
             return new ErrorContainer("找不到该用户名");
         }

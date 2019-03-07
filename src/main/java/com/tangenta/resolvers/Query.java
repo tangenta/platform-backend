@@ -36,6 +36,12 @@ public class Query implements GraphQLQueryResolver {
         return securityService.filterUsersByToken(rawAllUsers, authToken);
     }
 
+    public User user(String username, DataFetchingEnvironment env) {
+        String authToken = Utils.getAuthToken(env).orElse("");
+        User rawUser = userRepository.findByUsername(username);
+        return securityService.filterUserByToken(rawUser, authToken);
+    }
+
     public List<Post> posts() {
         return postRepository.getAllPosts();
     }

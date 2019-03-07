@@ -3,12 +3,13 @@ type Query {
     users: [User!]!
     posts: [Post!]!
 #    questions(class: QuestionClassification, number: Int!): [Question!]!
+    user(username: String!): User!
 }
 
 type Mutation {
     login(username: String!, password: String!): LoginResult!
     logout(sutdentId: Int!): Boolean!
-    register(username: String!, password: String!, email: String!): RegisterResult
+    register(username: String!, password: String!, email: String!): RegisterResult!
 
     # TODO: implement
 #    createQuestion(): Question!
