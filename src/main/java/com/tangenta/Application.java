@@ -1,6 +1,7 @@
 package com.tangenta;
 
 import org.apache.ibatis.session.Configuration;
+import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 
 @SpringBootApplication
@@ -30,6 +37,7 @@ public class Application implements WebMvcConfigurer {
     ServletWebServerFactory servletWebServerFactory(){
         return new TomcatServletWebServerFactory();
     }
+
 
 //    @Bean
 //    SchemaParserDictionary schemaParserDictionary() {
