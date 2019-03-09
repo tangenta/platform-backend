@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class RegisterService {
     private static final String REGISTER_LINK = "http://localhost:4000/register?token=";
+    // TODO: clear register tokens in time interval
     private static ConcurrentMap<String, User> registeringGuys = new ConcurrentHashMap<>();
     private UserRepository userRepository;
     private MailService mailService;

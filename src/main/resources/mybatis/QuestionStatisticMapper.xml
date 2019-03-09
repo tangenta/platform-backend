@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangenta.data.mapper.QuestionStatisticMapper" >
+    <!--<cache />-->
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.mybatis.QuestionStatistic" >
+        <id column="student_id" property="studentId" jdbcType="NUMERIC" />
+        <result column="classification" property="classification" jdbcType="NUMERIC"
+                typeHandler="com.tangenta.data.typeHandler.QuestionClassificationTypeHandler" />
+        <result column="type" property="type" jdbcType="NUMERIC"
+                typeHandler="com.tangenta.data.typeHandler.QuestionTypeTypeHandler"/>
+        <result column="correct" property="correct" jdbcType="NUMERIC" />
+        <result column="total" property="total" jdbcType="NUMERIC" />
+    </resultMap>
+
+    <select id="findByKeys" resultMap="baseResultMap">
+        select * from question_statistic where student_id = #{id}
+                                           and classification = #{class}
+                                           and type = #{type}
+    </select>
+
+    <insert id="insert">
+        insert into question_statistic (student_id, classification, type, total, correct)
+        VALUE (#{id}, #{class}, #{type}, #{total}, #{correct})
+    </insert>
+
+    <update id="update">
+        update question_statistic
+        set total = #{total}, correct = #{correct}
+        where student_id = #{id}
+            and classification = #{class}
+            and type = #{type}
+    </update>
+</mapper>

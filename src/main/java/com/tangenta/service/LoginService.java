@@ -1,16 +1,13 @@
 package com.tangenta.data.service;
 
 import com.tangenta.data.pojo.User;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.UserRepository;
-import com.tangenta.types.ErrorContainer;
 import com.tangenta.types.LoginPayload;
-import com.tangenta.types.LoginResult;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,16 +20,16 @@ public class LoginService {
         this.authenticationService = authenticationService;
     }
 
-    public LoginResult login(String username, String password) {
+    public LoginPayload login(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            return new ErrorContainer("找不到该用户名");
+            throw new BusinessException("找不到该用户名");
         }
         if (!user.getPassword().equals(password)) {
-            return new ErrorContainer("密码不正确");
+            throw new BusinessException("密码不正确");
         }
         if (authenticationService.hasLoggedIn(user.getStudentId())) {
-            return new ErrorContainer("该用户已经登录");
+            throw new BusinessException("该用户已经登录");
         }
         String token = authenticationService.allocateToken(user.getStudentId());
         return new LoginPayload(user, token);

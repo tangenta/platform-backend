@@ -17,7 +17,7 @@ public class ValidationService {
 
     public boolean isDuplicateUsername(String username) {
         User u1 = userRepository.findByUsername(username);
-        logger.info("username " + username + (u1 == null ? "not exists" : "exist"));
+        logger.info("username " + username + (u1 == null ? " not exists" : "exist"));
         return u1 != null;
     }
 
