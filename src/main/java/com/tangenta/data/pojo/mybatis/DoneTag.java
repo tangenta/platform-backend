@@ -5,6 +5,8 @@ public class DoneTag {
     private Long questionId;
     private String doneDate;
 
+    public DoneTag() {}
+
     public DoneTag(Long studentId, Long questionId, String doneDate) {
         this.studentId = studentId;
         this.questionId = questionId;

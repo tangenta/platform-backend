@@ -1,5 +1,7 @@
 package com.tangenta;
 
+import org.apache.ibatis.session.Configuration;
+import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,14 +21,6 @@ public class Application implements WebMvcConfigurer {
         SpringApplication.run(Application.class, args);
     }
 
-//    @Bean
-//    SchemaParserDictionary schemaParserDictionary() {
-//        return new SchemaParserDictionary()
-//                .add(LoginPayload.class)
-//                .add(RegisterPayload.class)
-//                .add(ErrorContainer.class);
-//    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
@@ -36,6 +30,14 @@ public class Application implements WebMvcConfigurer {
     ServletWebServerFactory servletWebServerFactory(){
         return new TomcatServletWebServerFactory();
     }
+
+//    @Bean
+//    SchemaParserDictionary schemaParserDictionary() {
+//        return new SchemaParserDictionary()
+//                .add(LoginPayload.class)
+//                .add(RegisterPayload.class)
+//                .add(ErrorContainer.class);
+//    }
 
     //    @Override
 //    public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -55,5 +57,16 @@ public class Application implements WebMvcConfigurer {
 //    @Override
 //    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 //        configurer.enable();
+//    }
+//
+//    @Bean
+//    ConfigurationCustomizer myBatisConfigurationCustomizer() {
+//        return new ConfigurationCustomizer() {
+//            @Override
+//            public void customize(Configuration configuration) {
+//                org.apache.ibatis.logging.LogFactory.useLog4JLogging();
+//
+//            }
+//        };
 //    }
 }
