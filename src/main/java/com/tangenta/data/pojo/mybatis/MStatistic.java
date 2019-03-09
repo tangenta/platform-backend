@@ -13,6 +13,8 @@ public class MStatistic {
     private Long answerQuestionNumber;
     private Long answerQuestionScore;
 
+    public MStatistic() {}
+
     public MStatistic(Long studentId, Long offlineLearningTime, Long onlineLearningTime,
                       Long postQuestionNumber, Long passQuestionNumber, Double attendanceRate,
                       Double paperScore, Double homeworkScore, Double annualScore,

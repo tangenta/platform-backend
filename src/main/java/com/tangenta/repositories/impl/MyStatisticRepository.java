@@ -11,12 +11,14 @@ import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 import com.tangenta.repositories.StatisticRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
+@Profile("dev")
 public class MyStatisticRepository implements StatisticRepository {
     private static Logger logger = LoggerFactory.getLogger(MyStatisticRepository.class);
     private StatisticMapper statisticMapper;

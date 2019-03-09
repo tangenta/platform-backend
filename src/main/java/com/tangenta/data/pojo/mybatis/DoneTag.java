@@ -1,13 +1,15 @@
 package com.tangenta.data.pojo.mybatis;
 
+import java.util.Date;
+
 public class DoneTag {
     private Long studentId;
     private Long questionId;
-    private String doneDate;
+    private Date doneDate;
 
     public DoneTag() {}
 
-    public DoneTag(Long studentId, Long questionId, String doneDate) {
+    public DoneTag(Long studentId, Long questionId, Date doneDate) {
         this.studentId = studentId;
         this.questionId = questionId;
         this.doneDate = doneDate;
@@ -21,7 +23,7 @@ public class DoneTag {
         return questionId;
     }
 
-    public String getDoneDate() {
+    public Date getDoneDate() {
         return doneDate;
     }
 }
