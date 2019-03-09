@@ -2,7 +2,7 @@ package com.tangenta.types;
 
 import com.tangenta.data.pojo.User;
 
-public class LoginPayload implements LoginResult {
+public class LoginPayload {
     private final User user;
     private final String token;
 

@@ -1,6 +1,7 @@
-package com.tangenta.data.service;
+package com.tangenta.service;
 
 import com.tangenta.data.pojo.User;
+import com.tangenta.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;

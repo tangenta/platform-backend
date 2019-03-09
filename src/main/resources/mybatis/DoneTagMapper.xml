@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangenta.data.mapper.DoneTagMapper" >
+    <!--<cache />-->
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.mybatis.DoneTag" >
+        <id column="student_id" property="studentId" jdbcType="NUMERIC" />
+        <result column="question_id" property="questionId" jdbcType="NUMERIC" />
+        <result column="done_date" property="doneDate" jdbcType="DATE" />
+    </resultMap>
+
+
+    <select id="findByStudentAndQuestion" resultMap="baseResultMap">
+        select * from donetag where student_id = #{studentId} and question_id = #{questionId}
+    </select>
+
+    <insert id="insert">
+        insert into donetag value (#{studentId}, #{questionId}, #{doneDate})
+    </insert>
+
+</mapper>

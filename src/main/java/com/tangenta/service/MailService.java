@@ -1,4 +1,4 @@
-package com.tangenta.data.service;
+package com.tangenta.service;
 
 import org.springframework.stereotype.Service;
 

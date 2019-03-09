@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangenta.data.mapper.StatisticMapper" >
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.mybatis.MStatistic" >
+        <id column="student_id" property="studentId" jdbcType="NUMERIC" />
+        <result column="offlineLearningTime" property="offlineLearningTime" jdbcType="NUMERIC" />
+        <result column="onlineLearningTime" property="onlineLearningTime" jdbcType="NUMERIC"/>
+        <result column="postQuestionNumber" property="postQuestionNumber" jdbcType="NUMERIC" />
+        <result column="passQuestionNumber" property="passQuestionNumber" jdbcType="NUMERIC" />
+        <result column="attendenceRate" property="attendanceRate" jdbcType="NUMERIC" />
+        <result column="paperScore" property="paperScore" jdbcType="NUMERIC" />
+        <result column="homeworkScore" property="homeworkScore" jdbcType="NUMERIC"/>
+        <result column="annualScore" property="annualScore" jdbcType="NUMERIC"/>
+        <result column="answerQuestionNumber" property="answerQuestionNumber" jdbcType="NUMERIC"/>
+        <result column="answerQuestionScore" property="answerQuestionScore" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <select id="getByStudentId" resultMap="baseResultMap">
+        select * from statistic where student_id = #{studentId}
+    </select>
+</mapper>

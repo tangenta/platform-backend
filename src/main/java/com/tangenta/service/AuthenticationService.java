@@ -1,9 +1,8 @@
-package com.tangenta.data.service;
+package com.tangenta.service;
 
+import com.tangenta.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -32,6 +31,10 @@ public class AuthenticationService {
         if (!tokens.containsKey(studentId) || !tokens.get(studentId).equals(token)) return false;
         tokens.remove(studentId);
         return true;
+    }
+
+    public void ensureLoggedIn(Long studentId) {
+        if (!hasLoggedIn(studentId)) throw new BusinessException("用户尚未登录");
     }
 
     public void clear() {

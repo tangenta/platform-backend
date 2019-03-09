@@ -1,6 +1,6 @@
 package com.tangenta.data.pojo;
 
-public enum QuestionType {
+public enum QuestionClassification {
     Lilunjichu,
     Jilvxing,
     Jiazhiguan,

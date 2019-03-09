@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tangenta.data.mapper.QuestionMapper" >
     <!--<cache />-->
-    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.Question" >
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.mybatis.MQuestion" >
         <id column="question_id" property="questionId" jdbcType="NUMERIC" />
         <result column="question_description" property="description" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="NUMERIC"
@@ -11,7 +11,15 @@
         <result column="answer_description" property="answerDescription" jdbcType="VARCHAR" />
         <result column="ispass" property="isPass" jdbcType="CHAR" />
         <result column="Student_id" property="belongToStudentId" jdbcType="NUMERIC" />
-
+        <result column="classification" property="classification" jdbcType="NUMERIC"
+                typeHandler="com.tangenta.data.typeHandler.QuestionClassificationTypeHandler"/>
     </resultMap>
 
+    <select id="getQuestionsByClassAndType" resultMap="baseResultMap">
+        select * from question where classification = #{classification} and type = #{type}
+    </select>
+
+    <select id="getById" resultMap="baseResultMap">
+        select * from question where question_id = #{id}
+    </select>
 </mapper>

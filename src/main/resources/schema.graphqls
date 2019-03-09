@@ -2,14 +2,20 @@
 type Query {
     users: [User!]!
     posts: [Post!]!
-#    questions(class: QuestionClassification, number: Int!): [Question!]!
+
     user(username: String!): User!
+
+    randomQuestion(class: QuestionClassification, type: QuestionType): Question!
+
+    #    questions(class: QuestionClassification!, number: Int!): [Question!]!
 }
 
 type Mutation {
-    login(username: String!, password: String!): LoginResult!
-    logout(sutdentId: Int!): Boolean!
-    register(username: String!, password: String!, email: String!): RegisterResult!
+    login(username: String!, password: String!): LoginPayload!
+    logout(studentId: Int!): Boolean!
+    register(username: String!, password: String!, email: String!): Boolean!
+
+    validateAnswer(studentId: Int!, questionId: Int!, answer: String!): Feedback!
 
     # TODO: implement
 #    createQuestion(): Question!
@@ -26,18 +32,9 @@ schema {
     mutation: Mutation
 }
 
-type ErrorContainer {
-    messages: [String!]!
-}
-
 type LoginPayload {
     user: User!
+    # Token is used for authentication
     token: String!
 }
 
-type RegisterPayload {
-    token: String!
-}
-
-union LoginResult = LoginPayload | ErrorContainer
-union RegisterResult = RegisterPayload | ErrorContainer

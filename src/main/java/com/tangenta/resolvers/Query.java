@@ -2,10 +2,12 @@ package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.tangenta.data.pojo.Post;
-import com.tangenta.data.pojo.Question;
-import com.tangenta.data.service.SecurityService;
+import com.tangenta.data.pojo.QuestionClassification;
+import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.graphql.Question;
+import com.tangenta.service.QuestionService;
+import com.tangenta.service.SecurityService;
 import com.tangenta.repositories.PostRepository;
-import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
 import com.tangenta.utils.Utils;
@@ -19,15 +21,16 @@ public class Query implements GraphQLQueryResolver {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final QuestionRepository questionRepository;
+
     private final SecurityService securityService;
+    private final QuestionService questionService;
 
     public Query(UserRepository userRepository, PostRepository postRepository,
-                 QuestionRepository questionRepository, SecurityService securityService) {
+                 SecurityService securityService, QuestionService questionService) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
-        this.questionRepository = questionRepository;
         this.securityService = securityService;
+        this.questionService = questionService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -46,7 +49,12 @@ public class Query implements GraphQLQueryResolver {
         return postRepository.getAllPosts();
     }
 
-    public List<Question> questions() {
-        return questionRepository.getAllQuestions();
+//    public List<MQuestion> questions() {
+//        return questionRepository.getAllQuestions();
+//    }
+
+    public Question randomQuestion(QuestionClassification classification, QuestionType type) {
+        return questionService.randomQuestion(classification, type);
     }
+
 }

@@ -1,6 +1,6 @@
 package com.tangenta.controller;
 
-import com.tangenta.data.service.RegisterService;
+import com.tangenta.service.RegisterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

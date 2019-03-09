@@ -3,31 +3,32 @@
 <mapper namespace="com.tangenta.data.mapper.QuestionStatisticMapper" >
     <!--<cache />-->
     <resultMap id="baseResultMap" type="com.tangenta.data.pojo.mybatis.QuestionStatistic" >
-        <id column="student_id" property="studentId" jdbcType="NUMERIC" />
-        <result column="classification" property="classification" jdbcType="NUMERIC"
+        <id column="student_id" property="studentId" jdbcType="NUMERIC" javaType="Long" />
+        <result column="classification" property="classification" jdbcType="NUMERIC" javaType="com.tangenta.data.pojo.QuestionClassification"
                 typeHandler="com.tangenta.data.typeHandler.QuestionClassificationTypeHandler" />
-        <result column="type" property="type" jdbcType="NUMERIC"
+        <result column="type" property="type" jdbcType="NUMERIC" javaType="com.tangenta.data.pojo.QuestionType"
                 typeHandler="com.tangenta.data.typeHandler.QuestionTypeTypeHandler"/>
-        <result column="correct" property="correct" jdbcType="NUMERIC" />
-        <result column="total" property="total" jdbcType="NUMERIC" />
+        <result column="correct" property="correct" jdbcType="NUMERIC" javaType="Long" />
+        <result column="total" property="total" jdbcType="NUMERIC" javaType="Long"/>
     </resultMap>
 
-    <select id="findByKeys" resultMap="baseResultMap">
+    <select id="findByKeys" resultType="com.tangenta.data.pojo.mybatis.QuestionStatistic">
         select * from question_statistic where student_id = #{id}
-                                           and classification = #{class}
-                                           and type = #{type}
+                                           and classification = #{class, typeHandler=QuestionClassHandler}
+                                           and type = #{type, typeHandler=QuestionTypeHandler}
     </select>
 
-    <insert id="insert">
+    <insert id="insert" parameterType="com.tangenta.data.pojo.mybatis.QuestionStatistic">
         insert into question_statistic (student_id, classification, type, total, correct)
-        VALUE (#{id}, #{class}, #{type}, #{total}, #{correct})
+        VALUE (#{qs.studentId}, #{qs.classification, typeHandler=QuestionClassHandler},
+               #{qs.type, typeHandler=QuestionTypeHandler}, #{qs.total}, #{qs.correct})
     </insert>
 
-    <update id="update">
+    <update id="update" parameterType="com.tangenta.data.pojo.mybatis.QuestionStatistic">
         update question_statistic
-        set total = #{total}, correct = #{correct}
-        where student_id = #{id}
-            and classification = #{class}
-            and type = #{type}
+        set total = #{qs.total}, correct = #{qs.correct}
+        where student_id = #{qs.studentId}
+            and classification = #{qs.classification, typeHandler=QuestionClassHandler}
+            and type = #{qs.type, typeHandler=QuestionTypeHandler}
     </update>
 </mapper>

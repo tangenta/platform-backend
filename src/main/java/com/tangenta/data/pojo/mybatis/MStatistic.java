@@ -1,6 +1,6 @@
-package com.tangenta.data.pojo;
+package com.tangenta.data.pojo.mybatis;
 
-public class Statistic {
+public class MStatistic {
     private Long studentId;
     private Long offlineLearningTime;
     private Long onlineLearningTime;
@@ -13,10 +13,10 @@ public class Statistic {
     private Long answerQuestionNumber;
     private Long answerQuestionScore;
 
-    public Statistic(Long studentId, Long offlineLearningTime, Long onlineLearningTime,
-                     Long postQuestionNumber, Long passQuestionNumber, Double attendanceRate,
-                     Double paperScore, Double homeworkScore, Double annualScore,
-                     Long answerQuestionNumber, Long answerQuestionScore) {
+    public MStatistic(Long studentId, Long offlineLearningTime, Long onlineLearningTime,
+                      Long postQuestionNumber, Long passQuestionNumber, Double attendanceRate,
+                      Double paperScore, Double homeworkScore, Double annualScore,
+                      Long answerQuestionNumber, Long answerQuestionScore) {
         this.studentId = studentId;
         this.offlineLearningTime = offlineLearningTime;
         this.onlineLearningTime = onlineLearningTime;

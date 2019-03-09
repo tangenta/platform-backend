@@ -1,4 +1,4 @@
-package com.tangenta.data.service;
+package com.tangenta.service;
 
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
@@ -31,6 +31,7 @@ public class QuestionService {
 
     public Feedback validateAnswer(Long questionId, String answer) {
         MQuestion q = questionRepository.findQuestionById(questionId);
+        if (q == null) throw new BusinessException("该题目不存在");
 
         // TODO: build a robust validation system
         boolean isCorrect = q.getCorrectAnswer().equals(answer);

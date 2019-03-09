@@ -1,4 +1,4 @@
-package com.tangenta.controller;
+package com.tangenta;
 
 import com.tangenta.exceptions.BusinessException;
 import graphql.ExceptionWhileDataFetching;

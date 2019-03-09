@@ -16,16 +16,12 @@ enum QuestionType {
 type Question {
     questionId: Long!
     description: String!
-    type: QuestionClassification!
-}
-
-type Answer {
-    questionId: Long!
-    answer: String!
+    classification: QuestionClassification!
 }
 
 type Feedback {
     questionId: Long!
+    correct: Boolean!
     answerDescription: String!
     correctAnswer: String!
 }

@@ -1,19 +1,12 @@
 package com.tangenta;
 
-import com.coxautodev.graphql.tools.SchemaParserDictionary;
-import com.tangenta.types.ErrorContainer;
-import com.tangenta.types.LoginPayload;
-import com.tangenta.types.RegisterPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,13 +19,13 @@ public class Application implements WebMvcConfigurer {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    SchemaParserDictionary schemaParserDictionary() {
-        return new SchemaParserDictionary()
-                .add(LoginPayload.class)
-                .add(RegisterPayload.class)
-                .add(ErrorContainer.class);
-    }
+//    @Bean
+//    SchemaParserDictionary schemaParserDictionary() {
+//        return new SchemaParserDictionary()
+//                .add(LoginPayload.class)
+//                .add(RegisterPayload.class)
+//                .add(ErrorContainer.class);
+//    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

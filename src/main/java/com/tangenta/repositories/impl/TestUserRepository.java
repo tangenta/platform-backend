@@ -1,6 +1,7 @@
 package com.tangenta.repositories.impl;
 
 import com.tangenta.data.pojo.User;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.UserRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,7 @@ public class TestUserRepository implements UserRepository {
 
     @Override
     public List<User> getAllUsers() {
+//        throw new BusinessException("test");
         return allUsers;
     }
 

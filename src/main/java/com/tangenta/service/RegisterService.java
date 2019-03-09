@@ -1,6 +1,7 @@
-package com.tangenta.data.service;
+package com.tangenta.service;
 
 import com.tangenta.data.pojo.User;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class RegisterService {
     private static final String REGISTER_LINK = "http://localhost:4000/register?token=";
-    // TODO: clear register tokens in time interval
+    // TODO: clear register tokens in a time period
     private static ConcurrentMap<String, User> registeringGuys = new ConcurrentHashMap<>();
     private UserRepository userRepository;
     private MailService mailService;
@@ -22,23 +23,26 @@ public class RegisterService {
         this.mailService = mailService;
     }
 
-    public String beginRegisterProcess(String username, String password, String email)
-        throws MessagingException {
+    public void beginRegisterProcess(String username, String password, String email) {
         User fakeUser = new User(-1L, username, password, email, "not-set");
         String token = UUID.randomUUID().toString();
-        mailService.send_email(email, REGISTER_LINK + token);
+        try {
+            mailService.send_email(email, REGISTER_LINK + token);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new BusinessException("邮件发送失败");
+        }
         registeringGuys.put(token, fakeUser);
-        return token;
-    }
-
-    public boolean registerTokenIsValid(String token) {
-        return registeringGuys.containsKey(token);
     }
 
     public boolean validateRegisterToken(String token) {
-        if (!registeringGuys.containsKey(token)) return false;
+        if (!registerTokenIsValid(token)) return false;
         userRepository.createUser(registeringGuys.get(token));
         registeringGuys.remove(token);
         return true;
+    }
+
+    private boolean registerTokenIsValid(String token) {
+        return registeringGuys.containsKey(token);
     }
 }
