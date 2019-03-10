@@ -11,10 +11,10 @@
         </filter>
     </appender>
 
-    <logger name="com.tangenta.data.mapper" level="DEBUG">
-        <level value="DEBUG"/>
-        <appender-ref ref="consoleAppender" />
-    </logger>
+    <!--<logger name="com.tangenta.data.mapper" level="DEBUG">-->
+        <!--<level value="DEBUG"/>-->
+        <!--<appender-ref ref="consoleAppender" />-->
+    <!--</logger>-->
 
     <root>
         <level value="INFO" />

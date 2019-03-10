@@ -9,10 +9,8 @@ public class Utils {
     public static Optional<String> getAuthToken(DataFetchingEnvironment env) {
         GraphQLContext graphQLContext = env.getContext();
         return graphQLContext.getHttpServletRequest()
-                .map(req -> {
-                    String token = req.getHeader("Authorization");
-                    return token.replace("Bearer ", "");
-                });
+                .map(req -> req.getHeader("Authorization"))
+                .map(authHeader -> authHeader.replace("Bearer ", ""));
     }
 
     public static <T, U> T mapToSameIndex(U[] src, U obj, T[] dest) {
