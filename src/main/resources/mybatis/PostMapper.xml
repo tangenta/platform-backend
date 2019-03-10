@@ -4,6 +4,7 @@
     <!--<cache />-->
     <resultMap id="baseResultMap" type="com.tangenta.data.pojo.Post" >
         <id column="post_id" property="postId" jdbcType="NUMERIC" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
         <result column="publishTime" property="publishTime" jdbcType="DATE" />
         <result column="content" property="content" jdbcType="VARCHAR" />
         <result column="viewNumber" property="viewNumber" jdbcType="NUMERIC" />
@@ -12,4 +13,8 @@
 
     </resultMap>
 
+    <insert id="createPost" parameterType="com.tangenta.data.pojo.Post">
+        insert into post (title, content, viewNumber, replyNumber, Student_id, publishTime)
+        value (#{p.title}, #{p.content}, #{p.viewNumber}, #{p.replyNumber}, #{p.studentId}, #{p.publishTime});
+    </insert>
 </mapper>

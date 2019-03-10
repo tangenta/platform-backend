@@ -14,9 +14,11 @@ import java.util.List;
 @Service
 public class QuestionService {
     private QuestionRepository questionRepository;
+    private ValidationService validationService;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, ValidationService validationService) {
         this.questionRepository = questionRepository;
+        this.validationService = validationService;
     }
 
     public Question randomQuestion(QuestionClassification classification, QuestionType type) {
@@ -30,9 +32,9 @@ public class QuestionService {
     }
 
     public Feedback validateAnswer(Long questionId, String answer) {
-        MQuestion q = questionRepository.findQuestionById(questionId);
-        if (q == null) throw new BusinessException("该题目不存在");
+        validationService.ensureQuestionExistence(questionId);
 
+        MQuestion q = questionRepository.findQuestionById(questionId);
         // TODO: build a robust validation system
         boolean isCorrect = q.getCorrectAnswer().equals(answer);
         return new Feedback(questionId, isCorrect, q.getAnswerDescription(), q.getCorrectAnswer());
@@ -41,12 +43,14 @@ public class QuestionService {
     public void createQuestion(Long studentId, String questionDescription, QuestionType type,
                                QuestionClassification classification, String correctAnswer,
                                String answerDescription) {
-        if (questionDescription.trim().isEmpty()) throw new BusinessException("题目描述不能为空");
-        if (correctAnswer.trim().isEmpty()) throw new BusinessException("正确答案不能为空");
+        String trimQuestion = questionDescription.trim();
+        String trimAnswer = correctAnswer.trim();
+        validationService.ensureNonEmptyString(trimQuestion, "问题描述");
+        validationService.ensureNonEmptyString(trimAnswer, "正确答案");
 
-        MQuestion partialQuestion = new MQuestion(-1L, questionDescription, type, classification,
-                correctAnswer, answerDescription, false, studentId);
-
+        MQuestion partialQuestion = new MQuestion(-1L, trimQuestion, type, classification,
+                trimAnswer, answerDescription, false, studentId);
+        questionRepository.createQuestion(partialQuestion);
     }
 
     // TODO: maybe show similar question

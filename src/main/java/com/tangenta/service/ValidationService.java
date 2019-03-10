@@ -1,7 +1,9 @@
 package com.tangenta.service;
 
 import com.tangenta.data.pojo.User;
+import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.exceptions.BusinessException;
+import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +16,11 @@ import javax.mail.internet.InternetAddress;
 public class ValidationService {
     private static Logger logger = LoggerFactory.getLogger(ValidationService.class);
     private UserRepository userRepository;
+    private QuestionRepository questionRepository;
 
-    public ValidationService(UserRepository userRepository) {
+    public ValidationService(UserRepository userRepository, QuestionRepository questionRepository) {
         this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
     }
 
     public void ensureValidEmailAddress(String email) {
@@ -42,5 +46,18 @@ public class ValidationService {
     private boolean isDuplicateEmail(String email) {
         User u2 = userRepository.findByEmail(email);
         return u2 != null;
+    }
+
+    public void ensureQuestionExistence(Long questionId) {
+        MQuestion q = questionRepository.findQuestionById(questionId);
+        if (q == null) throw new BusinessException("该题目不存在");
+    }
+
+    public void ensureNonEmptyString(String obj, String itemDescription) {
+        if (obj.isEmpty()) throw new BusinessException(itemDescription + "不能为空");
+    }
+
+    public void ensureUserExistence(String username) {
+        if (userRepository.findByUsername(username) == null) throw new BusinessException("找不到该用户名");
     }
 }

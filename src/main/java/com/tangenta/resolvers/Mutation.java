@@ -5,12 +5,9 @@ import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
 import com.tangenta.service.*;
-import com.tangenta.exceptions.BusinessException;
-import com.tangenta.types.*;
+import com.tangenta.types.LoginPayload;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
-
-import javax.mail.MessagingException;
 
 @Component
 public class Mutation implements GraphQLMutationResolver {
@@ -20,14 +17,19 @@ public class Mutation implements GraphQLMutationResolver {
     private AuthenticationService authenticationService;
     private QuestionService questionService;
     private StatisticService statisticService;
+    private PostService postService;
 
-    public Mutation(LoginService loginService, RegisterService registerService, ValidationService validationService, AuthenticationService authenticationService, QuestionService questionService, StatisticService statisticService) {
+    public Mutation(LoginService loginService, RegisterService registerService,
+                    ValidationService validationService, AuthenticationService authenticationService,
+                    QuestionService questionService, StatisticService statisticService,
+                    PostService postService) {
         this.loginService = loginService;
         this.registerService = registerService;
         this.validationService = validationService;
         this.authenticationService = authenticationService;
         this.questionService = questionService;
         this.statisticService = statisticService;
+        this.postService = postService;
     }
 
     public LoginPayload login(String username, String password) {
@@ -60,6 +62,12 @@ public class Mutation implements GraphQLMutationResolver {
 
         questionService.createQuestion(studentId, questionDescription, type,
                 classification, correctAnswer, answerDescription);
+        return true;
+    }
+
+    public boolean createPost(Long studentId, String title, String content) {
+        authenticationService.ensureLoggedIn(studentId);
+        postService.createPost(studentId, title, content);
         return true;
     }
 

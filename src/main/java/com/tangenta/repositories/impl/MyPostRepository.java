@@ -21,4 +21,9 @@ public class MyPostRepository implements PostRepository {
     public List<Post> getAllPosts() {
         return postMapper.getAllPosts();
     }
+
+    @Override
+    public void createPost(Post partialPost) {
+        postMapper.createPost(partialPost);
+    }
 }

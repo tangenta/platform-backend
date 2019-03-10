@@ -8,18 +8,26 @@ type Query {
     randomQuestion(class: QuestionClassification, type: QuestionType): Question!
 
     #    questions(class: QuestionClassification!, number: Int!): [Question!]!
+
+#    viewPost(postId: Int!): Post!
 }
 
 type Mutation {
     login(username: String!, password: String!): LoginPayload!
     logout(studentId: Int!): Boolean!
+
+    # always return true if success, otherwise throw an error
     register(username: String!, password: String!, email: String!): Boolean!
 
     validateAnswer(studentId: Int!, questionId: Int!, answer: String!): Feedback!
+
+    # always return true if success, otherwise throw an error
     createQuestion(studentId: Int!, questionDescription: String!,
         type: QuestionType!, classification: QuestionClassification!,
         correctAnswer: String!, answerDescription: String!
     ): Boolean!
+
+    createPost(studentId: Int!, title: String!, content: String!): Boolean!
 
     # TODO: implement
 #    createQuestion(): Question!

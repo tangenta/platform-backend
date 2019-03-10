@@ -45,6 +45,7 @@ public class Query implements GraphQLQueryResolver {
         return securityService.filterUserByToken(rawUser, authToken);
     }
 
+    // TODO: pagination
     public List<Post> posts() {
         return postRepository.getAllPosts();
     }

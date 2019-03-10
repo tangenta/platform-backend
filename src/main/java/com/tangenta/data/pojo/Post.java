@@ -1,8 +1,10 @@
 package com.tangenta.data.pojo;
 
+import java.util.Date;
+
 public class Post {
     private Long postId;
-    private String publishTime;
+    private Date publishTime;
     private String content;
     private Long viewNumber;
     private Long replyNumber;
@@ -11,7 +13,7 @@ public class Post {
 
     public Post() {}
 
-    public Post(Long postId, String publishTime, String content,
+    public Post(Long postId, Date publishTime, String content,
                 Long viewNumber, Long replyNumber, Long studentId, String title) {
         this.postId = postId;
         this.publishTime = publishTime;
@@ -26,7 +28,7 @@ public class Post {
         return postId;
     }
 
-    public String getPublishTime() {
+    public Date getPublishTime() {
         return publishTime;
     }
 
