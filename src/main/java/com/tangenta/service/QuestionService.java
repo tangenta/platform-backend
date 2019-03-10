@@ -37,4 +37,17 @@ public class QuestionService {
         boolean isCorrect = q.getCorrectAnswer().equals(answer);
         return new Feedback(questionId, isCorrect, q.getAnswerDescription(), q.getCorrectAnswer());
     }
+
+    public void createQuestion(Long studentId, String questionDescription, QuestionType type,
+                               QuestionClassification classification, String correctAnswer,
+                               String answerDescription) {
+        if (questionDescription.trim().isEmpty()) throw new BusinessException("题目描述不能为空");
+        if (correctAnswer.trim().isEmpty()) throw new BusinessException("正确答案不能为空");
+
+        MQuestion partialQuestion = new MQuestion(-1L, questionDescription, type, classification,
+                correctAnswer, answerDescription, false, studentId);
+
+    }
+
+    // TODO: maybe show similar question
 }

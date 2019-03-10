@@ -33,4 +33,9 @@ public class MyQuestionRepository implements QuestionRepository {
     public MQuestion findQuestionById(Long questionId) {
         return questionMapper.getById(questionId);
     }
+
+    @Override
+    public void createQuestion(MQuestion partialQuestion) {
+        questionMapper.createQuestion(partialQuestion);
+    }
 }

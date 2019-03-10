@@ -10,4 +10,5 @@ public interface QuestionRepository {
     List<MQuestion> getAllQuestions();
     List<MQuestion> getQuestionsByClassAndType(QuestionClassification classification, QuestionType type);
     MQuestion findQuestionById(Long questionId);
+    void createQuestion(MQuestion partialQuestion);
 }

@@ -21,6 +21,7 @@ public class TestQuestionRepository implements QuestionRepository {
                 QuestionClassification.Daodepingjia, "whatever",
                 "answer description2", true, 3L));
     }};
+    private static Long questionId = 3L;
 
     @Override
     public List<MQuestion> getAllQuestions() {
@@ -35,5 +36,12 @@ public class TestQuestionRepository implements QuestionRepository {
     @Override
     public MQuestion findQuestionById(Long questionId) {
         return null;
+    }
+
+    @Override
+    public void createQuestion(MQuestion q) {
+        allQuestions.add(new MQuestion(questionId++, q.getDescription(), q.getType(),
+                q.getClassification(), q.getCorrectAnswer(), q.getAnswerDescription(),
+                q.getPass(), q.getBelongToStudentId()));
     }
 }

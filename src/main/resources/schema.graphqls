@@ -16,6 +16,10 @@ type Mutation {
     register(username: String!, password: String!, email: String!): Boolean!
 
     validateAnswer(studentId: Int!, questionId: Int!, answer: String!): Feedback!
+    createQuestion(studentId: Int!, questionDescription: String!,
+        type: QuestionType!, classification: QuestionClassification!,
+        correctAnswer: String!, answerDescription: String!
+    ): Boolean!
 
     # TODO: implement
 #    createQuestion(): Question!

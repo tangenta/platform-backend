@@ -8,7 +8,11 @@ import java.util.Optional;
 public class Utils {
     public static Optional<String> getAuthToken(DataFetchingEnvironment env) {
         GraphQLContext graphQLContext = env.getContext();
-        return graphQLContext.getHttpServletRequest().map(req -> req.getHeader("Authorization"));
+        return graphQLContext.getHttpServletRequest()
+                .map(req -> {
+                    String token = req.getHeader("Authorization");
+                    return token.replace("Bearer ", "");
+                });
     }
 
     public static <T, U> T mapToSameIndex(U[] src, U obj, T[] dest) {

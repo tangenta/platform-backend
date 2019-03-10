@@ -1,6 +1,8 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.tangenta.data.pojo.QuestionClassification;
+import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
 import com.tangenta.service.*;
 import com.tangenta.exceptions.BusinessException;
@@ -49,6 +51,16 @@ public class Mutation implements GraphQLMutationResolver {
         Feedback fb =  questionService.validateAnswer(questionId, answer);
         statisticService.storeUsersFeedback(studentId, fb);
         return fb;
+    }
+
+    public boolean createQuestion(Long studentId, String questionDescription, QuestionType type,
+                                  QuestionClassification classification, String correctAnswer,
+                                  String answerDescription) {
+        authenticationService.ensureLoggedIn(studentId);
+
+        questionService.createQuestion(studentId, questionDescription, type,
+                classification, correctAnswer, answerDescription);
+        return true;
     }
 
 }

@@ -18,4 +18,6 @@ public interface QuestionMapper {
             @Param("type") QuestionType type);
 
     MQuestion getById(@Param("id") Long questionId);
+
+    void createQuestion(@Param("q") MQuestion question);
 }
