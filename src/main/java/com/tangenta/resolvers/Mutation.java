@@ -9,6 +9,9 @@ import com.tangenta.types.LoginPayload;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+
 @Component
 public class Mutation implements GraphQLMutationResolver {
     private LoginService loginService;
@@ -57,11 +60,11 @@ public class Mutation implements GraphQLMutationResolver {
 
     public boolean createQuestion(Long studentId, String questionDescription, QuestionType type,
                                   QuestionClassification classification, String correctAnswer,
-                                  String answerDescription) {
+                                  String answerDescription, Optional<List<String>> choices) {
         authenticationService.ensureLoggedIn(studentId);
 
         questionService.createQuestion(studentId, questionDescription, type,
-                classification, correctAnswer, answerDescription);
+                classification, correctAnswer, answerDescription, choices);
         return true;
     }
 

@@ -5,30 +5,52 @@ import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
 import com.tangenta.data.pojo.graphql.Question;
 import com.tangenta.data.pojo.mybatis.MQuestion;
+import com.tangenta.data.pojo.mybatis.QuestionSolution;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
+import com.tangenta.repositories.QuestionSolutionRepository;
+import com.tangenta.utils.QuestionIdGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import static com.tangenta.data.pojo.QuestionType.MultiChoice;
+import static com.tangenta.data.pojo.QuestionType.SingleChoice;
 
 @Service
 public class QuestionService {
+    private Random random = new Random();
+
     private QuestionRepository questionRepository;
     private ValidationService validationService;
+    private QuestionIdGenerator questionIdGenerator;
+    private QuestionSolutionRepository questionSolutionRepository;
 
-    public QuestionService(QuestionRepository questionRepository, ValidationService validationService) {
+    public QuestionService(QuestionRepository questionRepository,
+                           ValidationService validationService, QuestionIdGenerator questionIdGenerator, QuestionSolutionRepository questionSolutionRepository) {
         this.questionRepository = questionRepository;
         this.validationService = validationService;
+        this.questionIdGenerator = questionIdGenerator;
+        this.questionSolutionRepository = questionSolutionRepository;
     }
 
-    public Question randomQuestion(QuestionClassification classification, QuestionType type) {
-        List<MQuestion> questions = questionRepository.getQuestionsByClassAndType(classification, type);
+    public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
+        List<MQuestion> questions = questionRepository.getQuestionsByClassAndType(classifications, types);
         // TODO: filter visited questions
-        // TODO: implement random
 
-        if (questions.isEmpty()) throw new BusinessException("题库已经没有题了");
-        MQuestion q = questions.iterator().next();
-        return new Question(q.getQuestionId(), q.getDescription(), q.getClassification());
+        MQuestion q = questions.stream().skip(random.nextInt(questions.size()))
+                .findFirst().orElseThrow(() -> new BusinessException("题库已经没有题了"));
+
+        List<String> solutions = null;
+        if (q.getType().equals(SingleChoice) || q.getType().equals(MultiChoice)) {
+            List<QuestionSolution> questionSolution = questionSolutionRepository.getByQuestionId(q.getQuestionId());
+            solutions  = questionSolution.stream().map(QuestionSolution::getSolution).collect(Collectors.toList());
+        }
+        Optional<List<String>> solution = Optional.ofNullable(solutions);
+        return new Question(q.getQuestionId(), q.getDescription(), solution, q.getClassification());
     }
 
     public Feedback validateAnswer(Long questionId, String answer) {
@@ -42,15 +64,27 @@ public class QuestionService {
 
     public void createQuestion(Long studentId, String questionDescription, QuestionType type,
                                QuestionClassification classification, String correctAnswer,
-                               String answerDescription) {
+                               String answerDescription, Optional<List<String>> solutions) {
         String trimQuestion = questionDescription.trim();
         String trimAnswer = correctAnswer.trim();
         validationService.ensureNonEmptyString(trimQuestion, "问题描述");
         validationService.ensureNonEmptyString(trimAnswer, "正确答案");
 
-        MQuestion partialQuestion = new MQuestion(-1L, trimQuestion, type, classification,
+        Long newQuestionId = questionIdGenerator.generateId();
+
+        MQuestion partialQuestion = new MQuestion(newQuestionId, trimQuestion, type, classification,
                 trimAnswer, answerDescription, false, studentId);
         questionRepository.createQuestion(partialQuestion);
+
+        if (type.equals(SingleChoice) || type.equals(MultiChoice)) {
+            List<String> nonNullSolutions = solutions.filter(s -> !s.isEmpty())
+                    .orElseThrow(() -> new BusinessException("选择题必须包含选项"));
+
+            if (!nonNullSolutions.contains(correctAnswer)) throw new BusinessException("正确答案必须包含在选项中");
+            nonNullSolutions.forEach(s -> {
+                questionSolutionRepository.createQuestionSolution(newQuestionId, s);
+            });
+        }
     }
 
     // TODO: maybe show similar question

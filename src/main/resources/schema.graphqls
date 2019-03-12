@@ -5,10 +5,13 @@ type Query {
 
     user(username: String!): User!
 
-    randomQuestion(class: QuestionClassification, type: QuestionType): Question!
+    randomQuestion(classes: [QuestionClassification!]!, types: [QuestionType!]!): Question!
 
     #    questions(class: QuestionClassification!, number: Int!): [Question!]!
 
+    # show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method
+    # default SortMethod is sorting by publish time
+    showPosts(number: Int!, from: Int!, sortBy: SortMethod): [Post!]!
 #    viewPost(postId: Int!): Post!
 }
 
@@ -24,7 +27,7 @@ type Mutation {
     # always return true if success, otherwise throw an error
     createQuestion(studentId: Int!, questionDescription: String!,
         type: QuestionType!, classification: QuestionClassification!,
-        correctAnswer: String!, answerDescription: String!
+        correctAnswer: String!, answerDescription: String!, solutions: [String!]
     ): Boolean!
 
     createPost(studentId: Int!, title: String!, content: String!): Boolean!

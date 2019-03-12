@@ -3,6 +3,7 @@ package com.tangenta.repositories.impl;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.data.pojo.QuestionClassification;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -14,12 +15,12 @@ import java.util.List;
 @Profile("dev-test")
 public class TestQuestionRepository implements QuestionRepository {
     private static List<MQuestion> allQuestions = new LinkedList<MQuestion>() {{
-        add(new MQuestion(1L, "how are you?", QuestionType.MultiChoice,
-                QuestionClassification.Daodepingjia, "I am fine",
-                "answer description1", true, 1L));
-        add(new MQuestion(2L, "r u ok?", QuestionType.SingleChoice,
-                QuestionClassification.Daodepingjia, "whatever",
-                "answer description2", true, 3L));
+        add(new MQuestion(1L, "Which object is red?", QuestionType.SingleChoice,
+                QuestionClassification.Daodepingjia, "Apple",
+                "Apple is red.", true, 1L));
+        add(new MQuestion(2L, "Which word's length is < 10?", QuestionType.MultiChoice,
+                QuestionClassification.Daodepingjia, "Egg, Fxxx, Good, High",
+                "answer description2", true, 2L));
     }};
     private static Long questionId = 3L;
 
@@ -29,8 +30,8 @@ public class TestQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public List<MQuestion> getQuestionsByClassAndType(QuestionClassification classification, QuestionType type) {
-        return allQuestions;
+    public List<MQuestion> getQuestionsByClassAndType(List<QuestionClassification> classifications, List<QuestionType> types) {
+        throw new BusinessException("Not yet support");
     }
 
     @Override

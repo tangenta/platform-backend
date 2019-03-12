@@ -1,8 +1,7 @@
 package com.tangenta;
 
-import org.apache.ibatis.session.Configuration;
-import org.jetbrains.annotations.NotNull;
-import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
+import com.tangenta.data.mapper.QuestionIdFetchingMapper;
+import com.tangenta.utils.QuestionIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -10,14 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 
 @SpringBootApplication
@@ -38,8 +31,15 @@ public class Application implements WebMvcConfigurer {
         return new TomcatServletWebServerFactory();
     }
 
+    @Bean
+    QuestionIdGenerator initQuestionIdGeneratorDev(QuestionIdFetchingMapper questionIdFetchingMapper) {
+        QuestionIdGenerator ret = new QuestionIdGenerator(questionIdFetchingMapper);
+        logger.info("QuestionIdGenerator set up. Current max id: {}", ret.currentId());
+        return ret;
+    }
 
-//    @Bean
+
+    //    @Bean
 //    SchemaParserDictionary schemaParserDictionary() {
 //        return new SchemaParserDictionary()
 //                .add(LoginPayload.class)

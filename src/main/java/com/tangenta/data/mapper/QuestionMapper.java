@@ -17,6 +17,10 @@ public interface QuestionMapper {
             @Param("classification") QuestionClassification classification,
             @Param("type") QuestionType type);
 
+    List<MQuestion> getQuestionByClass(@Param("class") QuestionClassification classification);
+
+    List<MQuestion> getQuestionsByType(@Param("type") QuestionType type);
+
     MQuestion getById(@Param("id") Long questionId);
 
     void createQuestion(@Param("q") MQuestion question);

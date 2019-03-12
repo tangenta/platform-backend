@@ -5,6 +5,7 @@ import com.tangenta.data.pojo.Post;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Question;
+import com.tangenta.data.pojo.graphql.SortMethod;
 import com.tangenta.service.QuestionService;
 import com.tangenta.service.SecurityService;
 import com.tangenta.repositories.PostRepository;
@@ -13,8 +14,12 @@ import com.tangenta.data.pojo.User;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
+import static com.tangenta.data.pojo.graphql.SortMethod.*;
 
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class Query implements GraphQLQueryResolver {
@@ -45,7 +50,6 @@ public class Query implements GraphQLQueryResolver {
         return securityService.filterUserByToken(rawUser, authToken);
     }
 
-    // TODO: pagination
     public List<Post> posts() {
         return postRepository.getAllPosts();
     }
@@ -54,8 +58,26 @@ public class Query implements GraphQLQueryResolver {
 //        return questionRepository.getAllQuestions();
 //    }
 
-    public Question randomQuestion(QuestionClassification classification, QuestionType type) {
-        return questionService.randomQuestion(classification, type);
+    public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
+        return questionService.randomQuestion(classifications, types);
+    }
+
+    public List<Post> showPosts(int numbers, Long from, SortMethod sortBy) {
+        List<Post> allPosts = postRepository.getAllPosts();
+        Comparator<Post> comparator;
+        switch (sortBy) {
+            case ReplyNumber: comparator = Comparator.comparingLong(Post::getReplyNumber).thenComparing(Post::getPostId); break;
+            case ViewNumber: comparator = Comparator.comparingLong(Post::getViewNumber).thenComparing(Post::getPostId); break;
+            case Time:
+            default: comparator = Comparator.comparing(Post::getPublishTime).thenComparing(Post::getPostId);
+        }
+        allPosts.sort(comparator);
+        int index = 0;
+        for (Post post: allPosts) {
+            if (post.getPostId().equals(from)) break;
+            index++;
+        }
+        return allPosts.stream().skip(index).limit(numbers).collect(Collectors.toList());
     }
 
 }

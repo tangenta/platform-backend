@@ -9,6 +9,12 @@ type Post {
     title: String!
 }
 
+enum SortMethod {
+    Time,
+    ViewNumber,
+    ReplyNumber,
+}
+
 type Comment {
     postId: Long!
     username: String!

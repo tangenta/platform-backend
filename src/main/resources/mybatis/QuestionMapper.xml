@@ -19,15 +19,23 @@
         select * from question where classification = #{classification} and type = #{type}
     </select>
 
+    <select id="getQuestionsByClass" resultMap="baseResultMap">
+        select * from question where classification = #{class}
+    </select>
+
+    <select id="getQuestionsByType" resultMap="baseResultMap">
+        select * from question where type = #{type}
+    </select>
+
     <select id="getById" resultMap="baseResultMap">
         select * from question where question_id = #{id}
     </select>
 
     <insert id="createQuestion" parameterType="com.tangenta.data.pojo.mybatis.MQuestion">
-        insert into question (question_description, type, correct_answer,
+        insert into question (question_id, question_description, type, correct_answer,
                               answer_description, ispass, Student_id, classification)
-            value(#{q.description}, #{q.type, typeHandler=QuestionTypeHandler}, #{q.correctAnswer},
-                  #{q.answerDescription}, #{q.isPass}, #{q.belongToStudentId},
+            value(#{q.questionId}, #{q.description}, #{q.type, typeHandler=QuestionTypeHandler},
+                  #{q.correctAnswer}, #{q.answerDescription}, #{q.isPass}, #{q.belongToStudentId},
                   #{q.classification, typeHandler=QuestionClassHandler})
     </insert>
 </mapper>

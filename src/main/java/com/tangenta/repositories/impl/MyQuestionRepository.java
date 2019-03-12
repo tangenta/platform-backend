@@ -8,7 +8,9 @@ import com.tangenta.repositories.QuestionRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Profile("dev")
@@ -25,8 +27,15 @@ public class MyQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public List<MQuestion> getQuestionsByClassAndType(QuestionClassification classification, QuestionType type) {
-        return questionMapper.getQuestionsByClassAndType(classification, type);
+    public List<MQuestion> getQuestionsByClassAndType(List<QuestionClassification> classifications, List<QuestionType> types) {
+        List<MQuestion> result = new LinkedList<>();
+        for (QuestionType type: types) {
+            List<MQuestion> specificTypeQuestion = questionMapper.getQuestionsByType(type);
+            result.addAll(specificTypeQuestion.stream()
+                    .filter(question -> classifications.contains(question.getClassification()))
+                    .collect(Collectors.toList()));
+        }
+        return result;
     }
 
     @Override

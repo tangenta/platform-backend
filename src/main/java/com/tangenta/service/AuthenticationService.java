@@ -104,6 +104,7 @@ public class AuthenticationService {
 
     public void ensureLoggedIn(Long studentId) {
         if (!hasLoggedIn(studentId)) throw new BusinessException("用户尚未登录");
+        // TODO: authenticate
     }
 
 

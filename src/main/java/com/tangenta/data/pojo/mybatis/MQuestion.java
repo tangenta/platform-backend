@@ -3,6 +3,8 @@ package com.tangenta.data.pojo.mybatis;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 
+import java.util.List;
+
 public class MQuestion {
     private Long questionId;
     private String description;
@@ -60,4 +62,5 @@ public class MQuestion {
     public QuestionClassification getClassification() {
         return classification;
     }
+
 }
