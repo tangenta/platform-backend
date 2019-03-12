@@ -1,6 +1,7 @@
 package com.tangenta;
 
 import com.tangenta.data.mapper.QuestionIdFetchingMapper;
+import com.tangenta.repositories.impl.TestQuestionRepository;
 import com.tangenta.utils.QuestionIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -32,14 +34,21 @@ public class Application implements WebMvcConfigurer {
     }
 
     @Bean
+    @Profile("dev")
     QuestionIdGenerator initQuestionIdGeneratorDev(QuestionIdFetchingMapper questionIdFetchingMapper) {
-        QuestionIdGenerator ret = new QuestionIdGenerator(questionIdFetchingMapper);
+        QuestionIdGenerator ret = new QuestionIdGenerator(questionIdFetchingMapper.getMaxQuestionId());
         logger.info("QuestionIdGenerator set up. Current max id: {}", ret.currentId());
         return ret;
     }
 
+    @Bean
+    @Profile("dev-test")
+    QuestionIdGenerator initQuestionIdGeneratorDevTest() {
+        return new QuestionIdGenerator(TestQuestionRepository.currentMaxLength);
+    }
 
-    //    @Bean
+
+//    @Bean
 //    SchemaParserDictionary schemaParserDictionary() {
 //        return new SchemaParserDictionary()
 //                .add(LoginPayload.class)

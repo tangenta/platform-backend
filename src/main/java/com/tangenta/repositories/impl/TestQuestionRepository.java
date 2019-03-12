@@ -3,8 +3,8 @@ package com.tangenta.repositories.impl;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.data.pojo.QuestionClassification;
-import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
+import com.tangenta.utils.QuestionIdGenerator;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 @Profile("dev-test")
 public class TestQuestionRepository implements QuestionRepository {
+    public static final Long currentMaxLength = 3L;
     private static List<MQuestion> allQuestions = new LinkedList<MQuestion>() {{
         add(new MQuestion(1L, "Which object is red?", QuestionType.SingleChoice,
                 QuestionClassification.Daodepingjia, "Apple",
@@ -22,7 +23,11 @@ public class TestQuestionRepository implements QuestionRepository {
                 QuestionClassification.Daodepingjia, "Egg, Fxxx, Good, High",
                 "answer description2", true, 2L));
     }};
-    private static Long questionId = 3L;
+    private QuestionIdGenerator questionIdGenerator;
+
+    public TestQuestionRepository(QuestionIdGenerator questionIdGenerator) {
+        this.questionIdGenerator = questionIdGenerator;
+    }
 
     @Override
     public List<MQuestion> getAllQuestions() {
@@ -31,17 +36,21 @@ public class TestQuestionRepository implements QuestionRepository {
 
     @Override
     public List<MQuestion> getQuestionsByClassAndType(List<QuestionClassification> classifications, List<QuestionType> types) {
-        throw new BusinessException("Not yet support");
+        // TODO: not enough data
+        return allQuestions;
     }
 
     @Override
     public MQuestion findQuestionById(Long questionId) {
+        for (MQuestion q: allQuestions) {
+            if (q.getQuestionId().equals(questionId)) return q;
+        }
         return null;
     }
 
     @Override
     public void createQuestion(MQuestion q) {
-        allQuestions.add(new MQuestion(questionId++, q.getDescription(), q.getType(),
+        allQuestions.add(new MQuestion(questionIdGenerator.generateId(), q.getDescription(), q.getType(),
                 q.getClassification(), q.getCorrectAnswer(), q.getAnswerDescription(),
                 q.getPass(), q.getBelongToStudentId()));
     }

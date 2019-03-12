@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class QuestionIdGenerator {
     private static Logger logger = LoggerFactory.getLogger(QuestionIdGenerator.class);
     private final AtomicLong id;
-    public QuestionIdGenerator(QuestionIdFetchingMapper mapper) {
-        id = new AtomicLong(mapper.getMaxQuestionId());
+    public QuestionIdGenerator(Long currentMaxQuestionId) {
+        id = new AtomicLong(currentMaxQuestionId);
     }
 
     public Long generateId() {

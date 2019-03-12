@@ -18,6 +18,7 @@ type Question {
     description: String!
     solution: [String!]
     classification: QuestionClassification!
+    type: QuestionType!
 }
 
 type Feedback {

@@ -10,6 +10,8 @@ import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.QuestionSolutionRepository;
 import com.tangenta.utils.QuestionIdGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,7 @@ import static com.tangenta.data.pojo.QuestionType.SingleChoice;
 
 @Service
 public class QuestionService {
+    private static Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private Random random = new Random();
 
     private QuestionRepository questionRepository;
@@ -50,7 +53,8 @@ public class QuestionService {
             solutions  = questionSolution.stream().map(QuestionSolution::getSolution).collect(Collectors.toList());
         }
         Optional<List<String>> solution = Optional.ofNullable(solutions);
-        return new Question(q.getQuestionId(), q.getDescription(), solution, q.getClassification());
+        logger.info("show question: {} {}", q.getType(), q.getDescription());
+        return new Question(q.getQuestionId(), q.getDescription(), solution, q.getClassification(), q.getType());
     }
 
     public Feedback validateAnswer(Long questionId, String answer) {

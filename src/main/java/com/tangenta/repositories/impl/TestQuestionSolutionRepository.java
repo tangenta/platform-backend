@@ -1,13 +1,16 @@
 package com.tangenta.repositories.impl;
 
 import com.tangenta.data.pojo.mybatis.QuestionSolution;
-import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionSolutionRepository;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
+@Profile("dev-test")
 public class TestQuestionSolutionRepository implements QuestionSolutionRepository {
     private static List<QuestionSolution> solutions = new LinkedList<QuestionSolution>(){{
         add(new QuestionSolution(1L, "Apple"));
@@ -30,7 +33,7 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
 
     @Override
     public void createQuestionSolution(Long questionId, String solution) {
-
+        solutions.add(new QuestionSolution(questionId, solution));
     }
 
 }
