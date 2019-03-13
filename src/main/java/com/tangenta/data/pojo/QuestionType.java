@@ -2,7 +2,7 @@ package com.tangenta.data.pojo;
 
 public enum QuestionType {
     SingleChoice,
-    MultiChoice,
+    MultipleChoice,
     TrueOrFalse,
     BlanksFilling,
 }

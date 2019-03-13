@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static com.tangenta.data.pojo.QuestionType.MultiChoice;
+import static com.tangenta.data.pojo.QuestionType.MultipleChoice;
 import static com.tangenta.data.pojo.QuestionType.SingleChoice;
 
 @Service
@@ -48,7 +48,7 @@ public class QuestionService {
                 .findFirst().orElseThrow(() -> new BusinessException("题库已经没有题了"));
 
         List<String> solutions = null;
-        if (q.getType().equals(SingleChoice) || q.getType().equals(MultiChoice)) {
+        if (q.getType().equals(SingleChoice) || q.getType().equals(MultipleChoice)) {
             List<QuestionSolution> questionSolution = questionSolutionRepository.getByQuestionId(q.getQuestionId());
             solutions  = questionSolution.stream().map(QuestionSolution::getSolution).collect(Collectors.toList());
         }
@@ -80,7 +80,7 @@ public class QuestionService {
                 trimAnswer, answerDescription, false, studentId);
         questionRepository.createQuestion(partialQuestion);
 
-        if (type.equals(SingleChoice) || type.equals(MultiChoice)) {
+        if (type.equals(SingleChoice) || type.equals(MultipleChoice)) {
             List<String> nonNullSolutions = solutions.filter(s -> !s.isEmpty())
                     .orElseThrow(() -> new BusinessException("选择题必须包含选项"));
 

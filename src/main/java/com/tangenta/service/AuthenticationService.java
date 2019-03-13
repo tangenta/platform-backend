@@ -61,6 +61,15 @@ public class AuthenticationService {
         return newToken;
     }
 
+    public String reallocateToken(Long studentId) {
+        synchronized (lock) {
+            long time = idTokensMap.get(studentId).time;
+            idTokensMap.remove(studentId);
+            timeIdMap.remove(time);
+        }
+        return allocateToken(studentId);
+    }
+
     public boolean authenticate(Long studentId, String token) {
         TokenTimeTuple tuple;
         synchronized (lock) {

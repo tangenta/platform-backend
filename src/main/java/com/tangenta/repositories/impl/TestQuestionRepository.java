@@ -19,7 +19,7 @@ public class TestQuestionRepository implements QuestionRepository {
         add(new MQuestion(1L, "Which object is red?", QuestionType.SingleChoice,
                 QuestionClassification.Daodepingjia, "Apple",
                 "Apple is red.", true, 1L));
-        add(new MQuestion(2L, "Which word's length is < 10?", QuestionType.MultiChoice,
+        add(new MQuestion(2L, "Which word's length is < 10?", QuestionType.MultipleChoice,
                 QuestionClassification.Daodepingjia, "Egg, Fxxx, Good, High",
                 "answer description2", true, 2L));
     }};

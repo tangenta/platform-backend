@@ -18,7 +18,7 @@ public class QuestionTypeTypeHandler extends BaseTypeHandler<QuestionType> {
     private static Integer[] intTypes = {1, 2, 3, 4};
     private static QuestionType[] enumTypes = {
             SingleChoice,
-            MultiChoice,
+            MultipleChoice,
             TrueOrFalse,
             BlanksFilling,
     };

@@ -21,15 +21,15 @@ import static com.tangenta.data.pojo.QuestionType.*;
 @Profile("dev-test")
 public class TestStatisticRepository implements StatisticRepository {
     private static List<QuestionStatistic> mockQuestionStatistic = new LinkedList<QuestionStatistic>() {{
-        add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
-        add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
-        add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
+//        add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
+//        add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
+//        add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
     }};
 
     private static List<DoneTag> mockDoneTag = new LinkedList<DoneTag>() {{
-        add(new DoneTag(1L, 1L, new Date()));
-        add(new DoneTag(2L, 1L, new Date()));
-        add(new DoneTag(3L, 1L, new Date()));
+//        add(new DoneTag(1L, 1L, new Date()));
+//        add(new DoneTag(2L, 1L, new Date()));
+//        add(new DoneTag(3L, 1L, new Date()));
     }};
 
 

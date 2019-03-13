@@ -8,7 +8,7 @@ enum QuestionClassification {
 
 enum QuestionType {
     SingleChoice,
-    MultiChoice,
+    MultipleChoice,
     TrueOrFalse,
     BlanksFilling,
 }

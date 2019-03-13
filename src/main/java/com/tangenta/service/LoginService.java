@@ -28,10 +28,12 @@ public class LoginService {
         if (!user.getPassword().equals(password)) {
             throw new BusinessException("密码不正确");
         }
+        String token = null;
         if (authenticationService.hasLoggedIn(user.getStudentId())) {
-            throw new BusinessException("该用户已经登录");
+            token = authenticationService.reallocateToken(user.getStudentId());
+        } else {
+            token = authenticationService.allocateToken(user.getStudentId());
         }
-        String token = authenticationService.allocateToken(user.getStudentId());
         return new LoginPayload(user, token);
     }
 
