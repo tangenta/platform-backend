@@ -1,7 +1,6 @@
 
 type Query {
     users: [User!]!
-    posts: [Post!]!
 
     user(username: String!): User!
 
@@ -21,7 +20,7 @@ type Query {
     # show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method
     # default SortMethod is sorting by publish time
     showPosts(number: Int!, from: Int!, sortBy: SortMethod): [Post!]!
-#    viewPost(postId: Int!): Post!
+    viewPost(postId: Int!): Post!
 }
 
 type Mutation {

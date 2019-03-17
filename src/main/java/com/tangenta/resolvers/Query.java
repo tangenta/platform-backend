@@ -8,13 +8,10 @@ import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Question;
 import com.tangenta.data.pojo.graphql.SortMethod;
-import com.tangenta.service.AuthenticationService;
-import com.tangenta.service.QuestionService;
-import com.tangenta.service.SecurityService;
+import com.tangenta.service.*;
 import com.tangenta.repositories.PostRepository;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
-import com.tangenta.service.StatisticService;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.slf4j.Logger;
@@ -30,22 +27,22 @@ public class Query implements GraphQLQueryResolver {
     private static Logger logger = LoggerFactory.getLogger(Query.class);
 
     private final UserRepository userRepository;
-    private final PostRepository postRepository;
 
     private final SecurityService securityService;
     private final QuestionService questionService;
     private final AuthenticationService authenticationService;
     private final StatisticService statisticService;
+    private final PostService postService;
 
-    public Query(UserRepository userRepository, PostRepository postRepository,
+    public Query(UserRepository userRepository,
                  SecurityService securityService, QuestionService questionService,
-                 AuthenticationService authenticationService, StatisticService statisticService) {
+                 AuthenticationService authenticationService, StatisticService statisticService, PostService postService) {
         this.userRepository = userRepository;
-        this.postRepository = postRepository;
         this.securityService = securityService;
         this.questionService = questionService;
         this.authenticationService = authenticationService;
         this.statisticService = statisticService;
+        this.postService = postService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -60,14 +57,6 @@ public class Query implements GraphQLQueryResolver {
         return securityService.filterUserByToken(rawUser, authToken);
     }
 
-    public List<Post> posts(DataFetchingEnvironment env) {
-        String token = Utils.getAuthToken(env).orElse("");
-        return postRepository.getAllPosts().stream()
-                .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
-                        p.getViewNumber(), p.getReplyNumber(),
-                        securityService.filterUserByToken(userRepository.findById(p.getStudentId()), token), p.getTitle()))
-                .collect(Collectors.toList());
-    }
 
 //    public List<MQuestion> questions() {
 //        return questionRepository.getAllQuestions();
@@ -78,33 +67,24 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public List<Post> showPosts(int numbers, Long from, SortMethod sortBy, DataFetchingEnvironment env) {
-        List<MPost> allMPosts = postRepository.getAllPosts();
-        if (sortBy == null) sortBy = SortMethod.Time;
-
-        Comparator<MPost> comparator;
-        switch (sortBy) {
-            case ReplyNumber: comparator = Comparator.comparingLong(MPost::getReplyNumber).thenComparing(MPost::getPostId); break;
-            case ViewNumber: comparator = Comparator.comparingLong(MPost::getViewNumber).thenComparing(MPost::getPostId); break;
-            case Time:
-            default: comparator = Comparator.comparing(MPost::getPublishTime).thenComparing(MPost::getPostId);
-        }
-        allMPosts.sort(comparator);
-        int index = 0;
-        for (MPost mPost : allMPosts) {
-            if (mPost.getPostId().equals(from)) break;
-            index++;
-        }
+        List<Post> allMPosts = postService.allPost(numbers, from, sortBy);
 
         String token = Utils.getAuthToken(env).orElse("");
 
         return allMPosts.stream()
-                .skip(from.equals(0L) ? 0 : index + 1)
-                .limit(numbers)
                 .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
                         p.getViewNumber(), p.getReplyNumber(),
-                        securityService.filterUserByToken(userRepository.findById(p.getStudentId()), token),
+                        securityService.filterUserByToken(p.getUser(), token),
                         p.getTitle()))
                 .collect(Collectors.toList());
+    }
+
+    public Post viewPost(Long postId, DataFetchingEnvironment env) {
+        String token = Utils.getAuthToken(env).orElse("");
+        Post p = postService.viewPost(postId);
+        return new Post(p.getPostId(), p.getPublishTime(), p.getContent(), p.getViewNumber(),
+                p.getReplyNumber(), securityService.filterUserByToken(p.getUser(), token), p.getTitle());
+
     }
 
     public AnswerStatistic showAnswerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
