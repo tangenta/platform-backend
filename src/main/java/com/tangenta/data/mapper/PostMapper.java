@@ -18,8 +18,10 @@ public interface PostMapper {
     MPost findById(Long postId);
 
     @Delete("delete from post where post_id = #{postId}")
-    void deleteById(long postId);
+    void deleteById(@Param("postId") long postId);
 
     @Update("update post set title = #{title}, content = #{content} where post_id = #{postId}")
-    void update(Long postId, String title, String content);
+    void update(@Param("postId") Long postId,
+                @Param("title") String title,
+                @Param("content") String content);
 }

@@ -42,6 +42,8 @@ type Mutation {
 
     updatePost(studentId: Int!, postId: Int!, title: String!, content: String!): Boolean!
 
+    addComment(studentId: Int!, postId: Int!, content: String): Boolean!
+
     # TODO: implement
 
 #    postComment()

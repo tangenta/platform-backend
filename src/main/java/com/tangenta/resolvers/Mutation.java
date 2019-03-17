@@ -4,7 +4,6 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
-import com.tangenta.exceptions.BusinessException;
 import com.tangenta.service.*;
 import com.tangenta.types.LoginPayload;
 import graphql.schema.DataFetchingEnvironment;
@@ -26,11 +25,13 @@ public class Mutation implements GraphQLMutationResolver {
     private QuestionService questionService;
     private StatisticService statisticService;
     private PostService postService;
+    private CommentService commentService;
+
 
     public Mutation(LoginService loginService, RegisterService registerService,
                     ValidationService validationService, AuthenticationService authenticationService,
                     QuestionService questionService, StatisticService statisticService,
-                    PostService postService) {
+                    PostService postService, CommentService commentService) {
         this.loginService = loginService;
         this.registerService = registerService;
         this.validationService = validationService;
@@ -38,6 +39,7 @@ public class Mutation implements GraphQLMutationResolver {
         this.questionService = questionService;
         this.statisticService = statisticService;
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     public LoginPayload login(String username, String password) {
@@ -92,6 +94,14 @@ public class Mutation implements GraphQLMutationResolver {
         validationService.ensurePostBelongToStudent(postId, studentId);
 
         postService.updatePost(postId, title, content);
+        return true;
+    }
+
+    public boolean addComment(Long studentId, Long postId, String content) {
+        authenticationService.ensureLoggedIn(studentId);
+        validationService.ensurePostExistence(postId);
+
+        commentService.addComment(studentId, postId, content);
         return true;
     }
 
