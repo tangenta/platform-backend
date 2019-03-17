@@ -105,4 +105,13 @@ public class Mutation implements GraphQLMutationResolver {
         return true;
     }
 
+    public boolean deleteComment(Long studentId, Long commentId) {
+        authenticationService.ensureLoggedIn(studentId);
+        validationService.ensureCommentExistence(commentId);
+        validationService.ensureCommentBelongToStudent(studentId, commentId);
+
+        commentService.deleteComment(commentId);
+        return true;
+    }
+
 }

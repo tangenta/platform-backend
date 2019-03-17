@@ -10,38 +10,39 @@ type Query {
     ): Question!
 
     showAnswerStatistic(
-        studentId: Int!,
+        studentId: Long!,
         classes: [QuestionClassification!]!,
         types: [QuestionType!]!
     ): AnswerStatistic!
 
     # show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method
     # default SortMethod is sorting by publish time
-    showPosts(number: Int!, from: Int!, sortBy: SortMethod): [Post!]!
-    viewPost(postId: Int!): Post!
-    showComments(postId: Int!): [Comment!]!
+    showPosts(number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
+    viewPost(postId: Long!): Post!
+    showComments(postId: Long!): [Comment!]!
 }
 
 type Mutation {
     login(username: String!, password: String!): LoginPayload!
-    logout(studentId: Int!): Boolean!
+    logout(studentId: Long!): Boolean!
 
     # always return true if success, otherwise throw an error
     register(username: String!, password: String!, email: String!): Boolean!
 
-    validateAnswer(studentId: Int!, questionId: Int!, answer: String!): Feedback!
+    validateAnswer(studentId: Long!, questionId: Long!, answer: String!): Feedback!
 
     # always return true if success, otherwise throw an error
-    createQuestion(studentId: Int!, questionDescription: String!,
+    createQuestion(studentId: Long!, questionDescription: String!,
         type: QuestionType!, classification: QuestionClassification!,
         correctAnswer: String!, answerDescription: String!, solutions: [String!]
     ): Boolean!
 
-    createPost(studentId: Int!, title: String!, content: String!): Boolean!
-    deletePost(studentId: Int!, postId: Int!): Boolean!
-    updatePost(studentId: Int!, postId: Int!, title: String!, content: String!): Boolean!
+    createPost(studentId: Long!, title: String!, content: String!): Boolean!
+    deletePost(studentId: Long!, postId: Long!): Boolean!
+    updatePost(studentId: Long!, postId: Long!, title: String!, content: String!): Boolean!
 
-    addComment(studentId: Int!, postId: Int!, content: String): Boolean!
+    addComment(studentId: Long!, postId: Long!, content: String): Boolean!
+    deleteComment(studentId: Long!, commentId: Long!): Boolean!
 }
 
 schema {

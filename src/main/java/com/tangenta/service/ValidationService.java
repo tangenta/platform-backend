@@ -3,6 +3,7 @@ package com.tangenta.service;
 import com.tangenta.data.pojo.User;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.exceptions.BusinessException;
+import com.tangenta.repositories.CommentRepository;
 import com.tangenta.repositories.PostRepository;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.UserRepository;
@@ -19,11 +20,14 @@ public class ValidationService {
     private UserRepository userRepository;
     private QuestionRepository questionRepository;
     private PostRepository postRepository;
+    private CommentRepository commentRepository;
 
-    public ValidationService(UserRepository userRepository, QuestionRepository questionRepository, PostRepository postRepository) {
+    public ValidationService(UserRepository userRepository, QuestionRepository questionRepository,
+                             PostRepository postRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     public void ensureValidEmailAddress(String email) {
@@ -71,5 +75,15 @@ public class ValidationService {
     public void ensurePostBelongToStudent(Long postId, Long studentId) {
         if (!postRepository.findById(postId).getStudentId().equals(studentId))
             throw new BusinessException("帖子所有者不匹配");
+    }
+
+    public void ensureCommentExistence(Long commentId) {
+        if (commentRepository.findById(commentId) == null)
+            throw new BusinessException("评论不存在");
+    }
+
+    public void ensureCommentBelongToStudent(Long commentId, Long studentId) {
+        if (!commentRepository.findById(commentId).getStudentId().equals(studentId))
+            throw new BusinessException("评论所有者不匹配");
     }
 }

@@ -27,10 +27,14 @@ public class CommentService {
 
     public List<Comment> showComments(Long postId) {
         return commentRepository.showComments(postId).stream()
-                .map(mc -> new Comment(mc.getPostId(),
+                .map(mc -> new Comment(mc.getCommentId(), mc.getPostId(),
                         userRepository.findById(mc.getStudentId()).getUsername(),
                         mc.getContent(), mc.getCreationTime()))
                 .sorted(Comparator.comparing(Comment::getCreationTime))
                 .collect(Collectors.toList());
+    }
+
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

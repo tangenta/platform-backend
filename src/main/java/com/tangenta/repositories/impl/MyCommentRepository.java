@@ -27,4 +27,14 @@ public class MyCommentRepository implements CommentRepository {
     public List<MComment> showComments(Long postId) {
         return commentMapper.findByPostId(postId);
     }
+
+    @Override
+    public MComment findById(Long commentId) {
+        return commentMapper.findByCommentId(commentId);
+    }
+
+    @Override
+    public void deleteById(Long commentId) {
+        commentMapper.deleteComment(commentId);
+    }
 }

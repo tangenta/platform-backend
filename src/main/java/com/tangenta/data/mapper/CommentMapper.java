@@ -13,10 +13,18 @@ public interface CommentMapper {
     @ResultMap("baseResultMap")
     List<MComment> findByPostId(Long postId);
 
+    @Select("select * from comment where comment_id = #{commentId}")
+    @ResultMap("baseResultMap")
+    MComment findByCommentId(Long commentId);
+
     @Insert("insert into comment(student_id, content, post_id, creation_time) " +
             "value (#{studentId}, #{content}, #{postId}, #{creationTime})")
     void addComment(@Param("studentId") Long studentId,
                     @Param("postId") Long postId,
                     @Param("content") String content,
                     @Param("creationTime") Date creationTime);
+
+    @Delete("delete from comment where comment_id = #{commentID}")
+    void deleteComment(Long commentId);
+
 }

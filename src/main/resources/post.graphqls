@@ -16,6 +16,7 @@ enum SortMethod {
 }
 
 type Comment {
+    commentId: Long!
     postId: Long!
     username: String!
     content: String!

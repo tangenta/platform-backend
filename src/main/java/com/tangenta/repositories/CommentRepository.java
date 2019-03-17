@@ -8,4 +8,6 @@ import java.util.List;
 public interface CommentRepository {
     void addComment(Long studentId, Long postId, String content, Date creationDate);
     List<MComment> showComments(Long postId);
+    MComment findById(Long commentId);
+    void deleteById(Long commentId);
 }
