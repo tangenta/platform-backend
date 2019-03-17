@@ -1,15 +1,10 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.tangenta.data.pojo.graphql.AnswerStatistic;
-import com.tangenta.data.pojo.graphql.Post;
-import com.tangenta.data.pojo.mybatis.MPost;
+import com.tangenta.data.pojo.graphql.*;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
-import com.tangenta.data.pojo.graphql.Question;
-import com.tangenta.data.pojo.graphql.SortMethod;
 import com.tangenta.service.*;
-import com.tangenta.repositories.PostRepository;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
 import com.tangenta.utils.Utils;
@@ -18,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,16 +27,18 @@ public class Query implements GraphQLQueryResolver {
     private final AuthenticationService authenticationService;
     private final StatisticService statisticService;
     private final PostService postService;
+    private final CommentService commentService;
 
     public Query(UserRepository userRepository,
                  SecurityService securityService, QuestionService questionService,
-                 AuthenticationService authenticationService, StatisticService statisticService, PostService postService) {
+                 AuthenticationService authenticationService, StatisticService statisticService, PostService postService, CommentService commentService) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.questionService = questionService;
         this.authenticationService = authenticationService;
         this.statisticService = statisticService;
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -56,11 +52,6 @@ public class Query implements GraphQLQueryResolver {
         User rawUser = userRepository.findByUsername(username);
         return securityService.filterUserByToken(rawUser, authToken);
     }
-
-
-//    public List<MQuestion> questions() {
-//        return questionRepository.getAllQuestions();
-//    }
 
     public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
         return questionService.randomQuestion(classifications, types);
@@ -90,6 +81,10 @@ public class Query implements GraphQLQueryResolver {
     public AnswerStatistic showAnswerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
         authenticationService.ensureLoggedIn(studentId);
         return statisticService.showAnswerStatistic(studentId, classes, types);
+    }
+
+    public List<Comment> showComments(Long postId) {
+        return commentService.showComments(postId);
     }
 
 }

@@ -1,33 +1,26 @@
-package com.tangenta.data.pojo.mybatis;
+package com.tangenta.data.pojo.graphql;
 
 import java.util.Date;
 
 public class Comment {
-    private Long commentId;
-    private Long studentId;
     private Long postId;
+    private String username;
     private String content;
     private Date creationTime;
 
-    public Comment(Long commentId, Long studentId, Long postId,
-                   String content, Date creationTime) {
-        this.commentId = commentId;
-        this.studentId = studentId;
+    public Comment(Long postId, String username, String content, Date creationTime) {
         this.postId = postId;
+        this.username = username;
         this.content = content;
         this.creationTime = creationTime;
     }
 
-    public Long getCommentId() {
-        return commentId;
-    }
-
-    public Long getStudentId() {
-        return studentId;
-    }
-
     public Long getPostId() {
         return postId;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getContent() {

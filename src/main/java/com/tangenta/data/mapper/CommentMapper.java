@@ -1,6 +1,6 @@
 package com.tangenta.data.mapper;
 
-import com.tangenta.data.pojo.mybatis.Comment;
+import com.tangenta.data.pojo.mybatis.MComment;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
@@ -11,7 +11,7 @@ public interface CommentMapper {
 
     @Select("select * from comment where post_id = #{postId}")
     @ResultMap("baseResultMap")
-    List<Comment> findByPostId(Long postId);
+    List<MComment> findByPostId(Long postId);
 
     @Insert("insert into comment(student_id, content, post_id, creation_time) " +
             "value (#{studentId}, #{content}, #{postId}, #{creationTime})")
