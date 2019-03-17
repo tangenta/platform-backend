@@ -1,4 +1,6 @@
-package com.tangenta.data.pojo;
+package com.tangenta.data.pojo.graphql;
+
+import com.tangenta.data.pojo.User;
 
 import java.util.Date;
 
@@ -8,19 +10,17 @@ public class Post {
     private String content;
     private Long viewNumber;
     private Long replyNumber;
-    private Long studentId;
+    private User user;
     private String title;
 
-    public Post() {}
-
     public Post(Long postId, Date publishTime, String content,
-                Long viewNumber, Long replyNumber, Long studentId, String title) {
+                Long viewNumber, Long replyNumber, User user, String title) {
         this.postId = postId;
         this.publishTime = publishTime;
         this.content = content;
         this.viewNumber = viewNumber;
         this.replyNumber = replyNumber;
-        this.studentId = studentId;
+        this.user = user;
         this.title = title;
     }
 
@@ -44,8 +44,8 @@ public class Post {
         return replyNumber;
     }
 
-    public Long getStudentId() {
-        return studentId;
+    public User getUser() {
+        return user;
     }
 
     public String getTitle() {

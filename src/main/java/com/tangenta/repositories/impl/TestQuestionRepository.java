@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 @Profile("dev-test")
 public class TestQuestionRepository implements QuestionRepository {
-    public static final Long currentMaxLength = 3L;
+    public static final Long currentMaxLength = 2L;
     private static List<MQuestion> allQuestions = new LinkedList<MQuestion>() {{
         add(new MQuestion(1L, "Which object is red?", QuestionType.SingleChoice,
                 QuestionClassification.Daodepingjia, "Apple",
@@ -50,7 +50,7 @@ public class TestQuestionRepository implements QuestionRepository {
 
     @Override
     public void createQuestion(MQuestion q) {
-        allQuestions.add(new MQuestion(questionIdGenerator.generateId(), q.getDescription(), q.getType(),
+        allQuestions.add(new MQuestion(q.getQuestionId(), q.getDescription(), q.getType(),
                 q.getClassification(), q.getCorrectAnswer(), q.getAnswerDescription(),
                 q.getPass(), q.getBelongToStudentId()));
     }

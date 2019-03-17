@@ -49,11 +49,12 @@ public class QuestionService {
 
         List<String> solutions = null;
         if (q.getType().equals(SingleChoice) || q.getType().equals(MultipleChoice)) {
+            logger.info("inside single Choice");
             List<QuestionSolution> questionSolution = questionSolutionRepository.getByQuestionId(q.getQuestionId());
             solutions  = questionSolution.stream().map(QuestionSolution::getSolution).collect(Collectors.toList());
         }
         Optional<List<String>> solution = Optional.ofNullable(solutions);
-        logger.info("show question: {} {}", q.getType(), q.getDescription());
+        logger.info("show question: {} {} {}", q.getType(), q.getDescription(), solution);
         return new Question(q.getQuestionId(), q.getDescription(), solution, q.getClassification(), q.getType());
     }
 

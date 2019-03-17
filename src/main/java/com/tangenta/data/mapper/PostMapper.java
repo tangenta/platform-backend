@@ -1,6 +1,6 @@
 package com.tangenta.data.mapper;
 
-import com.tangenta.data.pojo.Post;
+import com.tangenta.data.pojo.mybatis.MPost;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface PostMapper {
     @Select("select * from post")
     @ResultMap("baseResultMap")
-    List<Post> getAllPosts();
+    List<MPost> getAllPosts();
 
-    void createPost(@Param("p") Post post);
+    void createPost(@Param("p") MPost MPost);
 }

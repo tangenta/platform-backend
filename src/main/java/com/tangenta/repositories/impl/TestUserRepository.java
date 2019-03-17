@@ -30,6 +30,13 @@ public class TestUserRepository implements UserRepository {
     }
 
     @Override
+    public User findById(Long studentId) {
+        return allUsers.stream()
+                .filter(user -> user.getStudentId().equals(studentId))
+                .findFirst().orElse(null);
+    }
+
+    @Override
     public User findByUsername(String username) {
         for(User user: allUsers) {
             if (user.getUsername().equals(username)) {

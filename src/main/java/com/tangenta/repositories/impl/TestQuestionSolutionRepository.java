@@ -2,6 +2,8 @@ package com.tangenta.repositories.impl;
 
 import com.tangenta.data.pojo.mybatis.QuestionSolution;
 import com.tangenta.repositories.QuestionSolutionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,8 @@ import java.util.stream.Collectors;
 @Repository
 @Profile("dev-test")
 public class TestQuestionSolutionRepository implements QuestionSolutionRepository {
+    private static Logger logger = LoggerFactory.getLogger(TestQuestionSolutionRepository.class);
+
     private static List<QuestionSolution> solutions = new LinkedList<QuestionSolution>(){{
         add(new QuestionSolution(1L, "Apple"));
         add(new QuestionSolution(1L, "Banana"));
@@ -26,6 +30,8 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
 
     @Override
     public List<QuestionSolution> getByQuestionId(Long questionId) {
+        logger.info("get questionId = {}", questionId);
+        solutions.forEach(s -> logger.info("{}", s.getQuestionId()));
         return solutions.stream()
                 .filter(qs -> qs.getQuestionId().equals(questionId))
                 .collect(Collectors.toList());

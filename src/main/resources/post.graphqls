@@ -5,7 +5,7 @@ type Post {
     content: String!
     viewNumber: Long!
     replyNumber: Long!
-    studentId: Long!
+    user: User!
     title: String!
 }
 

@@ -1,7 +1,8 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.tangenta.data.pojo.Post;
+import com.tangenta.data.pojo.graphql.Post;
+import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Question;
@@ -14,10 +15,8 @@ import com.tangenta.data.pojo.User;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
-import static com.tangenta.data.pojo.graphql.SortMethod.*;
 
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,8 +49,13 @@ public class Query implements GraphQLQueryResolver {
         return securityService.filterUserByToken(rawUser, authToken);
     }
 
-    public List<Post> posts() {
-        return postRepository.getAllPosts();
+    public List<Post> posts(DataFetchingEnvironment env) {
+        String token = Utils.getAuthToken(env).orElse("");
+        return postRepository.getAllPosts().stream()
+                .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
+                        p.getViewNumber(), p.getReplyNumber(),
+                        securityService.filterUserByToken(userRepository.findById(p.getStudentId()), token), p.getTitle()))
+                .collect(Collectors.toList());
     }
 
 //    public List<MQuestion> questions() {
@@ -62,22 +66,34 @@ public class Query implements GraphQLQueryResolver {
         return questionService.randomQuestion(classifications, types);
     }
 
-    public List<Post> showPosts(int numbers, Long from, SortMethod sortBy) {
-        List<Post> allPosts = postRepository.getAllPosts();
-        Comparator<Post> comparator;
+    public List<Post> showPosts(int numbers, Long from, SortMethod sortBy, DataFetchingEnvironment env) {
+        List<MPost> allMPosts = postRepository.getAllPosts();
+        if (sortBy == null) sortBy = SortMethod.Time;
+
+        Comparator<MPost> comparator;
         switch (sortBy) {
-            case ReplyNumber: comparator = Comparator.comparingLong(Post::getReplyNumber).thenComparing(Post::getPostId); break;
-            case ViewNumber: comparator = Comparator.comparingLong(Post::getViewNumber).thenComparing(Post::getPostId); break;
+            case ReplyNumber: comparator = Comparator.comparingLong(MPost::getReplyNumber).thenComparing(MPost::getPostId); break;
+            case ViewNumber: comparator = Comparator.comparingLong(MPost::getViewNumber).thenComparing(MPost::getPostId); break;
             case Time:
-            default: comparator = Comparator.comparing(Post::getPublishTime).thenComparing(Post::getPostId);
+            default: comparator = Comparator.comparing(MPost::getPublishTime).thenComparing(MPost::getPostId);
         }
-        allPosts.sort(comparator);
+        allMPosts.sort(comparator);
         int index = 0;
-        for (Post post: allPosts) {
-            if (post.getPostId().equals(from)) break;
+        for (MPost mPost : allMPosts) {
+            if (mPost.getPostId().equals(from)) break;
             index++;
         }
-        return allPosts.stream().skip(index).limit(numbers).collect(Collectors.toList());
+
+        String token = Utils.getAuthToken(env).orElse("");
+
+        return allMPosts.stream()
+                .skip(from.equals(0L) ? 0 : index + 1)
+                .limit(numbers)
+                .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
+                        p.getViewNumber(), p.getReplyNumber(),
+                        securityService.filterUserByToken(userRepository.findById(p.getStudentId()), token),
+                        p.getTitle()))
+                .collect(Collectors.toList());
     }
 
 }

@@ -7,6 +7,8 @@ import com.tangenta.data.pojo.graphql.Feedback;
 import com.tangenta.service.*;
 import com.tangenta.types.LoginPayload;
 import graphql.schema.DataFetchingEnvironment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.Optional;
 
 @Component
 public class Mutation implements GraphQLMutationResolver {
+    private static Logger logger = LoggerFactory.getLogger(Mutation.class);
+
     private LoginService loginService;
     private RegisterService registerService;
     private ValidationService validationService;
@@ -61,8 +65,9 @@ public class Mutation implements GraphQLMutationResolver {
     public boolean createQuestion(Long studentId, String questionDescription, QuestionType type,
                                   QuestionClassification classification, String correctAnswer,
                                   String answerDescription, Optional<List<String>> choices) {
-        authenticationService.ensureLoggedIn(studentId);
 
+        authenticationService.ensureLoggedIn(studentId);
+        logger.info("{}", choices);
         questionService.createQuestion(studentId, questionDescription, type,
                 classification, correctAnswer, answerDescription, choices);
         return true;

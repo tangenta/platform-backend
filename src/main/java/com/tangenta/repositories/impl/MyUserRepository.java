@@ -24,6 +24,11 @@ public class MyUserRepository implements UserRepository {
     }
 
     @Override
+    public User findById(Long studentId) {
+        return userMapper.findById(studentId);
+    }
+
+    @Override
     public User findByUsername(String username) {
         return userMapper.findByUserName(username);
     }

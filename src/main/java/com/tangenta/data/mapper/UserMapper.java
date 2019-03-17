@@ -12,6 +12,9 @@ public interface UserMapper {
     @ResultMap("baseResultMap")
     List<User> getAllUsers();
 
+    @Select("select * from user where student_id = #{studentId}")
+    User findById(Long studentId);
+
     @Select("select * from user where username = #{username}")
     @ResultMap("baseResultMap")
     User findByUserName(String username);

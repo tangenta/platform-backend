@@ -1,10 +1,10 @@
 package com.tangenta.repositories;
 
-import com.tangenta.data.pojo.Post;
+import com.tangenta.data.pojo.mybatis.MPost;
 
 import java.util.List;
 
 public interface PostRepository {
-    List<Post> getAllPosts();
-    void createPost(Post partialPost);
+    List<MPost> getAllPosts();
+    void createPost(MPost partialMPost);
 }

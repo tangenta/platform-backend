@@ -1,6 +1,6 @@
 package com.tangenta.service;
 
-import com.tangenta.data.pojo.Post;
+import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.repositories.PostRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class PostService {
         validationService.ensureNonEmptyString(trimTitle, "标题");
         validationService.ensureNonEmptyString(trimContent, "内容");
 
-        postRepository.createPost(new Post(-1L, new Date(), trimContent,
+        postRepository.createPost(new MPost(-1L, new Date(), trimContent,
                 0L, 0L, studentId, trimTitle));
     }
 }

@@ -1,7 +1,7 @@
 package com.tangenta.repositories.impl;
 
 import com.tangenta.data.mapper.PostMapper;
-import com.tangenta.data.pojo.Post;
+import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.repositories.PostRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -18,12 +18,12 @@ public class MyPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> getAllPosts() {
+    public List<MPost> getAllPosts() {
         return postMapper.getAllPosts();
     }
 
     @Override
-    public void createPost(Post partialPost) {
-        postMapper.createPost(partialPost);
+    public void createPost(MPost partialMPost) {
+        postMapper.createPost(partialMPost);
     }
 }
