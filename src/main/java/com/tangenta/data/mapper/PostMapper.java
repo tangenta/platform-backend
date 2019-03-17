@@ -19,4 +19,7 @@ public interface PostMapper {
 
     @Delete("delete from post where post_id = #{postId}")
     void deleteById(long postId);
+
+    @Update("update post set title = #{title}, content = #{content} where post_id = #{postId}")
+    void update(Long postId, String title, String content);
 }

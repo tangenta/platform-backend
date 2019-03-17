@@ -15,8 +15,6 @@ type Query {
         types: [QuestionType!]!
     ): AnswerStatistic!
 
-    #    questions(class: QuestionClassification!, number: Int!): [Question!]!
-
     # show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method
     # default SortMethod is sorting by publish time
     showPosts(number: Int!, from: Int!, sortBy: SortMethod): [Post!]!
@@ -42,11 +40,11 @@ type Mutation {
 
     deletePost(studentId: Int!, postId: Int!): Boolean!
 
+    updatePost(studentId: Int!, postId: Int!, title: String!, content: String!): Boolean!
+
     # TODO: implement
-#    createPost(): Post!
 
 #    postComment()
-#    deletePost()
 }
 
 schema {

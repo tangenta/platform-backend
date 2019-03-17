@@ -67,4 +67,9 @@ public class ValidationService {
     public void ensurePostExistence(Long postId) {
         if (postRepository.findById(postId) == null) throw new BusinessException("帖子不存在");
     }
+
+    public void ensurePostBelongToStudent(Long postId, Long studentId) {
+        if (!postRepository.findById(postId).getStudentId().equals(studentId))
+            throw new BusinessException("帖子所有者不匹配");
+    }
 }

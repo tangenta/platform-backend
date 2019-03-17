@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 @Profile("dev-test")
@@ -32,7 +29,7 @@ public class TestPostRepository implements PostRepository {
     }
 
     @Override
-    public void createPost(MPost p) {
+    public void create(MPost p) {
         allMPost.add(new MPost(postId++, p.getPublishTime(), p.getContent(),
                 0L, 0L, p.getStudentId(), p.getTitle()));
     }
@@ -55,4 +52,23 @@ public class TestPostRepository implements PostRepository {
             }
         }
     }
+
+    @Override
+    public void update(Long postId, String title, String content) {
+        Iterator<MPost> i = allMPost.iterator();
+        MPost newPost = null;
+        while (i.hasNext()) {
+            MPost p = i.next();
+            if (p.getPostId().equals(postId)) {
+                newPost = new MPost(postId, p.getPublishTime(), content, p.getViewNumber(),
+                        p.getReplyNumber(), p.getStudentId(), title);
+                i.remove();
+                break;
+            }
+        }
+        Objects.requireNonNull(newPost);
+        allMPost.add(newPost);
+    }
+
+
 }

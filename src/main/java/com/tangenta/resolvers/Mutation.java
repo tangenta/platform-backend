@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.service.*;
 import com.tangenta.types.LoginPayload;
 import graphql.schema.DataFetchingEnvironment;
@@ -82,6 +83,15 @@ public class Mutation implements GraphQLMutationResolver {
     public boolean deletePost(Long studentId, Long postId) {
         authenticationService.ensureLoggedIn(studentId);
         postService.deletePost(postId);
+        return true;
+    }
+
+    public boolean updatePost(Long studentId, Long postId, String title, String content) {
+        authenticationService.ensureLoggedIn(studentId);
+        validationService.ensurePostExistence(postId);
+        validationService.ensurePostBelongToStudent(postId, studentId);
+
+        postService.updatePost(postId, title, content);
         return true;
     }
 

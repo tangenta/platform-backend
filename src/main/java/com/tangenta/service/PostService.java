@@ -6,8 +6,6 @@ import com.tangenta.data.pojo.graphql.SortMethod;
 import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.repositories.PostRepository;
 import com.tangenta.repositories.UserRepository;
-import com.tangenta.utils.Utils;
-import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -69,12 +67,16 @@ public class PostService {
         validationService.ensureNonEmptyString(trimTitle, "标题");
         validationService.ensureNonEmptyString(trimContent, "内容");
 
-        postRepository.createPost(new MPost(-1L, new Date(), trimContent,
+        postRepository.create(new MPost(-1L, new Date(), trimContent,
                 0L, 0L, studentId, trimTitle));
     }
 
     public void deletePost(Long postId) {
         validationService.ensurePostExistence(postId);
         postRepository.deleteById(postId);
+    }
+
+    public void updatePost(Long postId, String title, String content) {
+        postRepository.update(postId, title, content);
     }
 }

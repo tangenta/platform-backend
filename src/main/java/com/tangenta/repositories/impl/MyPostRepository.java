@@ -23,7 +23,7 @@ public class MyPostRepository implements PostRepository {
     }
 
     @Override
-    public void createPost(MPost partialMPost) {
+    public void create(MPost partialMPost) {
         postMapper.createPost(partialMPost);
     }
 
@@ -35,5 +35,10 @@ public class MyPostRepository implements PostRepository {
     @Override
     public void deleteById(Long postId) {
         postMapper.deleteById(postId);
+    }
+
+    @Override
+    public void update(Long postId, String title, String content) {
+        postMapper.update(postId, title, content);
     }
 }

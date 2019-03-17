@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface PostRepository {
     List<MPost> getAllPosts();
-    void createPost(MPost partialMPost);
+    void create(MPost partialMPost);
     MPost findById(Long postId);
     void deleteById(Long postId);
+    void update(Long postId, String title, String content);
 }
