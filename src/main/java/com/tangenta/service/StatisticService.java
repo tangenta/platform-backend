@@ -2,6 +2,7 @@ package com.tangenta.service;
 
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.graphql.AnswerStatistic;
 import com.tangenta.data.pojo.graphql.Feedback;
 import com.tangenta.data.pojo.mybatis.DoneTag;
 import com.tangenta.data.pojo.mybatis.MQuestion;
@@ -12,6 +13,8 @@ import com.tangenta.repositories.StatisticRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.function.BinaryOperator;
 
 @Service
 public class StatisticService {
@@ -46,6 +49,19 @@ public class StatisticService {
         }
         statisticRepository.insertDoneTag(studentId, question.getQuestionId(), new Date());
 
+    }
+
+    public AnswerStatistic showAnswerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
+        AnswerStatistic id = new AnswerStatistic(studentId, 0L, 0L);
+        BinaryOperator<AnswerStatistic> binOp = (a, b) -> new AnswerStatistic(studentId,
+                a.getCorrect() + b.getCorrect() , a.getTotal() + b.getTotal());
+        return classes.stream()
+                .map(c ->
+                    types.stream()
+                            .map(t -> statisticRepository.getQuestionStatisticByKeys(studentId, c, t))
+                            .map(qs -> new AnswerStatistic(studentId, qs.getCorrect(), qs.getTotal()))
+                            .reduce(id, binOp))
+                .reduce(id, binOp);
     }
 
 }

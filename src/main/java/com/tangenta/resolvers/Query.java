@@ -1,17 +1,20 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import com.tangenta.data.pojo.graphql.AnswerStatistic;
 import com.tangenta.data.pojo.graphql.Post;
 import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Question;
 import com.tangenta.data.pojo.graphql.SortMethod;
+import com.tangenta.service.AuthenticationService;
 import com.tangenta.service.QuestionService;
 import com.tangenta.service.SecurityService;
 import com.tangenta.repositories.PostRepository;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
+import com.tangenta.service.StatisticService;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
@@ -28,13 +31,18 @@ public class Query implements GraphQLQueryResolver {
 
     private final SecurityService securityService;
     private final QuestionService questionService;
+    private final AuthenticationService authenticationService;
+    private final StatisticService statisticService;
 
     public Query(UserRepository userRepository, PostRepository postRepository,
-                 SecurityService securityService, QuestionService questionService) {
+                 SecurityService securityService, QuestionService questionService,
+                 AuthenticationService authenticationService, StatisticService statisticService) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.securityService = securityService;
         this.questionService = questionService;
+        this.authenticationService = authenticationService;
+        this.statisticService = statisticService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -94,6 +102,11 @@ public class Query implements GraphQLQueryResolver {
                         securityService.filterUserByToken(userRepository.findById(p.getStudentId()), token),
                         p.getTitle()))
                 .collect(Collectors.toList());
+    }
+
+    public AnswerStatistic showAnswerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
+        authenticationService.ensureLoggedIn(studentId);
+        return statisticService.showAnswerStatistic(studentId, classes, types);
     }
 
 }

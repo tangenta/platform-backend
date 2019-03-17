@@ -5,7 +5,16 @@ type Query {
 
     user(username: String!): User!
 
-    randomQuestion(classes: [QuestionClassification!]!, types: [QuestionType!]!): Question!
+    randomQuestion(
+        classes: [QuestionClassification!]!,
+        types: [QuestionType!]!
+    ): Question!
+
+    showAnswerStatistic(
+        studentId: Int!,
+        classes: [QuestionClassification!]!,
+        types: [QuestionType!]!
+    ): AnswerStatistic!
 
     #    questions(class: QuestionClassification!, number: Int!): [Question!]!
 
@@ -33,10 +42,8 @@ type Mutation {
     createPost(studentId: Int!, title: String!, content: String!): Boolean!
 
     # TODO: implement
-#    createQuestion(): Question!
 #    createPost(): Post!
 
-#    handInAnswers(answers: [Answer!]!)
 #    postComment()
 #    postPost()
 #    deletePost()
