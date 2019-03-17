@@ -30,8 +30,6 @@ type Feedback {
 
 type AnswerStatistic {
     studentId: Int!
-    classifications: [QuestionClassification!]!
-    types: [QuestionType!]!
     correct: Int!
     total: Int!
 }
