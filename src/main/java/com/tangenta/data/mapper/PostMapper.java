@@ -1,10 +1,7 @@
 package com.tangenta.data.mapper;
 
 import com.tangenta.data.pojo.mybatis.MPost;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,4 +12,11 @@ public interface PostMapper {
     List<MPost> getAllPosts();
 
     void createPost(@Param("p") MPost MPost);
+
+    @Select("select * from post where post_id = #{postId}")
+    @ResultMap("baseResultMap")
+    MPost findById(Long postId);
+
+    @Delete("delete from post where post_id = #{postId}")
+    void deleteById(long postId);
 }

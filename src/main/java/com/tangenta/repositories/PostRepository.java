@@ -7,4 +7,6 @@ import java.util.List;
 public interface PostRepository {
     List<MPost> getAllPosts();
     void createPost(MPost partialMPost);
+    MPost findById(Long postId);
+    void deleteById(Long postId);
 }

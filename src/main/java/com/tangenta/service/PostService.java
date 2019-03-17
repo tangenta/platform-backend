@@ -1,6 +1,7 @@
 package com.tangenta.service;
 
 import com.tangenta.data.pojo.mybatis.MPost;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.PostRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public class PostService {
 
         postRepository.createPost(new MPost(-1L, new Date(), trimContent,
                 0L, 0L, studentId, trimTitle));
+    }
+
+    public void deletePost(Long postId) {
+        validationService.ensurePostExistence(postId);
+        postRepository.deleteById(postId);
     }
 }

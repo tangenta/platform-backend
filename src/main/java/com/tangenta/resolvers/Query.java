@@ -17,6 +17,8 @@ import com.tangenta.data.pojo.User;
 import com.tangenta.service.StatisticService;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class Query implements GraphQLQueryResolver {
+    private static Logger logger = LoggerFactory.getLogger(Query.class);
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;

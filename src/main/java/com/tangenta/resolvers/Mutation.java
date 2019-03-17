@@ -79,4 +79,10 @@ public class Mutation implements GraphQLMutationResolver {
         return true;
     }
 
+    public boolean deletePost(Long studentId, Long postId) {
+        authenticationService.ensureLoggedIn(studentId);
+        postService.deletePost(postId);
+        return true;
+    }
+
 }

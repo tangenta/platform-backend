@@ -2,16 +2,20 @@ package com.tangenta.repositories.impl;
 
 import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.repositories.PostRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 @Repository
 @Profile("dev-test")
 public class TestPostRepository implements PostRepository {
+    private static Logger logger = LoggerFactory.getLogger(TestPostRepository.class);
     private static List<MPost> allMPost = new LinkedList<MPost>(){{
         add(new MPost(1L, new Date(), "It's a nice day",
                 1L, 0L, 1L, "title1"));
@@ -29,7 +33,26 @@ public class TestPostRepository implements PostRepository {
 
     @Override
     public void createPost(MPost p) {
-        allMPost.add(new MPost(postId++, new Date(), p.getContent(),
+        allMPost.add(new MPost(postId++, p.getPublishTime(), p.getContent(),
                 0L, 0L, p.getStudentId(), p.getTitle()));
+    }
+
+    @Override
+    public MPost findById(Long postId) {
+        return allMPost.stream()
+                .filter(p -> p.getPostId().equals(postId))
+                .findFirst().orElse(null);
+    }
+
+    @Override
+    public void deleteById(Long postId) {
+        Iterator<MPost> i = allMPost.iterator();
+        while (i.hasNext()) {
+            MPost p = i.next();
+            if (p.getPostId().equals(postId)) {
+                i.remove();
+                break;
+            }
+        }
     }
 }

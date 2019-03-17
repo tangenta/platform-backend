@@ -41,11 +41,12 @@ type Mutation {
 
     createPost(studentId: Int!, title: String!, content: String!): Boolean!
 
+    deletePost(studentId: Int!, postId: Int!): Boolean!
+
     # TODO: implement
 #    createPost(): Post!
 
 #    postComment()
-#    postPost()
 #    deletePost()
 }
 

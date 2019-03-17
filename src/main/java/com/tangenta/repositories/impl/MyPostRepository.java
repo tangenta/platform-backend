@@ -26,4 +26,14 @@ public class MyPostRepository implements PostRepository {
     public void createPost(MPost partialMPost) {
         postMapper.createPost(partialMPost);
     }
+
+    @Override
+    public MPost findById(Long postId) {
+        return postMapper.findById(postId);
+    }
+
+    @Override
+    public void deleteById(Long postId) {
+        postMapper.deleteById(postId);
+    }
 }

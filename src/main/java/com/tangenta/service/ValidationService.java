@@ -3,6 +3,7 @@ package com.tangenta.service;
 import com.tangenta.data.pojo.User;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.exceptions.BusinessException;
+import com.tangenta.repositories.PostRepository;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -17,10 +18,12 @@ public class ValidationService {
     private static Logger logger = LoggerFactory.getLogger(ValidationService.class);
     private UserRepository userRepository;
     private QuestionRepository questionRepository;
+    private PostRepository postRepository;
 
-    public ValidationService(UserRepository userRepository, QuestionRepository questionRepository) {
+    public ValidationService(UserRepository userRepository, QuestionRepository questionRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
+        this.postRepository = postRepository;
     }
 
     public void ensureValidEmailAddress(String email) {
@@ -59,5 +62,9 @@ public class ValidationService {
 
     public void ensureUserExistence(String username) {
         if (userRepository.findByUsername(username) == null) throw new BusinessException("找不到该用户名");
+    }
+
+    public void ensurePostExistence(Long postId) {
+        if (postRepository.findById(postId) == null) throw new BusinessException("帖子不存在");
     }
 }
