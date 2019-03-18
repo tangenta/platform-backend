@@ -9,14 +9,14 @@ import java.util.Optional;
 public class Question {
     private Long questionId;
     private String description;
-    private Optional<List<String>> solution;
+    private Optional<List<String>> options;
     private QuestionClassification classification;
     private QuestionType type;
 
-    public Question(Long questionId, String description, Optional<List<String>> solution, QuestionClassification classification, QuestionType type) {
+    public Question(Long questionId, String description, Optional<List<String>> options, QuestionClassification classification, QuestionType type) {
         this.questionId = questionId;
         this.description = description;
-        this.solution = solution;
+        this.options = options;
         this.classification = classification;
         this.type = type;
     }
@@ -33,8 +33,8 @@ public class Question {
         return classification;
     }
 
-    public Optional<List<String>> getSolution() {
-        return solution;
+    public Optional<List<String>> getOptions() {
+        return options;
     }
 
     public QuestionType getType() {

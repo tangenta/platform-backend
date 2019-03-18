@@ -1,10 +1,15 @@
 package com.tangenta;
 
 import com.tangenta.data.mapper.QuestionIdFetchingMapper;
+import com.tangenta.data.mapper.QuestionMapper;
+import com.tangenta.data.mapper.QuestionSolutionMapper;
 import com.tangenta.repositories.impl.TestQuestionRepository;
 import com.tangenta.utils.QuestionIdGenerator;
+import com.tangenta.utils.QuestionImport;
+import com.tangenta.utils.QuestionImport2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -13,6 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 
 @SpringBootApplication
@@ -36,7 +44,8 @@ public class Application implements WebMvcConfigurer {
     @Bean
     @Profile("dev")
     QuestionIdGenerator initQuestionIdGeneratorDev(QuestionIdFetchingMapper questionIdFetchingMapper) {
-        QuestionIdGenerator ret = new QuestionIdGenerator(questionIdFetchingMapper.getMaxQuestionId());
+        Long maxQuestionId = questionIdFetchingMapper.getMaxQuestionId();
+        QuestionIdGenerator ret = new QuestionIdGenerator(maxQuestionId == null ? 0L : maxQuestionId);
         logger.info("QuestionIdGenerator set up. Current max id: {}", ret.currentId());
         return ret;
     }
@@ -46,6 +55,19 @@ public class Application implements WebMvcConfigurer {
     QuestionIdGenerator initQuestionIdGeneratorDevTest() {
         return new QuestionIdGenerator(TestQuestionRepository.currentMaxLength);
     }
+
+//    @Bean
+//    QuestionImport initQuestionImport(QuestionMapper questionMapper, QuestionSolutionMapper questionSolutionMapper) {
+//        QuestionImport questionImport = new QuestionImport();
+//        try {
+//            QuestionImport2.readQuestions("D:\\questionData\\question.txt",
+//                    q -> q.forEach(questionMapper::createQuestion),
+//                    qs -> qs.forEach(i -> questionSolutionMapper.createQuestionSolution(i.getQuestionId(), i.getOption())));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return questionImport;
+//    }
 
 
 //    @Bean

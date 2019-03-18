@@ -44,14 +44,13 @@ public class QuestionService {
         List<MQuestion> questions = questionRepository.getQuestionsByClassAndType(classifications, types);
         // TODO: filter visited questions
 
-        MQuestion q = questions.stream().skip(random.nextInt(questions.size()))
+        MQuestion q = questions.stream().skip(random.nextInt(questions.size() + 1))
                 .findFirst().orElseThrow(() -> new BusinessException("题库已经没有题了"));
 
         List<String> solutions = null;
         if (q.getType().equals(SingleChoice) || q.getType().equals(MultipleChoice)) {
-            logger.info("inside single Choice");
             List<QuestionSolution> questionSolution = questionSolutionRepository.getByQuestionId(q.getQuestionId());
-            solutions  = questionSolution.stream().map(QuestionSolution::getSolution).collect(Collectors.toList());
+            solutions  = questionSolution.stream().map(QuestionSolution::getOption).collect(Collectors.toList());
         }
         Optional<List<String>> solution = Optional.ofNullable(solutions);
         logger.info("show question: {} {} {}", q.getType(), q.getDescription(), solution);

@@ -16,7 +16,7 @@ enum QuestionType {
 type Question {
     questionId: Long!
     description: String!
-    solution: [String!]
+    options: [String!]
     classification: QuestionClassification!
     type: QuestionType!
 }

@@ -2,21 +2,21 @@ package com.tangenta.data.pojo.mybatis;
 
 public class QuestionSolution {
     private Long questionId;
-    private String solution;
+    private String option;
 
     public QuestionSolution() {
     }
 
-    public QuestionSolution(Long questionId, String solution) {
+    public QuestionSolution(Long questionId, String option) {
         this.questionId = questionId;
-        this.solution = solution;
+        this.option = option;
     }
 
     public Long getQuestionId() {
         return questionId;
     }
 
-    public String getSolution() {
-        return solution;
+    public String getOption() {
+        return option;
     }
 }

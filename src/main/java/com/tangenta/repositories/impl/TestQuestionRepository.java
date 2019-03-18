@@ -22,6 +22,7 @@ public class TestQuestionRepository implements QuestionRepository {
         add(new MQuestion(2L, "Which word's length is < 10?", QuestionType.MultipleChoice,
                 QuestionClassification.Daodepingjia, "Egg, Fxxx, Good, High",
                 "answer description2", true, 2L));
+
     }};
     private QuestionIdGenerator questionIdGenerator;
 
