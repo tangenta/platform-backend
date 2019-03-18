@@ -113,15 +113,31 @@ public class QuestionImport2 {
     }
 
     public static void main(String[] args) throws IOException {
-//        QuestionImport2.readQuestions("D:\\questionData\\question.txt",
-//                q -> q.forEach(System.out::println),
-//                qs -> qs.forEach(System.out::println));
-
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("D:\\questionData\\question.txt"), StandardCharsets.UTF_8));
-        String str = reader.readLine();
-        String[] desOptions = "A.客体 B.对象 C.他人眼光 D.主体".split("[ .a-zA-Z]");
-        List<String> list = Arrays.stream(desOptions).map(String::trim).filter(s -> !s.isEmpty() && !s.equals(" ")).collect(Collectors.toList());
-        System.out.println(list);
+        QuestionImport2.readQuestions("D:\\questionData\\question.txt",
+                q -> q.forEach(question -> {
+                    System.out.println(
+                            "add(new MQuestion(" +
+                                    question.getQuestionId() +
+                                    "L, \""+
+                                    question.getDescription() +
+                                    "\", QuestionType." +
+                                    question.getType() +
+                                    ", QuestionClassification." +
+                                    question.getClassification() +
+                                    ", \"" +
+                                    question.getCorrectAnswer() +
+                                    "\", \"" +
+                                    question.getAnswerDescription() +
+                                    "\", true, 0L));");
+                }),
+                qs -> qs.forEach(questionSolution -> {
+                    System.out.println(
+                        "add(new QuestionSolution(" +
+                                questionSolution.getQuestionId() +
+                                "L, \"" +
+                                questionSolution.getOption() +
+                                "\"));"
+                    );
+                }));
     }
 }
