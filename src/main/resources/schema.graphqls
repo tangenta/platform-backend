@@ -20,6 +20,9 @@ type Query {
     showPosts(number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
     viewPost(postId: Long!): Post!
     showComments(postId: Long!): [Comment!]!
+
+    following(studentId: Long!): [User!]!
+    followers(studentId: Long!): [User!]!
 }
 
 type Mutation {
@@ -43,6 +46,9 @@ type Mutation {
 
     addComment(studentId: Long!, postId: Long!, content: String): Boolean!
     deleteComment(studentId: Long!, commentId: Long!): Boolean!
+
+    follow(subjectId: Long!, objectId: Long!): Boolean!
+    unFollow(subjectId: Long!, objectId: Long!): Boolean!
 }
 
 schema {

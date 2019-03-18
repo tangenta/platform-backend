@@ -64,6 +64,10 @@ public class ValidationService {
         if (obj.isEmpty()) throw new BusinessException(itemDescription + "不能为空");
     }
 
+    public void ensureUserExistence(Long studentId) {
+        if (userRepository.findById(studentId) == null) throw new BusinessException("找不到该用户");
+    }
+
     public void ensureUserExistence(String username) {
         if (userRepository.findByUsername(username) == null) throw new BusinessException("找不到该用户名");
     }

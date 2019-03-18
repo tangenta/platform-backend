@@ -11,11 +11,11 @@ public interface CommentMapper {
 
     @Select("select * from comment where post_id = #{postId}")
     @ResultMap("baseResultMap")
-    List<MComment> findByPostId(Long postId);
+    List<MComment> findByPostId(@Param("postId") Long postId);
 
     @Select("select * from comment where comment_id = #{commentId}")
     @ResultMap("baseResultMap")
-    MComment findByCommentId(Long commentId);
+    MComment findByCommentId(@Param("commentId") Long commentId);
 
     @Insert("insert into comment(student_id, content, post_id, creation_time) " +
             "value (#{studentId}, #{content}, #{postId}, #{creationTime})")
@@ -25,6 +25,6 @@ public interface CommentMapper {
                     @Param("creationTime") Date creationTime);
 
     @Delete("delete from comment where comment_id = #{commentID}")
-    void deleteComment(Long commentId);
+    void deleteComment(@Param("commentId") Long commentId);
 
 }

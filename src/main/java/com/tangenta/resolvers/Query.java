@@ -28,10 +28,13 @@ public class Query implements GraphQLQueryResolver {
     private final StatisticService statisticService;
     private final PostService postService;
     private final CommentService commentService;
+    private final FollowService followService;
+    private final ValidationService validationService;
 
     public Query(UserRepository userRepository,
                  SecurityService securityService, QuestionService questionService,
-                 AuthenticationService authenticationService, StatisticService statisticService, PostService postService, CommentService commentService) {
+                 AuthenticationService authenticationService, StatisticService statisticService,
+                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.questionService = questionService;
@@ -39,6 +42,8 @@ public class Query implements GraphQLQueryResolver {
         this.statisticService = statisticService;
         this.postService = postService;
         this.commentService = commentService;
+        this.followService = followService;
+        this.validationService = validationService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -48,6 +53,8 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public User user(String username, DataFetchingEnvironment env) {
+        validationService.ensureUserExistence(username);
+
         String authToken = Utils.getAuthToken(env).orElse("");
         User rawUser = userRepository.findByUsername(username);
         return securityService.filterUserByToken(rawUser, authToken);
@@ -71,6 +78,8 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public Post viewPost(Long postId, DataFetchingEnvironment env) {
+        validationService.ensurePostExistence(postId);
+
         String token = Utils.getAuthToken(env).orElse("");
         Post p = postService.viewPost(postId);
         return new Post(p.getPostId(), p.getPublishTime(), p.getContent(), p.getViewNumber(),
@@ -79,12 +88,24 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public AnswerStatistic showAnswerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
+        validationService.ensureUserExistence(studentId);
         authenticationService.ensureLoggedIn(studentId);
         return statisticService.showAnswerStatistic(studentId, classes, types);
     }
 
     public List<Comment> showComments(Long postId) {
+        validationService.ensurePostExistence(postId);
         return commentService.showComments(postId);
+    }
+
+    public List<User> following(Long studentId) {
+        validationService.ensureUserExistence(studentId);
+        return followService.following(studentId);
+    }
+
+    public List<User> followers(Long studentId) {
+        validationService.ensureUserExistence(studentId);
+        return followService.followers(studentId);
     }
 
 }

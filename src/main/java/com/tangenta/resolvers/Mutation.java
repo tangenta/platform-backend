@@ -26,12 +26,13 @@ public class Mutation implements GraphQLMutationResolver {
     private StatisticService statisticService;
     private PostService postService;
     private CommentService commentService;
+    private FollowService followService;
 
 
     public Mutation(LoginService loginService, RegisterService registerService,
                     ValidationService validationService, AuthenticationService authenticationService,
                     QuestionService questionService, StatisticService statisticService,
-                    PostService postService, CommentService commentService) {
+                    PostService postService, CommentService commentService, FollowService followService) {
         this.loginService = loginService;
         this.registerService = registerService;
         this.validationService = validationService;
@@ -40,6 +41,7 @@ public class Mutation implements GraphQLMutationResolver {
         this.statisticService = statisticService;
         this.postService = postService;
         this.commentService = commentService;
+        this.followService = followService;
     }
 
     public LoginPayload login(String username, String password) {
@@ -111,6 +113,21 @@ public class Mutation implements GraphQLMutationResolver {
         validationService.ensureCommentBelongToStudent(studentId, commentId);
 
         commentService.deleteComment(commentId);
+        return true;
+    }
+
+    public boolean follow(Long subjectId, Long objectId) {
+        authenticationService.ensureLoggedIn(subjectId);
+        validationService.ensureUserExistence(objectId);
+
+        followService.follow(subjectId, objectId);
+        return true;
+    }
+
+    public boolean unFollow(Long subjectId, Long objectId) {
+        authenticationService.ensureLoggedIn(subjectId);
+
+        followService.unFollow(subjectId, objectId);
         return true;
     }
 

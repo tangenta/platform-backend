@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangenta.data.mapper.FriendListMapper" >
+    <!--<cache />-->
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.mybatis.FriendRelationship" >
+        <result column="student_id" property="studentId" jdbcType="NUMERIC" />
+        <result column="friend_id" property="friendId" jdbcType="NUMERIC" />
+    </resultMap>
+</mapper>
