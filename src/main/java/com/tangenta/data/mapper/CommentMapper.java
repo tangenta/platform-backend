@@ -13,6 +13,10 @@ public interface CommentMapper {
     @ResultMap("baseResultMap")
     List<MComment> findByPostId(@Param("postId") Long postId);
 
+    @Select("select * from comment where student_id = #{studentId}")
+    @ResultMap("baseResultMap")
+    List<MComment> findByStudentId(@Param("studentId") Long studentId);
+
     @Select("select * from comment where comment_id = #{commentId}")
     @ResultMap("baseResultMap")
     MComment findByCommentId(@Param("commentId") Long commentId);

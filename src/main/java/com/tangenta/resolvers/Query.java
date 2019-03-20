@@ -30,11 +30,12 @@ public class Query implements GraphQLQueryResolver {
     private final CommentService commentService;
     private final FollowService followService;
     private final ValidationService validationService;
+    private final PagingService pagingService;
 
     public Query(UserRepository userRepository,
                  SecurityService securityService, QuestionService questionService,
                  AuthenticationService authenticationService, StatisticService statisticService,
-                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService) {
+                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.questionService = questionService;
@@ -44,6 +45,7 @@ public class Query implements GraphQLQueryResolver {
         this.commentService = commentService;
         this.followService = followService;
         this.validationService = validationService;
+        this.pagingService = pagingService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -86,6 +88,13 @@ public class Query implements GraphQLQueryResolver {
                 .collect(Collectors.toList());
     }
 
+    public List<Post> showUserPosts(Long userId, int numbers, Long from, SortMethod sortBy,
+                                    DataFetchingEnvironment env) {
+        return showPosts(numbers, from, sortBy, env).stream()
+                .filter(p -> p.getUser().getStudentId().equals(userId))
+                .collect(Collectors.toList());
+    }
+
     public Post viewPost(Long postId, DataFetchingEnvironment env) {
         validationService.ensurePostExistence(postId);
 
@@ -96,28 +105,34 @@ public class Query implements GraphQLQueryResolver {
 
     }
 
-    public AnswerStatistic answerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
+    public AnswerStatistic answerStatisticByClassAndType(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
         validationService.ensureUserExistence(studentId);
         authenticationService.ensureLoggedIn(studentId);
         return statisticService.showAnswerStatistic(studentId, classes, types);
     }
 
-    public List<Comment> showComments(Long postId) {
+    public List<Comment> showComments(Long postId, int number, Long from) {
         validationService.ensurePostExistence(postId);
-        return commentService.showComments(postId);
+        return commentService.showComments(postId, number, from);
     }
 
-    public List<User> following(Long studentId) {
+    public List<Comment> showUserComments(Long studentId, int number, Long from) {
         validationService.ensureUserExistence(studentId);
-        return followService.following(studentId);
+        return commentService.showUserComments(studentId, number, from);
     }
 
-    public List<User> followers(Long studentId) {
+
+    public List<User> following(Long studentId, int number, Long from) {
         validationService.ensureUserExistence(studentId);
-        return followService.followers(studentId);
+        return pagingService.paging(followService.following(studentId), number, from, User::getStudentId);
     }
 
-    public List<AnswerStatistic> answerStatistic(Long studentId, List<QuestionClassification> classes) {
+    public List<User> followers(Long studentId, int number, Long from) {
+        validationService.ensureUserExistence(studentId);
+        return pagingService.paging(followService.followers(studentId), number, from, User::getStudentId);
+    }
+
+    public List<AnswerStatistic> answerStatisticByClass(Long studentId, List<QuestionClassification> classes) {
         validationService.ensureUserExistence(studentId);
 //        authenticationService.ensureLoggedIn(studentId);
 

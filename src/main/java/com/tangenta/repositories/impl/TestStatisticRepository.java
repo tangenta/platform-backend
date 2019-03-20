@@ -7,19 +7,26 @@ import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.StatisticRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.tangenta.data.pojo.QuestionClassification.Lilunjichu;
+import static com.tangenta.data.pojo.QuestionType.BlanksFilling;
+
 @Repository
 @Profile("dev-test")
 public class TestStatisticRepository implements StatisticRepository {
+    private static Logger logger = LoggerFactory.getLogger(TestStatisticRepository.class);
+
     private static List<QuestionStatistic> allQuestionStatistic = new LinkedList<QuestionStatistic>() {{
-//        add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
-//        add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
-//        add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
+        add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
+        add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
+        add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
     }};
 
     private static List<DoneTag> mockDoneTag = new LinkedList<DoneTag>() {{
@@ -90,7 +97,7 @@ public class TestStatisticRepository implements StatisticRepository {
     @Override
     public DoneTag getDoneTagByKeys(Long studentId, Long questionId) {
         for (DoneTag dt: mockDoneTag) {
-            if (dt.getQuestionId().equals(studentId) && dt.getQuestionId().equals(questionId)) {
+            if (dt.getStudentId().equals(studentId) && dt.getQuestionId().equals(questionId)) {
                 return dt;
             }
         }

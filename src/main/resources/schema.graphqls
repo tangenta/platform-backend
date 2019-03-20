@@ -10,22 +10,24 @@ type Query {
         types: [QuestionType!]!
     ): Question!
 
-    answerStatistic(
+    answerStatisticByClassAndType(
         studentId: Long!,
         classes: [QuestionClassification!]!,
         types: [QuestionType!]!
     ): AnswerStatistic!
-    answerStatistic(studentId: Long!, classes: [QuestionClassification!]!): [AnswerStatistic!]!
+    answerStatisticByClass(studentId: Long!, classes: [QuestionClassification!]!): [AnswerStatistic!]!
 
-    # show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method
-    # default SortMethod is sorting by publish time
+    # Show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method.
+    # Default SortMethod is sorting by publish time
     showPosts(number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
+    showUserPosts(studentId: Long!, number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
     viewPost(postId: Long!): Post!
-    showComments(postId: Long!): [Comment!]!
 
-    following(studentId: Long!): [User!]!
-    followers(studentId: Long!): [User!]!
+    showComments(postId: Long!, number: Long!, from: Long!): [Comment!]!
+    showUserComments(studentId: Long!, number: Long!, from: Long!): [Comment!]!
 
+    following(studentId: Long!, number: Long!, from: Long!): [User!]!
+    followers(studentId: Long!, number: Long!, from: Long!): [User!]!
 }
 
 type Mutation {

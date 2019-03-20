@@ -9,5 +9,6 @@ public interface CommentRepository {
     void addComment(Long studentId, Long postId, String content, Date creationDate);
     List<MComment> showComments(Long postId);
     MComment findById(Long commentId);
+    List<MComment> showUserComments(Long studentId);
     void deleteById(Long commentId);
 }

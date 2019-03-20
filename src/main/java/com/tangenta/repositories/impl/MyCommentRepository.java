@@ -34,6 +34,11 @@ public class MyCommentRepository implements CommentRepository {
     }
 
     @Override
+    public List<MComment> showUserComments(Long studentId) {
+        return commentMapper.findByStudentId(studentId);
+    }
+
+    @Override
     public void deleteById(Long commentId) {
         commentMapper.deleteComment(commentId);
     }

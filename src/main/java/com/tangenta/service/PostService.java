@@ -15,12 +15,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-    private ValidationService validationService;
-    private UserRepository userRepository;
-    private PostRepository postRepository;
+    private final ValidationService validationService;
+    private final PagingService pagingService;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public PostService(ValidationService validationService, UserRepository userRepository, PostRepository postRepository) {
+    public PostService(ValidationService validationService, PagingService pagingService, UserRepository userRepository, PostRepository postRepository) {
         this.validationService = validationService;
+        this.pagingService = pagingService;
         this.userRepository = userRepository;
         this.postRepository = postRepository;
     }
@@ -37,15 +39,8 @@ public class PostService {
             default: comparator = Comparator.comparing(MPost::getPublishTime).thenComparing(MPost::getPostId);
         }
         allMPosts.sort(comparator);
-        int index = 0;
-        for (MPost mPost : allMPosts) {
-            if (mPost.getPostId().equals(from)) break;
-            index++;
-        }
 
-        return allMPosts.stream()
-                .skip(from.equals(0L) ? 0 : index + 1)
-                .limit(numbers)
+        return pagingService.paging(allMPosts, numbers, from, MPost::getPostId).stream()
                 .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
                         p.getViewNumber(), p.getReplyNumber(),
                         userRepository.findById(p.getStudentId()),

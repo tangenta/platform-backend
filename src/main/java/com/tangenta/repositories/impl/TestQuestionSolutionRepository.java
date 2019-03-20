@@ -18,8 +18,6 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
 
     @Override
     public List<QuestionSolution> getByQuestionId(Long questionId) {
-        logger.info("get questionId = {}", questionId);
-        solutions.forEach(s -> logger.info("{}", s.getQuestionId()));
         return solutions.stream()
                 .filter(qs -> qs.getQuestionId().equals(questionId))
                 .collect(Collectors.toList());
