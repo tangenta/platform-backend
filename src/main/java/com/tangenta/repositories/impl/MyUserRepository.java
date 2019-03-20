@@ -46,4 +46,9 @@ public class MyUserRepository implements UserRepository {
                 new Date().toString());
     }
 
+    @Override
+    public void updateUser(User user) {
+        userMapper.updateUser(user.getStudentId(), user.getUsername(), user.getPassword(), user.getEmail());
+    }
+
 }

@@ -32,13 +32,18 @@ public class MyStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public MStatistic getByStudentId(Long studentId) {
+    public MStatistic getUserStatisticByStudentId(Long studentId) {
         return statisticMapper.getByStudentId(studentId);
     }
 
     @Override
-    public QuestionStatistic getQuestionStatisticByKeys(Long studentId, QuestionClassification classification, QuestionType type) {
+    public QuestionStatistic getByKeys(Long studentId, QuestionClassification classification, QuestionType type) {
         return questionStatisticMapper.findByKeys(studentId, classification, type);
+    }
+
+    @Override
+    public List<QuestionStatistic> getQuestionStatisticByStudentId(Long studentId) {
+        return questionStatisticMapper.findByStudentId(studentId);
     }
 
     @Override

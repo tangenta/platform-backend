@@ -18,6 +18,13 @@
                                            and type = #{type, typeHandler=QuestionTypeHandler}
     </select>
 
+    <select id="findByStudentId" resultMap="baseResultMap">
+        select student_id, classification, sum(total) as total, sum(correct) as correct
+        from question_statistic
+        where student_id = #{id}
+        group by classification
+    </select>
+
     <insert id="insert" parameterType="com.tangenta.data.pojo.mybatis.QuestionStatistic">
         insert into question_statistic (student_id, classification, type, total, correct)
         VALUE (#{qs.studentId}, #{qs.classification, typeHandler=QuestionClassHandler},

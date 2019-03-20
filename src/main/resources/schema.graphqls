@@ -3,17 +3,19 @@ type Query {
     users: [User!]!
 
     user(username: String!): User!
+    userById(studentId: Long!): User!
 
     randomQuestion(
         classes: [QuestionClassification!]!,
         types: [QuestionType!]!
     ): Question!
 
-    showAnswerStatistic(
+    answerStatistic(
         studentId: Long!,
         classes: [QuestionClassification!]!,
         types: [QuestionType!]!
     ): AnswerStatistic!
+    answerStatistic(studentId: Long!, classes: [QuestionClassification!]!): [AnswerStatistic!]!
 
     # show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method
     # default SortMethod is sorting by publish time
@@ -23,11 +25,13 @@ type Query {
 
     following(studentId: Long!): [User!]!
     followers(studentId: Long!): [User!]!
+
 }
 
 type Mutation {
     login(username: String!, password: String!): LoginPayload!
     logout(studentId: Long!): Boolean!
+    changePassword(studentId: Long!, oldPassword: String!, newPassword: String!): Boolean!
 
     # always return true if success, otherwise throw an error
     register(username: String!, password: String!, email: String!): Boolean!

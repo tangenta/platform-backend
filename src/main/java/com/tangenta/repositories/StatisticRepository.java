@@ -7,12 +7,15 @@ import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 
 import java.util.Date;
+import java.util.List;
 
 public interface StatisticRepository {
-    MStatistic getByStudentId(Long studentId);
+    MStatistic getUserStatisticByStudentId(Long studentId);
 
-    QuestionStatistic getQuestionStatisticByKeys(Long studentId, QuestionClassification classification,
-                                                 QuestionType type);
+    QuestionStatistic getByKeys(Long studentId, QuestionClassification classification,
+                                QuestionType type);
+
+    List<QuestionStatistic> getQuestionStatisticByStudentId(Long studentId);
 
     void insertQuestionStatistic(Long studentId, QuestionClassification classification,
                                  QuestionType type, Long total, Long correct);

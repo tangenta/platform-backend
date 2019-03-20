@@ -56,6 +56,7 @@ public class Application implements WebMvcConfigurer {
         return new QuestionIdGenerator(TestQuestionRepository.currentMaxLength);
     }
 
+    // uncomment it to load file data into database
 //    @Bean
 //    QuestionImport initQuestionImport(QuestionMapper questionMapper, QuestionSolutionMapper questionSolutionMapper) {
 //        QuestionImport questionImport = new QuestionImport();

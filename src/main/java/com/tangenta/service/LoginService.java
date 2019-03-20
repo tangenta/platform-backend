@@ -14,10 +14,12 @@ import java.util.Optional;
 public class LoginService {
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
+    private final ValidationService validationService;
 
-    public LoginService(UserRepository userRepository, AuthenticationService authenticationService) {
+    public LoginService(UserRepository userRepository, AuthenticationService authenticationService, ValidationService validationService) {
         this.userRepository = userRepository;
         this.authenticationService = authenticationService;
+        this.validationService = validationService;
     }
 
     public LoginPayload login(String username, String password) {
@@ -40,5 +42,17 @@ public class LoginService {
     public boolean logout(Long studentId, DataFetchingEnvironment env) {
         Optional<String> oToken = Utils.getAuthToken(env);
         return oToken.map(token -> authenticationService.logout(studentId, token)).orElse(false);
+    }
+
+
+    public void changePassword(Long studentId, String password) {
+        validationService.ensureUserExistence(studentId);
+        User u = userRepository.findById(studentId);
+        userRepository.updateUser(new User(studentId, u.getUsername(), password, u.getEmail(), u.getCreationDate()));
+    }
+
+    public boolean authMatched(Long studentId, String password) {
+        User user = userRepository.findById(studentId);
+        return user != null && user.getPassword().equals(password);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 @Service
 public class StatisticService {
@@ -36,7 +37,7 @@ public class StatisticService {
         QuestionClassification cls = question.getClassification();
         QuestionType type = question.getType();
 
-        QuestionStatistic qs = statisticRepository.getQuestionStatisticByKeys(studentId, cls, type);
+        QuestionStatistic qs = statisticRepository.getByKeys(studentId, cls, type);
 
         Long correctScore = feedback.isCorrect() ? 1L : 0L;
 
@@ -58,10 +59,21 @@ public class StatisticService {
         return classes.stream()
                 .map(c ->
                     types.stream()
-                            .map(t -> statisticRepository.getQuestionStatisticByKeys(studentId, c, t))
+                            .map(t -> statisticRepository.getByKeys(studentId, c, t))
                             .map(qs -> new AnswerStatistic(studentId, qs.getCorrect(), qs.getTotal()))
                             .reduce(id, binOp))
                 .reduce(id, binOp);
+    }
+
+    public List<AnswerStatistic> showAnswerStatisticByClass(Long studentId, List<QuestionClassification> classes) {
+        List<QuestionStatistic> questionStatistics = statisticRepository.getQuestionStatisticByStudentId(studentId);
+        return classes.stream()
+                .map(cls -> questionStatistics.stream()
+                    .filter(qs -> qs.getClassification().equals(cls))
+                    .findFirst()
+                    .orElse(new QuestionStatistic(studentId, cls, null, 0L, 0L)))
+                .map(qs -> new AnswerStatistic(studentId, qs.getCorrect(), qs.getTotal()))
+                .collect(Collectors.toList());
     }
 
 }

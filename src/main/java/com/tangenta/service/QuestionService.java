@@ -9,6 +9,7 @@ import com.tangenta.data.pojo.mybatis.QuestionSolution;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.QuestionSolutionRepository;
+import com.tangenta.utils.AnswerConverter;
 import com.tangenta.utils.QuestionIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +20,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static com.tangenta.data.pojo.QuestionType.MultipleChoice;
-import static com.tangenta.data.pojo.QuestionType.SingleChoice;
+import static com.tangenta.data.pojo.QuestionType.*;
 
 @Service
 public class QuestionService {
@@ -62,8 +62,14 @@ public class QuestionService {
 
         MQuestion q = questionRepository.findQuestionById(questionId);
         // TODO: build a robust validation system
-        boolean isCorrect = q.getCorrectAnswer().equals(answer);
-        return new Feedback(questionId, isCorrect, q.getAnswerDescription(), q.getCorrectAnswer());
+        String correctAnswer;
+        if (q.getType().equals(TrueOrFalse)) {
+            correctAnswer = AnswerConverter.convertTrueOrFalse(q.getCorrectAnswer());
+        } else {
+            correctAnswer = q.getCorrectAnswer();
+        }
+        boolean isCorrect = correctAnswer.equals(answer);
+        return new Feedback(questionId, isCorrect, q.getAnswerDescription(), correctAnswer);
     }
 
     public void createQuestion(Long studentId, String questionDescription, QuestionType type,

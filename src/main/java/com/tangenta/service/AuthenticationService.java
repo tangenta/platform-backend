@@ -1,6 +1,8 @@
 package com.tangenta.service;
 
 import com.tangenta.exceptions.BusinessException;
+import com.tangenta.utils.Utils;
+import graphql.schema.DataFetchingEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -113,9 +115,12 @@ public class AuthenticationService {
 
     public void ensureLoggedIn(Long studentId) {
         if (!hasLoggedIn(studentId)) throw new BusinessException("用户尚未登录");
-        // TODO: authenticate
     }
 
-
+    public void ensureAuthenticated(Long studentId, DataFetchingEnvironment env) {
+        BusinessException e = new BusinessException("用户未认证");
+        String authToken = Utils.getAuthToken(env).orElseThrow(() -> e);
+        if (!authenticate(studentId, authToken)) throw e;
+    }
 
 }

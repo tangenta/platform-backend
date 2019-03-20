@@ -10,17 +10,13 @@ import com.tangenta.repositories.StatisticRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import static com.tangenta.data.pojo.QuestionClassification.*;
-import static com.tangenta.data.pojo.QuestionType.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Profile("dev-test")
 public class TestStatisticRepository implements StatisticRepository {
-    private static List<QuestionStatistic> mockQuestionStatistic = new LinkedList<QuestionStatistic>() {{
+    private static List<QuestionStatistic> allQuestionStatistic = new LinkedList<QuestionStatistic>() {{
 //        add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
 //        add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
 //        add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
@@ -34,13 +30,13 @@ public class TestStatisticRepository implements StatisticRepository {
 
 
     @Override
-    public MStatistic getByStudentId(Long studentId) {
+    public MStatistic getUserStatisticByStudentId(Long studentId) {
         throw new BusinessException("不支持操作");
     }
 
     @Override
-    public QuestionStatistic getQuestionStatisticByKeys(Long studentId, QuestionClassification classification, QuestionType type) {
-        for (QuestionStatistic qs: mockQuestionStatistic) {
+    public QuestionStatistic getByKeys(Long studentId, QuestionClassification classification, QuestionType type) {
+        for (QuestionStatistic qs: allQuestionStatistic) {
             if (qs.getStudentId().equals(studentId) && qs.getClassification().equals(classification)
                     && qs.getType().equals(type)) return qs;
         }
@@ -48,15 +44,31 @@ public class TestStatisticRepository implements StatisticRepository {
     }
 
     @Override
+    public List<QuestionStatistic> getQuestionStatisticByStudentId(Long studentId) {
+        return allQuestionStatistic.stream()
+                .filter(qs -> qs.getStudentId().equals(studentId))
+                .collect(Collectors.groupingBy(
+                        QuestionStatistic::getClassification,
+                        Collectors.reducing(
+                                (QuestionStatistic a, QuestionStatistic b) ->
+                            new QuestionStatistic(studentId, b.getClassification(), null,
+                                    a.getTotal() + b.getTotal(), a.getCorrect() + b.getCorrect())
+                        ))).values().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void insertQuestionStatistic(Long studentId, QuestionClassification classification, QuestionType type, Long total, Long correct) {
-        mockQuestionStatistic.add(new QuestionStatistic(studentId, classification, type, total, correct));
+        allQuestionStatistic.add(new QuestionStatistic(studentId, classification, type, total, correct));
     }
 
     @Override
     public void updateQuestionStatistic(Long studentId, QuestionClassification classification, QuestionType type, Long total, Long correct) {
         QuestionStatistic copied = null;
 
-        Iterator<QuestionStatistic> iter = mockQuestionStatistic.iterator();
+        Iterator<QuestionStatistic> iter = allQuestionStatistic.iterator();
         while (iter.hasNext()) {
             QuestionStatistic qs = iter.next();
             if (qs.getStudentId().equals(studentId) && qs.getClassification().equals(classification)
@@ -70,7 +82,7 @@ public class TestStatisticRepository implements StatisticRepository {
         if (copied == null) {
             throw new BusinessException("找不到更新对象");
         } else {
-            mockQuestionStatistic.add(copied);
+            allQuestionStatistic.add(copied);
         }
 
     }

@@ -5,10 +5,7 @@ import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.data.pojo.mybatis.QuestionSolution;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,6 +13,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -33,9 +31,13 @@ public class QuestionImport2 {
                         String[] desOptions = splitDescription(descriptionField(ln));
                         String description = desOptions[0];
                         List<String> options = splitOptions(desOptions[1]);
+                        String correctAnswer = mapAlphaToNumber(correctAnswerField(ln)).stream()
+                                .map(options::get)
+                                .sorted()
+                                .collect(Collectors.joining(", "));
 
                         questions.add(new MQuestion(questionId[0], description, typeField(ln),
-                                classField(ln), correctAnswerField(ln), answerDescriptionField(ln), false, 0L));
+                                classField(ln), correctAnswer, answerDescriptionField(ln), false, 0L));
                         questionSolutions.addAll(options.stream()
                                 .map(o -> new QuestionSolution(questionId[0], o))
                                 .collect(Collectors.toList())
@@ -69,9 +71,8 @@ public class QuestionImport2 {
     }
 
     private static List<String> splitOptions(String options) {
-        return Arrays.stream(options.split("[  ]"))
+        return Arrays.stream(options.split("[  ([a-zA-Z].)]"))
                 .filter(s -> !s.isEmpty())
-                .map(s -> s.substring(2))
                 .collect(Collectors.toList());
     }
 
@@ -112,7 +113,11 @@ public class QuestionImport2 {
         return line[5];
     }
 
-    public static void main(String[] args) throws IOException {
+    private static List<Integer> mapAlphaToNumber(String alpha) {
+        return alpha.chars().map(i -> i - 'A').boxed().collect(Collectors.toList());
+    }
+
+    public static void generateCode() throws IOException {
         QuestionImport2.readQuestions("D:\\questionData\\question.txt",
                 q -> q.forEach(question -> {
                     System.out.println(
@@ -132,12 +137,25 @@ public class QuestionImport2 {
                 }),
                 qs -> qs.forEach(questionSolution -> {
                     System.out.println(
-                        "add(new QuestionSolution(" +
-                                questionSolution.getQuestionId() +
-                                "L, \"" +
-                                questionSolution.getOption() +
-                                "\"));"
+                            "add(new QuestionSolution(" +
+                                    questionSolution.getQuestionId() +
+                                    "L, \"" +
+                                    questionSolution.getOption() +
+                                    "\"));"
                     );
                 }));
+    }
+
+    public static void main(String[] args) throws IOException {
+        generateCode();
+
+        // Test exception
+//        QuestionImport2.readQuestions("D:\\\\questionData\\\\question.txt",
+//                q -> {}, qs -> qs.forEach(i -> System.out.println(i.getOption())));
+
+//        BufferedReader bufferedReader = new BufferedReader(new FileReader("D:\\\\questionData\\\\question.txt"));
+//        String line = bufferedReader.readLine();
+//        String option = splitDescription(line.split("\t")[3])[1];
+//        System.out.println(Arrays.toString(option.split("[  ([a-zA-Z].)]")));
     }
 }

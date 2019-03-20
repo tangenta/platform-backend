@@ -60,6 +60,15 @@ public class Query implements GraphQLQueryResolver {
         return securityService.filterUserByToken(rawUser, authToken);
     }
 
+    public User userById(Long studentId, DataFetchingEnvironment env) {
+        authenticationService.ensureLoggedIn(studentId);
+        validationService.ensureUserExistence(studentId);
+
+        String authToken = Utils.getAuthToken(env).orElse("");
+        User rawUser = userRepository.findById(studentId);
+        return securityService.filterUserByToken(rawUser, authToken);
+    }
+
     public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
         return questionService.randomQuestion(classifications, types);
     }
@@ -87,7 +96,7 @@ public class Query implements GraphQLQueryResolver {
 
     }
 
-    public AnswerStatistic showAnswerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
+    public AnswerStatistic answerStatistic(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
         validationService.ensureUserExistence(studentId);
         authenticationService.ensureLoggedIn(studentId);
         return statisticService.showAnswerStatistic(studentId, classes, types);
@@ -106,6 +115,13 @@ public class Query implements GraphQLQueryResolver {
     public List<User> followers(Long studentId) {
         validationService.ensureUserExistence(studentId);
         return followService.followers(studentId);
+    }
+
+    public List<AnswerStatistic> answerStatistic(Long studentId, List<QuestionClassification> classes) {
+        validationService.ensureUserExistence(studentId);
+//        authenticationService.ensureLoggedIn(studentId);
+
+        return statisticService.showAnswerStatisticByClass(studentId, classes);
     }
 
 }

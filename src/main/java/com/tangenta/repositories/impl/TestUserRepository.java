@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,5 +63,22 @@ public class TestUserRepository implements UserRepository {
                 new User(id++, partialUser.getUsername(), partialUser.getPassword(),
                         partialUser.getEmail(), new Date().toString())
         );
+    }
+
+    @Override
+    public void updateUser(User user) {
+        Iterator<User> i = allUsers.iterator();
+        User newUser = null;
+        while (i.hasNext()) {
+            User u = i.next();
+            if (u.getStudentId().equals(user.getStudentId())) {
+                newUser = new User(user.getStudentId(), user.getUsername(), user.getPassword(),
+                        user.getEmail(), u.getCreationDate());
+                i.remove();
+                break;
+            }
+        }
+        if (newUser == null) throw new BusinessException("用户不存在");
+        allUsers.add(newUser);
     }
 }

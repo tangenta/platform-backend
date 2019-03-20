@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
+import com.tangenta.exceptions.BusinessException;
 import com.tangenta.service.*;
 import com.tangenta.types.LoginPayload;
 import graphql.schema.DataFetchingEnvironment;
@@ -56,6 +57,16 @@ public class Mutation implements GraphQLMutationResolver {
         validationService.ensureValidEmailAddress(email);
         validationService.ensureNoDuplication(username, email);
         registerService.beginRegisterProcess(username, password, email);
+        return true;
+    }
+
+    public boolean changePassword(Long studentId, String oldPassword, String newPassword, DataFetchingEnvironment env) {
+        authenticationService.ensureLoggedIn(studentId);
+        authenticationService.ensureAuthenticated(studentId, env);
+        if (!loginService.authMatched(studentId, oldPassword)) {
+            throw new BusinessException("旧密码不正确");
+        }
+        loginService.changePassword(studentId, newPassword);
         return true;
     }
 

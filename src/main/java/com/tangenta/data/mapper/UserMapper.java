@@ -28,4 +28,8 @@ public interface UserMapper {
                     @Param("password") String password,
                     @Param("email") String email,
                     @Param("creationDate") String creationDate);
+
+    @Update("update user set username = #{username}, password = #{password}, email = #{email} " +
+            "where student_id = #{studentId}")
+    void updateUser(Long studentId, String username, String password, String email);
 }

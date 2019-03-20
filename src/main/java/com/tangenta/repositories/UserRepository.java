@@ -10,4 +10,5 @@ public interface UserRepository {
     User findByUsername(String username);
     User findByEmail(String email);
     void createUser(User partialUser);
+    void updateUser(User user);
 }

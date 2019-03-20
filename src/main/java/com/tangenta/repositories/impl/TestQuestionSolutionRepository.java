@@ -51,7 +51,10 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
         add(new QuestionSolution(5L, "资本"));
         add(new QuestionSolution(5L, "公平"));
         add(new QuestionSolution(5L, "自有"));
-        add(new QuestionSolution(6L, "十七世纪末十八世纪初B.十八世纪末十九世纪初C.十九世纪末二十世纪初D.二十世纪末二十一世纪初"));
+        add(new QuestionSolution(6L, "十七世纪末十八世纪初"));
+        add(new QuestionSolution(6L, "十八世纪末十九世纪初"));
+        add(new QuestionSolution(6L, "十九世纪末二十世纪初"));
+        add(new QuestionSolution(6L, "二十世纪末二十一世纪初"));
         add(new QuestionSolution(7L, "信念"));
         add(new QuestionSolution(7L, "信仰"));
         add(new QuestionSolution(7L, "文化"));
@@ -68,7 +71,10 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
         add(new QuestionSolution(10L, "以人为本"));
         add(new QuestionSolution(10L, "全面协调可持续发展"));
         add(new QuestionSolution(10L, "统筹兼顾"));
-        add(new QuestionSolution(11L, "听任多样化的无序发展B.允许各种非马克思主义的社会思潮泛滥C.尊重差异，包容多样D.兼收并蓄"));
+        add(new QuestionSolution(11L, "听任多样化的无序发展"));
+        add(new QuestionSolution(11L, "允许各种非马克思主义的社会思潮泛滥"));
+        add(new QuestionSolution(11L, "尊重差异，包容多样"));
+        add(new QuestionSolution(11L, "兼收并蓄"));
         add(new QuestionSolution(12L, "物质"));
         add(new QuestionSolution(12L, "精神"));
         add(new QuestionSolution(12L, "政治"));
@@ -162,7 +168,8 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
         add(new QuestionSolution(34L, "改革创新"));
         add(new QuestionSolution(34L, "改革开放"));
         add(new QuestionSolution(35L, "政治、经济和文化"));
-        add(new QuestionSolution(35L, "政治、思想和组织C.政治、思想和经济"));
+        add(new QuestionSolution(35L, "政治、思想和组织"));
+        add(new QuestionSolution(35L, "政治、思想和经济"));
         add(new QuestionSolution(35L, "政治、思想和文化"));
         add(new QuestionSolution(36L, "实事求是"));
         add(new QuestionSolution(36L, "开拓创新"));
@@ -248,7 +255,8 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
         add(new QuestionSolution(56L, "全面提高公民道德素质"));
         add(new QuestionSolution(56L, "丰富人民精神文化生活"));
         add(new QuestionSolution(56L, "增强文化整体实力和竞争力"));
-        add(new QuestionSolution(57L, "综合国力进一步跃升的“实力特征”B.社会和谐进一步提升的“幸福特征”"));
+        add(new QuestionSolution(57L, "综合国力进一步跃升的“实力特征”"));
+        add(new QuestionSolution(57L, "社会和谐进一步提升的“幸福特征”"));
         add(new QuestionSolution(57L, "中华文明在复兴中进一步演进的“文明特征”"));
         add(new QuestionSolution(57L, "促进人全面发展的“价值特征”"));
         add(new QuestionSolution(58L, "人的活动的全面发展"));
@@ -278,7 +286,8 @@ public class TestQuestionSolutionRepository implements QuestionSolutionRepositor
         add(new QuestionSolution(115L, "以德治国"));
         add(new QuestionSolution(115L, "组织领导"));
         add(new QuestionSolution(115L, "政治领导"));
-        add(new QuestionSolution(116L, "公有制为主体，多种所有制经济共同发展B.非公有制为主体，多种经济成分共同发展"));
+        add(new QuestionSolution(116L, "公有制为主体，多种所有制经济共同发展"));
+        add(new QuestionSolution(116L, "非公有制为主体，多种经济成分共同发展"));
         add(new QuestionSolution(116L, "全民所有制为主体，集体所有制为辅"));
         add(new QuestionSolution(117L, "学校"));
         add(new QuestionSolution(117L, "家庭"));
