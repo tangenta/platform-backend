@@ -19,7 +19,7 @@ import java.util.Optional;
 public class Mutation implements GraphQLMutationResolver {
     private static Logger logger = LoggerFactory.getLogger(Mutation.class);
 
-    private LoginService loginService;
+    private UserLoginService loginService;
     private RegisterService registerService;
     private ValidationService validationService;
     private AuthenticationService authenticationService;
@@ -30,7 +30,7 @@ public class Mutation implements GraphQLMutationResolver {
     private FollowService followService;
 
 
-    public Mutation(LoginService loginService, RegisterService registerService,
+    public Mutation(UserLoginService loginService, RegisterService registerService,
                     ValidationService validationService, AuthenticationService authenticationService,
                     QuestionService questionService, StatisticService statisticService,
                     PostService postService, CommentService commentService, FollowService followService) {

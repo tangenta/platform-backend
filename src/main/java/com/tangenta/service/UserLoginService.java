@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class LoginService {
+public class UserLoginService {
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
     private final ValidationService validationService;
 
-    public LoginService(UserRepository userRepository, AuthenticationService authenticationService, ValidationService validationService) {
+    public UserLoginService(UserRepository userRepository, AuthenticationService authenticationService, ValidationService validationService) {
         this.userRepository = userRepository;
         this.authenticationService = authenticationService;
         this.validationService = validationService;
