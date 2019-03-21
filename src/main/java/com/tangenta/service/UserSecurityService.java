@@ -8,10 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class SecurityService {
+public class UserSecurityService {
     private AuthenticationService authenticationService;
 
-    public SecurityService(AuthenticationService authenticationService) {
+    public UserSecurityService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 

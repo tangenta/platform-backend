@@ -24,7 +24,7 @@ public class Query implements GraphQLQueryResolver {
 
     private final UserRepository userRepository;
 
-    private final SecurityService securityService;
+    private final UserSecurityService userSecurityService;
     private final QuestionService questionService;
     private final AuthenticationService authenticationService;
     private final StatisticService statisticService;
@@ -35,11 +35,11 @@ public class Query implements GraphQLQueryResolver {
     private final PagingService pagingService;
 
     public Query(UserRepository userRepository,
-                 SecurityService securityService, QuestionService questionService,
+                 UserSecurityService userSecurityService, QuestionService questionService,
                  AuthenticationService authenticationService, StatisticService statisticService,
                  PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService) {
         this.userRepository = userRepository;
-        this.securityService = securityService;
+        this.userSecurityService = userSecurityService;
         this.questionService = questionService;
         this.authenticationService = authenticationService;
         this.statisticService = statisticService;
@@ -53,7 +53,7 @@ public class Query implements GraphQLQueryResolver {
     public List<User> users(DataFetchingEnvironment env) {
         String authToken = Utils.getAuthToken(env).orElse("");
         List<User> rawAllUsers = userRepository.getAllUsers();
-        return securityService.filterUsersByToken(rawAllUsers, authToken);
+        return userSecurityService.filterUsersByToken(rawAllUsers, authToken);
     }
 
     public User user(String username, DataFetchingEnvironment env) {
@@ -61,7 +61,7 @@ public class Query implements GraphQLQueryResolver {
 
         String authToken = Utils.getAuthToken(env).orElse("");
         User rawUser = userRepository.findByUsername(username);
-        return securityService.filterUserByToken(rawUser, authToken);
+        return userSecurityService.filterUserByToken(rawUser, authToken);
     }
 
     public User userById(Long studentId, DataFetchingEnvironment env) {
@@ -70,7 +70,7 @@ public class Query implements GraphQLQueryResolver {
 
         String authToken = Utils.getAuthToken(env).orElse("");
         User rawUser = userRepository.findById(studentId);
-        return securityService.filterUserByToken(rawUser, authToken);
+        return userSecurityService.filterUserByToken(rawUser, authToken);
     }
 
     public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
@@ -85,7 +85,7 @@ public class Query implements GraphQLQueryResolver {
         return allMPosts.stream()
                 .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
                         p.getViewNumber(), p.getReplyNumber(),
-                        securityService.filterUserByToken(p.getUser(), token),
+                        userSecurityService.filterUserByToken(p.getUser(), token),
                         p.getTitle()))
                 .collect(Collectors.toList());
     }
@@ -103,7 +103,7 @@ public class Query implements GraphQLQueryResolver {
         String token = Utils.getAuthToken(env).orElse("");
         Post p = postService.viewPost(postId);
         return new Post(p.getPostId(), p.getPublishTime(), p.getContent(), p.getViewNumber(),
-                p.getReplyNumber(), securityService.filterUserByToken(p.getUser(), token), p.getTitle());
+                p.getReplyNumber(), userSecurityService.filterUserByToken(p.getUser(), token), p.getTitle());
 
     }
 
