@@ -2,6 +2,7 @@ package com.tangenta.repositories;
 
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
 import com.tangenta.data.pojo.mybatis.DoneTag;
 import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
@@ -26,4 +27,6 @@ public interface StatisticRepository {
     DoneTag getDoneTagByKeys(Long studentId, Long questionId);
 
     void insertDoneTag(Long studentId, Long questionId, Date doneDate);
+
+    List<AnswerCountDatePair> countAndGroupByDate(Long studentId);
 }

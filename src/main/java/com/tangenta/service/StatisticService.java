@@ -4,21 +4,28 @@ import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.AnswerStatistic;
 import com.tangenta.data.pojo.graphql.Feedback;
+import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
 import com.tangenta.data.pojo.mybatis.DoneTag;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
+import kotlin.reflect.jvm.internal.impl.resolve.scopes.StaticScopeForKotlinEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StatisticService {
+    private static Logger logger = LoggerFactory.getLogger(StatisticService.class);
     private QuestionRepository questionRepository;
     private StatisticRepository statisticRepository;
 
@@ -76,4 +83,15 @@ public class StatisticService {
                 .collect(Collectors.toList());
     }
 
+    public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<Date> dates) {
+        List<AnswerCountDatePair> found =  statisticRepository.countAndGroupByDate(studentId).stream()
+                .filter(acPair -> dates.contains(acPair.getDate()))
+                .collect(Collectors.toList());
+        dates.forEach(d -> logger.info(d.toString()));
+        statisticRepository.countAndGroupByDate(studentId).forEach(d -> logger.info(d.getDate().toString()));
+        return dates.stream().map(date -> found.stream()
+                .filter(p -> p.getDate().equals(date))
+                .findFirst()
+                .orElse(new AnswerCountDatePair(0, date))).collect(Collectors.toList());
+    }
 }

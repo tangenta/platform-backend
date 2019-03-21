@@ -27,7 +27,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public List<Post> allPost(int numbers, Long from, SortMethod sortBy) {
+    public List<Post> allPost(int numbers, int from, SortMethod sortBy) {
         List<MPost> allMPosts = postRepository.getAllPosts();
         if (sortBy == null) sortBy = SortMethod.Time;
 
@@ -40,7 +40,7 @@ public class PostService {
         }
         allMPosts.sort(comparator);
 
-        return pagingService.paging(allMPosts, numbers, from, MPost::getPostId).stream()
+        return pagingService.paging(allMPosts, numbers, from).stream()
                 .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
                         p.getViewNumber(), p.getReplyNumber(),
                         userRepository.findById(p.getStudentId()),

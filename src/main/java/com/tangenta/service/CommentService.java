@@ -28,15 +28,15 @@ public class CommentService {
         commentRepository.addComment(studentId, postId, content, new Date());
     }
 
-    public List<Comment> showComments(Long postId, int number, Long from) {
+    public List<Comment> showComments(Long postId, int number, int from) {
         List<MComment> result = pagingService.paging(commentRepository.showComments(postId),
-                number, from, MComment::getCommentId);
+                number, from);
         return mapMCommentToComment(result);
     }
 
-    public List<Comment> showUserComments(Long studentId, int number, Long from) {
+    public List<Comment> showUserComments(Long studentId, int number, int from) {
         List<MComment> result = pagingService.paging(commentRepository.showUserComments(studentId),
-                number, from, MComment::getCommentId);
+                number, from);
         return mapMCommentToComment(result);
     }
 

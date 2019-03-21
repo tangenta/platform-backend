@@ -1,13 +1,13 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.tangenta.data.pojo.graphql.*;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
-import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
-import com.tangenta.service.*;
-import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
+import com.tangenta.data.pojo.graphql.*;
+import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
+import com.tangenta.repositories.UserRepository;
+import com.tangenta.service.*;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.slf4j.Logger;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,7 +77,7 @@ public class Query implements GraphQLQueryResolver {
         return questionService.randomQuestion(classifications, types);
     }
 
-    public List<Post> showPosts(int numbers, Long from, SortMethod sortBy, DataFetchingEnvironment env) {
+    public List<Post> showPosts(int numbers, int from, SortMethod sortBy, DataFetchingEnvironment env) {
         List<Post> allMPosts = postService.allPost(numbers, from, sortBy);
 
         String token = Utils.getAuthToken(env).orElse("");
@@ -91,7 +90,7 @@ public class Query implements GraphQLQueryResolver {
                 .collect(Collectors.toList());
     }
 
-    public List<Post> showUserPosts(Long userId, int numbers, Long from, SortMethod sortBy,
+    public List<Post> showUserPosts(Long userId, int numbers, int from, SortMethod sortBy,
                                     DataFetchingEnvironment env) {
         return showPosts(numbers, from, sortBy, env).stream()
                 .filter(p -> p.getUser().getStudentId().equals(userId))
@@ -114,25 +113,25 @@ public class Query implements GraphQLQueryResolver {
         return statisticService.showAnswerStatistic(studentId, classes, types);
     }
 
-    public List<Comment> showComments(Long postId, int number, Long from) {
+    public List<Comment> showComments(Long postId, int number, int from) {
         validationService.ensurePostExistence(postId);
         return commentService.showComments(postId, number, from);
     }
 
-    public List<Comment> showUserComments(Long studentId, int number, Long from) {
+    public List<Comment> showUserComments(Long studentId, int number, int from) {
         validationService.ensureUserExistence(studentId);
         return commentService.showUserComments(studentId, number, from);
     }
 
 
-    public List<User> following(Long studentId, int number, Long from) {
+    public List<User> following(Long studentId, int number, int from) {
         validationService.ensureUserExistence(studentId);
-        return pagingService.paging(followService.following(studentId), number, from, User::getStudentId);
+        return pagingService.paging(followService.following(studentId), number, from);
     }
 
-    public List<User> followers(Long studentId, int number, Long from) {
+    public List<User> followers(Long studentId, int number, int from) {
         validationService.ensureUserExistence(studentId);
-        return pagingService.paging(followService.followers(studentId), number, from, User::getStudentId);
+        return pagingService.paging(followService.followers(studentId), number, from);
     }
 
     public List<AnswerStatistic> answerStatisticByClass(Long studentId, List<QuestionClassification> classes) {
@@ -143,7 +142,10 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<Date> dates) {
-        return dates.stream().map(d -> new AnswerCountDatePair(5, d)).collect(Collectors.toList());
+        validationService.ensureUserExistence(studentId);
+//        authenticationService.ensureLoggedIn(studentId);
+
+        return statisticService.answersCountRecently(studentId, dates);
     }
 
 }

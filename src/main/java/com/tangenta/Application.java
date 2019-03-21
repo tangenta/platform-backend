@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -67,7 +68,7 @@ public class Application implements WebMvcConfigurer {
                     public String serialize(Object dataFetcherResult) throws CoercingSerializeException {
                         if (dataFetcherResult instanceof Date) {
                             Date date = (Date)dataFetcherResult;
-                            LocalDate localDate = date.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+                            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                             return DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
                         } else {
                             throw new CoercingSerializeException("Invalid value '" + dataFetcherResult + "' for Date");
@@ -80,7 +81,7 @@ public class Application implements WebMvcConfigurer {
                             String date = (String)input;
                             try {
                                 LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-                                return Date.from(Instant.from(localDate.atStartOfDay(ZoneOffset.UTC)));
+                                return Date.from(Instant.from(localDate.atStartOfDay(ZoneId.systemDefault())));
                             } catch (DateTimeParseException e) {
                                 throw new CoercingParseValueException("Invalid value '" + input + "' for Date");
                             }

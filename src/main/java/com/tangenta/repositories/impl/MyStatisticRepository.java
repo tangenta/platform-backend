@@ -5,6 +5,7 @@ import com.tangenta.data.mapper.QuestionStatisticMapper;
 import com.tangenta.data.mapper.StatisticMapper;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
 import com.tangenta.data.pojo.mybatis.DoneTag;
 import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
@@ -66,6 +67,11 @@ public class MyStatisticRepository implements StatisticRepository {
     @Override
     public void insertDoneTag(Long studentId, Long questionId, Date doneDate) {
         doneTagMapper.insert(studentId, questionId, doneDate);
+    }
+
+    @Override
+    public List<AnswerCountDatePair> countAndGroupByDate(Long studentId) {
+        return doneTagMapper.countAndGroupByDate(studentId);
     }
 
 
