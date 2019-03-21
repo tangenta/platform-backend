@@ -29,7 +29,12 @@ type Feedback {
 }
 
 type AnswerStatistic {
-    studentId: Int!
-    correct: Int!
-    total: Int!
+    studentId: Long!
+    correct: Long!
+    total: Long!
+}
+
+type AnswerCountDatePair {
+    count: Long!
+    date: LocalDate!
 }

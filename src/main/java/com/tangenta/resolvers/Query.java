@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.tangenta.data.pojo.graphql.*;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
 import com.tangenta.service.*;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.data.pojo.User;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -137,6 +140,10 @@ public class Query implements GraphQLQueryResolver {
 //        authenticationService.ensureLoggedIn(studentId);
 
         return statisticService.showAnswerStatisticByClass(studentId, classes);
+    }
+
+    public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<Date> dates) {
+        return dates.stream().map(d -> new AnswerCountDatePair(5, d)).collect(Collectors.toList());
     }
 
 }

@@ -28,6 +28,8 @@ type Query {
 
     following(studentId: Long!, number: Long!, from: Long!): [User!]!
     followers(studentId: Long!, number: Long!, from: Long!): [User!]!
+
+    answersCountRecently(studentId: Long!, dates: [LocalDate!]!): [AnswerCountDatePair!]!
 }
 
 type Mutation {
@@ -68,3 +70,4 @@ type LoginPayload {
     token: String!
 }
 
+scalar LocalDate

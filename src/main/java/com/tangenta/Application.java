@@ -1,15 +1,12 @@
 package com.tangenta;
 
 import com.tangenta.data.mapper.QuestionIdFetchingMapper;
-import com.tangenta.data.mapper.QuestionMapper;
-import com.tangenta.data.mapper.QuestionSolutionMapper;
 import com.tangenta.repositories.impl.TestQuestionRepository;
 import com.tangenta.utils.QuestionIdGenerator;
-import com.tangenta.utils.QuestionImport;
-import com.tangenta.utils.QuestionImport2;
+import graphql.language.StringValue;
+import graphql.schema.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -19,8 +16,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 
 
 @SpringBootApplication
@@ -54,6 +55,55 @@ public class Application implements WebMvcConfigurer {
     @Profile("dev-test")
     QuestionIdGenerator initQuestionIdGeneratorDevTest() {
         return new QuestionIdGenerator(TestQuestionRepository.currentMaxLength);
+    }
+
+    @Bean
+    GraphQLScalarType myGQLScalarType() {
+        return GraphQLScalarType.newScalar()
+                .name("LocalDate")
+                .description("YYYY-MM-DD")
+                .coercing(new Coercing<Date, String>(){
+                    @Override
+                    public String serialize(Object dataFetcherResult) throws CoercingSerializeException {
+                        if (dataFetcherResult instanceof Date) {
+                            Date date = (Date)dataFetcherResult;
+                            LocalDate localDate = date.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+                            return DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
+                        } else {
+                            throw new CoercingSerializeException("Invalid value '" + dataFetcherResult + "' for Date");
+                        }
+                    }
+
+                    @Override
+                    public Date parseValue(Object input) throws CoercingParseValueException {
+                        if (input instanceof String) {
+                            String date = (String)input;
+                            try {
+                                LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+                                return Date.from(Instant.from(localDate.atStartOfDay(ZoneOffset.UTC)));
+                            } catch (DateTimeParseException e) {
+                                throw new CoercingParseValueException("Invalid value '" + input + "' for Date");
+                            }
+                        } else {
+                            throw new CoercingParseValueException("Invalid value '" + input + "' for Date");
+                        }
+                    }
+
+                    @Override
+                    public Date parseLiteral(Object input) throws CoercingParseLiteralException {
+                        if (!(input instanceof StringValue)) {
+                            throw new CoercingParseLiteralException("Invalid value '" + input + "' for Date");
+                        }
+                        String value = ((StringValue) input).getValue();
+
+                        try {
+                            return parseValue(value);
+                        } catch (CoercingParseValueException e) {
+                            throw new CoercingParseLiteralException(e.getMessage());
+                        }
+                    }
+                })
+                .build();
     }
 
     // uncomment it to load file data into database

@@ -5,6 +5,8 @@ import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.servlet.DefaultGraphQLErrorHandler;
 import graphql.servlet.GenericGraphQLError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,8 +16,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class MyGraphqlErrorHandler extends DefaultGraphQLErrorHandler {
+    private static Logger logger = LoggerFactory.getLogger(MyGraphqlErrorHandler.class);
     @Override
     public List<GraphQLError> processErrors(List<GraphQLError> errors) {
+        logger.info("{}", errors);
         List<GraphQLError> customErrors =  errors.stream()
                 .filter(e -> e instanceof ExceptionWhileDataFetching)
                 .map(e -> ((ExceptionWhileDataFetching)e).getException())

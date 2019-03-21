@@ -1,10 +1,12 @@
 package com.tangenta.data.mapper;
 
+import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
 import com.tangenta.data.pojo.mybatis.DoneTag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 @Mapper
 public interface DoneTagMapper {
@@ -15,4 +17,6 @@ public interface DoneTagMapper {
     void insert(@Param("studentId") Long studentId,
                 @Param("questionId") Long questionId, @Param("doneDate") Date doneDate);
 
+
+    List<AnswerCountDatePair> countAndGroupByDate(Long studentId);
 }

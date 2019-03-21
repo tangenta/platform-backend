@@ -8,6 +8,11 @@
         <result column="done_date" property="doneDate" jdbcType="DATE" />
     </resultMap>
 
+    <resultMap id="countMap" type="com.tangenta.data.pojo.mybatis.AnswerCountDatePair">
+        <result column="number" property="number" jdbcType="NUMERIC"/>
+        <result column="done_date" property="date" jdbcType="DATE"/>
+    </resultMap>
+
 
     <select id="findByStudentAndQuestion" resultMap="baseResultMap">
         select * from donetag where student_id = #{studentId} and question_id = #{questionId}
@@ -16,5 +21,11 @@
     <insert id="insert">
         insert into donetag value (#{studentId}, #{questionId}, #{doneDate})
     </insert>
+
+    <select id="findUserGroupByDate" resultMap="countMap">
+        select count(*) as count, done_date from donetag
+        where student_id = 1
+        group by done_date
+    </select>
 
 </mapper>

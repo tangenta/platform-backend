@@ -31,4 +31,6 @@ public interface QuestionStatisticMapper {
 //                @Param("correct") Long correct);
 
     void update(@Param("qs") QuestionStatistic questionStatistic);
+
+
 }
