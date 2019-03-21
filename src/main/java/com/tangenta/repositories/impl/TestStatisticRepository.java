@@ -43,6 +43,8 @@ public class TestStatisticRepository implements StatisticRepository {
         add(new DoneTag(1L, 6L, buildDate(2018, 5, 15)));
         add(new DoneTag(1L, 7L, buildDate(2018, 5, 15)));
         add(new DoneTag(1L, 8L, buildDate(2018, 5, 16)));
+        add(new DoneTag(1L, 9L, new Date()));
+        add(new DoneTag(1L, 10L, new Date()));
     }};
 
 

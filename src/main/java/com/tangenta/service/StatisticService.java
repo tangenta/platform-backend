@@ -11,11 +11,14 @@ import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
+import com.tangenta.utils.Utils;
 import kotlin.reflect.jvm.internal.impl.resolve.scopes.StaticScopeForKotlinEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,13 +88,14 @@ public class StatisticService {
 
     public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<Date> dates) {
         List<AnswerCountDatePair> found =  statisticRepository.countAndGroupByDate(studentId).stream()
-                .filter(acPair -> dates.contains(acPair.getDate()))
+                .filter(acPair -> dates.stream()
+                        .anyMatch(inputDate ->
+                                Utils.compareDateByDateField(inputDate, acPair.getDate()) == 0))
                 .collect(Collectors.toList());
-        dates.forEach(d -> logger.info(d.toString()));
-        statisticRepository.countAndGroupByDate(studentId).forEach(d -> logger.info(d.getDate().toString()));
         return dates.stream().map(date -> found.stream()
-                .filter(p -> p.getDate().equals(date))
+                .filter(p -> Utils.compareDateByDateField(p.getDate(), date) == 0)
                 .findFirst()
-                .orElse(new AnswerCountDatePair(0, date))).collect(Collectors.toList());
+                .orElse(new AnswerCountDatePair(0, date)))
+                .collect(Collectors.toList());
     }
 }

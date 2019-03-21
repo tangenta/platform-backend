@@ -2,10 +2,17 @@ package com.tangenta.utils;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.GraphQLContext;
+import org.apache.tomcat.jni.Local;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Optional;
 
 public class Utils {
+    private static Logger logger = LoggerFactory.getLogger(Utils.class);
     public static Optional<String> getAuthToken(DataFetchingEnvironment env) {
         GraphQLContext graphQLContext = env.getContext();
         return graphQLContext.getHttpServletRequest()
@@ -21,6 +28,14 @@ public class Utils {
             }
         }
         throw new RuntimeException("impossible to reach here");
+    }
+
+    public static LocalDate dateToLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static int compareDateByDateField(Date a, Date b) {
+        return dateToLocalDate(a).compareTo(dateToLocalDate(b));
     }
 
 }
