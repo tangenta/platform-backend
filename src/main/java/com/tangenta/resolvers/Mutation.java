@@ -1,6 +1,7 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.tangenta.data.pojo.Gender;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,13 +31,14 @@ public class Mutation implements GraphQLMutationResolver {
     private CommentService commentService;
     private FollowService followService;
     private FavouriteService favouriteService;
+    private StudentInfoService studentInfoService;
 
 
     public Mutation(UserLoginService loginService, RegisterService registerService,
                     ValidationService validationService, AuthenticationService authenticationService,
                     QuestionService questionService, StatisticService statisticService,
                     PostService postService, CommentService commentService, FollowService followService,
-                    FavouriteService favouriteService) {
+                    FavouriteService favouriteService, StudentInfoService studentInfoService) {
         this.loginService = loginService;
         this.registerService = registerService;
         this.validationService = validationService;
@@ -46,6 +49,7 @@ public class Mutation implements GraphQLMutationResolver {
         this.commentService = commentService;
         this.followService = followService;
         this.favouriteService = favouriteService;
+        this.studentInfoService = studentInfoService;
     }
 
     public LoginPayload login(String username, String password) {
@@ -161,6 +165,27 @@ public class Mutation implements GraphQLMutationResolver {
         authenticationService.ensureLoggedIn(subjectId);
 
         followService.unFollow(subjectId, objectId);
+        return true;
+    }
+
+    public boolean updateStudentInfo(Long studentId, String studentName, Gender gender, Long picture, String partyBranch, LocalDate birthday,
+                                     String nation, String nativePlace, String politicalLandscape, String college, String major,
+                                     String currentClass, String lengthOfSchooling, String state, String professionalDirection,
+                                     LocalDate admissionDate, String dormitoryNumber, String phone, String mailCode, String idNumber,
+                                     String academicLevel, LocalDate joinLeagueDate, String englishLevel, String graduateSchool,
+                                     String familyCode, String familyPhone, String fatherName, String fatherWorkPlace,
+                                     String fatherPhone, String motherName, String motherWorkPlace, String motherPhone,
+                                     String familyAddress, String hmtCode, DataFetchingEnvironment env) {
+        validationService.ensureUserExistence(studentId);
+        authenticationService.ensureAuthenticated(studentId, env);
+        studentInfoService.update(studentId, studentName, gender, picture, partyBranch, birthday,
+                nation, nativePlace, politicalLandscape, college, major,
+                currentClass, lengthOfSchooling, state, professionalDirection,
+                admissionDate, dormitoryNumber, phone, mailCode, idNumber,
+                academicLevel, joinLeagueDate, englishLevel, graduateSchool,
+                familyCode, familyPhone, fatherName, fatherWorkPlace,
+                fatherPhone, motherName, motherWorkPlace, motherPhone,
+                familyAddress, hmtCode);
         return true;
     }
 

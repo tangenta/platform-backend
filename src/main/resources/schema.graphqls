@@ -31,6 +31,7 @@ type Query {
     followers(studentId: Long!, number: Long!, from: Long!): [User!]!
 
     answersCountRecently(studentId: Long!, dates: [LocalDate!]!): [AnswerCountDatePair!]!
+    studentInfo(studentId: Long!): StudentInfo!
 }
 
 type Mutation {

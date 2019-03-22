@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangenta.data.mapper.StudentInfoMapper" >
+    <!--<cache />-->
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.StudentInfo" >
+            <id column="Student_id" property="studentId" jdbcType="NUMERIC" />
+        <result column="Student_name" property="studentName" jdbcType="VARCHAR" />
+        <result column="Student_gender" property="gender" jdbcType="VARCHAR"
+                typeHandler="com.tangenta.data.typeHandler.GenderHandler"/>
+        <result column="Student_picture" property="pictureId" jdbcType="NUMERIC" />
+        <result column="partyBranch" property="partyBranch" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="DATE" />
+        <result column="national" property="nation" jdbcType="VARCHAR" />
+        <result column="NativePlace" property="nativePlace" jdbcType="VARCHAR" />
+        <result column="Political_landscape" property="politicalLandscape" jdbcType="VARCHAR" />
+        <result column="college" property="college" jdbcType="VARCHAR" />
+        <result column="major" property="major" jdbcType="VARCHAR" />
+        <result column="class" property="currentClass" jdbcType="VARCHAR" />
+        <result column="LengthOfSchooling" property="lengthOfSchooling" jdbcType="VARCHAR" />
+        <result column="StudentState" property="state" jdbcType="VARCHAR" />
+        <result column="ProfessionalDirection" property="professionalDirection" jdbcType="VARCHAR" />
+        <result column="AdmissionDate" property="admissionDate" jdbcType="DATE" />
+        <result column="DormitoryNo" property="dormitoryNumber" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="mailCode" property="mailCode" jdbcType="VARCHAR" />
+        <result column="IdNumber" property="idNumber" jdbcType="VARCHAR" />
+        <result column="AcademicLevel" property="academicLevel" jdbcType="VARCHAR" />
+        <result column="JoinLeagueDate" property="joinLeagueDate" jdbcType="DATE" />
+        <result column="EnglishLevel" property="englishLevel" jdbcType="VARCHAR" />
+        <result column="GraduateSchool" property="graduateSchool" jdbcType="VARCHAR" />
+        <result column="FamilyCode" property="familyCode" jdbcType="VARCHAR" />
+        <result column="Familyphone" property="familyPhone" jdbcType="VARCHAR" />
+        <result column="father" property="fatherName" jdbcType="VARCHAR" />
+        <result column="fatherWorkPlace" property="fatherWorkPlace" jdbcType="VARCHAR" />
+        <result column="fatherPhone" property="fatherPhone" jdbcType="VARCHAR" />
+        <result column="mother" property="motherName" jdbcType="VARCHAR" />
+        <result column="motherWorkPlace" property="motherWorkPlace" jdbcType="VARCHAR" />
+        <result column="motherPhone" property="motherPhone" jdbcType="VARCHAR" />
+        <result column="familyAddress" property="familyAddress" jdbcType="VARCHAR" />
+        <result column="HongKongMacaoTaiwanCode" property="HMTCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="get" resultMap="baseResultMap">
+        select * from student where student_id = #{studentId}
+    </select>
+
+    <insert id="create">
+        insert into student value
+          (#{i.studentInfo},
+           #{i.studentName},
+           #{i.gender, typeHandler=GenderHandler},
+           #{i.pictureId},
+           #{i.partyBranch},
+           #{i.birthday},
+           #{i.nation},
+           #{i.nativePlace},
+           #{i.politicalLandscape},
+           #{i.college},
+           #{i.major},
+           #{i.currentClass},
+           #{i.lengthOfSchooling},
+           #{i.state},
+           #{i.professionalDirection},
+           #{i.admissionDate},
+           #{i.dormitoryNumber},
+           #{i.phone},
+           #{i.mailCode},
+           #{i.idNumber},
+           #{i.academicLevel},
+           #{i.joinLeagueDate},
+           #{i.englishLevel},
+           #{i.graduateSchool},
+           #{i.familyCode},
+           #{i.familyPhone},
+           #{i.fatherName},
+           #{i.fatherWorkPlace},
+           #{i.fatherPhone},
+           #{i.motherName},
+           #{i.motherWorkPlace},
+           #{i.motherPhone},
+           #{i.familyAddress},
+           #{i.HMTCode})
+    </insert>
+
+    <update id="set">
+        update student set
+           Student_id  = #{i.studentInfo},
+           Student_name  = #{i.studentName},
+           Student_gender  = #{i.gender, typeHandler=GenderHandler},
+           Student_picture = #{i.pictureId},
+           partyBranch  = #{i.partyBranch},
+           birthday = #{i.birthday},
+           national = #{i.nation},
+           NativePlace  = #{i.nativePlace},
+           Political_landscape = #{i.politicalLandscape},
+           college = #{i.college},
+           major = #{i.major},
+           class = #{i.currentClass},
+           LengthOfSchooling = #{i.lengthOfSchooling},
+           StudentState  = #{i.state},
+           ProfessionalDirection  = #{i.professionalDirection},
+           AdmissionDate  = #{i.admissionDate},
+           DormitoryNo  = #{i.dormitoryNumber},
+           phone  = #{i.phone},
+           mailCode = #{i.mailCode},
+           IdNumber   = #{i.idNumber},
+           AcademicLevel  = #{i.academicLevel},
+           JoinLeagueDate  = #{i.joinLeagueDate},
+           EnglishLevel  = #{i.englishLevel},
+           GraduateSchool  = #{i.graduateSchool},
+           FamilyCode  = #{i.familyCode},
+           Familyphone  = #{i.familyPhone},
+           father = #{i.fatherName},
+           fatherWorkPlace  = #{i.fatherWorkPlace},
+           fatherPhone  = #{i.fatherPhone},
+           mother = #{i.motherName},
+           motherWorkPlace = #{i.motherWorkPlace},
+           motherPhone = #{i.motherPhone},
+           familyAddress = #{i.familyAddress},
+           HongKongMacaoTaiwanCode = #{i.HMTCode}
+        where Student_id = #{i.studentId}
+    </update>
+
+
+</mapper>

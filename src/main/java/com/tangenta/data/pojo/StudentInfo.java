@@ -5,7 +5,8 @@ import java.time.LocalDate;
 public class StudentInfo {
     private Long studentId;
     private String studentName;
-    private byte[] picture;
+    private Gender gender;
+    private Long pictureId;
     private String partyBranch;
     private LocalDate birthday;
     private String nation;
@@ -37,7 +38,14 @@ public class StudentInfo {
     private String familyAddress;
     private String HMTCode;
 
-    public StudentInfo(Long studentId, String studentName, byte[] picture, String partyBranch, LocalDate birthday,
+    public StudentInfo() {
+    }
+
+    public StudentInfo(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public StudentInfo(Long studentId, String studentName, Gender gender, Long picture, String partyBranch, LocalDate birthday,
                        String nation, String nativePlace, String politicalLandscape, String college, String major,
                        String currentClass, String lengthOfSchooling, String state, String professionalDirection,
                        LocalDate admissionDate, String dormitoryNumber, String phone, String mailCode, String idNumber,
@@ -47,7 +55,8 @@ public class StudentInfo {
                        String familyAddress, String hmtCode) {
         this.studentId = studentId;
         this.studentName = studentName;
-        this.picture = picture;
+        this.gender = gender;
+        this.pictureId = picture;
         this.partyBranch = partyBranch;
         this.birthday = birthday;
         this.nation = nation;
@@ -88,8 +97,8 @@ public class StudentInfo {
         return studentName;
     }
 
-    public byte[] getPicture() {
-        return picture;
+    public Long getPicture() {
+        return pictureId;
     }
 
     public String getPartyBranch() {
@@ -216,8 +225,8 @@ public class StudentInfo {
         this.studentName = studentName;
     }
 
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
+    public void setPicture(Long picture) {
+        this.pictureId = picture;
     }
 
     public void setPartyBranch(String partyBranch) {
@@ -338,5 +347,13 @@ public class StudentInfo {
 
     public void setHMTCode(String HMTCode) {
         this.HMTCode = HMTCode;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

@@ -3,6 +3,7 @@ package com.tangenta.resolvers;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.StudentInfo;
 import com.tangenta.data.pojo.User;
 import com.tangenta.data.pojo.graphql.*;
 import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
@@ -34,11 +35,12 @@ public class Query implements GraphQLQueryResolver {
     private final ValidationService validationService;
     private final PagingService pagingService;
     private final FavouriteService favouriteService;
+    private final StudentInfoService studentInfoService;
 
     public Query(UserRepository userRepository,
                  UserSecurityService userSecurityService, QuestionService questionService,
                  AuthenticationService authenticationService, StatisticService statisticService,
-                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService, FavouriteService favouriteService) {
+                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService, FavouriteService favouriteService, StudentInfoService studentInfoService) {
         this.userRepository = userRepository;
         this.userSecurityService = userSecurityService;
         this.questionService = questionService;
@@ -50,6 +52,7 @@ public class Query implements GraphQLQueryResolver {
         this.validationService = validationService;
         this.pagingService = pagingService;
         this.favouriteService = favouriteService;
+        this.studentInfoService = studentInfoService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -156,4 +159,9 @@ public class Query implements GraphQLQueryResolver {
         return statisticService.answersCountRecently(studentId, dates);
     }
 
+    public StudentInfo studentInfo(Long studentId, DataFetchingEnvironment env) {
+        validationService.ensureUserExistence(studentId);
+        authenticationService.ensureAuthenticated(studentId, env);
+        return studentInfoService.get(studentId);
+    }
 }

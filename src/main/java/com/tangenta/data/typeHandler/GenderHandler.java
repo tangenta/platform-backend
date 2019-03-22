@@ -1,14 +1,12 @@
 package com.tangenta.data.typeHandler;
 
 import com.tangenta.data.pojo.Gender;
-import com.tangenta.data.pojo.QuestionClassification;
 import org.apache.ibatis.type.*;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 @Alias("GenderHandler")
 @MappedJdbcTypes(value = JdbcType.CHAR)
