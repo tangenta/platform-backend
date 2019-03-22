@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,11 +33,12 @@ public class Query implements GraphQLQueryResolver {
     private final FollowService followService;
     private final ValidationService validationService;
     private final PagingService pagingService;
+    private final FavouriteService favouriteService;
 
     public Query(UserRepository userRepository,
                  UserSecurityService userSecurityService, QuestionService questionService,
                  AuthenticationService authenticationService, StatisticService statisticService,
-                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService) {
+                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService, FavouriteService favouriteService) {
         this.userRepository = userRepository;
         this.userSecurityService = userSecurityService;
         this.questionService = questionService;
@@ -49,6 +49,7 @@ public class Query implements GraphQLQueryResolver {
         this.followService = followService;
         this.validationService = validationService;
         this.pagingService = pagingService;
+        this.favouriteService = favouriteService;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -106,6 +107,12 @@ public class Query implements GraphQLQueryResolver {
         return new Post(p.getPostId(), p.getPublishTime(), p.getContent(), p.getViewNumber(),
                 p.getReplyNumber(), userSecurityService.filterUserByToken(p.getUser(), token), p.getTitle());
 
+    }
+
+    public List<Post> favouritePosts(Long studentId) {
+        validationService.ensureUserExistence(studentId);
+//        authenticationService.ensureLoggedIn(studentId);
+        return favouriteService.favouritePosts(studentId);
     }
 
     public AnswerStatistic answerStatisticByClassAndType(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {
