@@ -9,4 +9,8 @@ import java.util.List;
 @Mapper
 public interface FavouritePostMapper {
     List<FavouritePost> findByUser(@Param("studentId") Long studentId);
+
+    void add(@Param("studentId") Long studentId, @Param("postId") Long postId);
+
+    void delete(@Param("studentId") Long studentId, @Param("postId") Long postId);
 }

@@ -3,10 +3,7 @@ package com.tangenta.service;
 import com.tangenta.data.pojo.User;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.exceptions.BusinessException;
-import com.tangenta.repositories.CommentRepository;
-import com.tangenta.repositories.PostRepository;
-import com.tangenta.repositories.QuestionRepository;
-import com.tangenta.repositories.UserRepository;
+import com.tangenta.repositories.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,13 +18,16 @@ public class ValidationService {
     private QuestionRepository questionRepository;
     private PostRepository postRepository;
     private CommentRepository commentRepository;
+    private FavouriteRepository favouriteRepository;
 
     public ValidationService(UserRepository userRepository, QuestionRepository questionRepository,
-                             PostRepository postRepository, CommentRepository commentRepository) {
+                             PostRepository postRepository, CommentRepository commentRepository,
+                             FavouriteRepository favouriteRepository) {
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
+        this.favouriteRepository = favouriteRepository;
     }
 
     public void ensureValidEmailAddress(String email) {
@@ -89,5 +89,19 @@ public class ValidationService {
     public void ensureCommentBelongToStudent(Long commentId, Long studentId) {
         if (!commentRepository.findById(commentId).getStudentId().equals(studentId))
             throw new BusinessException("评论所有者不匹配");
+    }
+
+    public void ensureFavNotExist(Long studentId, Long postId) {
+        if (favouriteRepository.favouritePosts(studentId).stream()
+                .anyMatch(fp -> fp.getPostId().equals(postId))) {
+            throw new BusinessException("该帖子已收藏");
+        }
+    }
+
+    public void ensureFavExist(Long studentId, Long postId) {
+        if (favouriteRepository.favouritePosts(studentId).stream()
+                .noneMatch(fp -> fp.getPostId().equals(postId))) {
+            throw new BusinessException("未收藏该帖子");
+        }
     }
 }

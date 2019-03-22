@@ -28,12 +28,14 @@ public class Mutation implements GraphQLMutationResolver {
     private PostService postService;
     private CommentService commentService;
     private FollowService followService;
+    private FavouriteService favouriteService;
 
 
     public Mutation(UserLoginService loginService, RegisterService registerService,
                     ValidationService validationService, AuthenticationService authenticationService,
                     QuestionService questionService, StatisticService statisticService,
-                    PostService postService, CommentService commentService, FollowService followService) {
+                    PostService postService, CommentService commentService, FollowService followService,
+                    FavouriteService favouriteService) {
         this.loginService = loginService;
         this.registerService = registerService;
         this.validationService = validationService;
@@ -43,6 +45,7 @@ public class Mutation implements GraphQLMutationResolver {
         this.postService = postService;
         this.commentService = commentService;
         this.followService = followService;
+        this.favouriteService = favouriteService;
     }
 
     public LoginPayload login(String username, String password) {
@@ -83,30 +86,49 @@ public class Mutation implements GraphQLMutationResolver {
                                   String answerDescription, Optional<List<String>> choices) {
 
         authenticationService.ensureLoggedIn(studentId);
-        logger.info("{}", choices);
         questionService.createQuestion(studentId, questionDescription, type,
                 classification, correctAnswer, answerDescription, choices);
         return true;
     }
 
-    public boolean createPost(Long studentId, String title, String content) {
-        authenticationService.ensureLoggedIn(studentId);
+    public boolean createPost(Long studentId, String title, String content, DataFetchingEnvironment env) {
+        authenticationService.ensureAuthenticated(studentId, env);
         postService.createPost(studentId, title, content);
         return true;
     }
 
-    public boolean deletePost(Long studentId, Long postId) {
-        authenticationService.ensureLoggedIn(studentId);
+    public boolean deletePost(Long studentId, Long postId, DataFetchingEnvironment env) {
+        authenticationService.ensureAuthenticated(studentId, env);
         postService.deletePost(postId);
         return true;
     }
 
-    public boolean updatePost(Long studentId, Long postId, String title, String content) {
-        authenticationService.ensureLoggedIn(studentId);
+    public boolean updatePost(Long studentId, Long postId, String title, String content, DataFetchingEnvironment env) {
+        authenticationService.ensureAuthenticated(studentId, env);
         validationService.ensurePostExistence(postId);
         validationService.ensurePostBelongToStudent(postId, studentId);
 
         postService.updatePost(postId, title, content);
+        return true;
+    }
+
+    public boolean addFavPost(Long studentId, Long postId, DataFetchingEnvironment env) {
+//        authenticationService.ensureAuthenticated(studentId, env);
+        validationService.ensureUserExistence(studentId);
+        validationService.ensureUserExistence(postId);
+        validationService.ensureFavNotExist(studentId, postId);
+
+        favouriteService.addFavouritePost(studentId, postId);
+        return true;
+    }
+
+    public boolean deleteFavPost(Long studentId, Long postId, DataFetchingEnvironment env) {
+//        authenticationService.ensureAuthenticated(studentId, env);
+        validationService.ensureUserExistence(studentId);
+        validationService.ensureUserExistence(postId);
+        validationService.ensureFavExist(studentId, postId);
+
+        favouriteService.deleteFavouritePost(studentId, postId);
         return true;
     }
 

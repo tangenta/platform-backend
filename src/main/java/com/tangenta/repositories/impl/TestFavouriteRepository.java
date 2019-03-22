@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,5 +24,22 @@ public class TestFavouriteRepository implements FavouriteRepository {
         return allFavPosts.stream()
                 .filter(fp -> fp.getStudentId().equals(studentId))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addFavouritePost(Long studentId, Long postId) {
+        allFavPosts.add(new FavouritePost(studentId, postId));
+    }
+
+    @Override
+    public void deleteFavouritePost(Long studentId, Long postId) {
+        Iterator<FavouritePost> iter = allFavPosts.iterator();
+        while (iter.hasNext()) {
+            FavouritePost fp = iter.next();
+            if (fp.getStudentId().equals(studentId) && fp.getPostId().equals(postId)) {
+                iter.remove();
+                break;
+            }
+        }
     }
 }

@@ -21,4 +21,14 @@ public class MyFavouriteRepository implements FavouriteRepository {
     public List<FavouritePost> favouritePosts(Long studentId) {
         return favouritePostMapper.findByUser(studentId);
     }
+
+    @Override
+    public void addFavouritePost(Long studentId, Long postId) {
+        favouritePostMapper.add(studentId, postId);
+    }
+
+    @Override
+    public void deleteFavouritePost(Long studentId, Long postId) {
+        favouritePostMapper.delete(studentId, postId);
+    }
 }

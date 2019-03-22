@@ -109,9 +109,9 @@ public class Query implements GraphQLQueryResolver {
 
     }
 
-    public List<Post> favouritePosts(Long studentId) {
+    public List<Post> favPosts(Long studentId, DataFetchingEnvironment env) {
         validationService.ensureUserExistence(studentId);
-//        authenticationService.ensureLoggedIn(studentId);
+//        authenticationService.ensureAuthenticated(studentId, env);
         return favouriteService.favouritePosts(studentId);
     }
 

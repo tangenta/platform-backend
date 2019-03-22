@@ -22,4 +22,12 @@ public class FavouriteService {
                 .map(fp -> postService.viewPost((fp.getPostId())))
                 .collect(Collectors.toList());
     }
+
+    public void addFavouritePost(Long studentId, Long postId) {
+        favouriteRepository.addFavouritePost(studentId, postId);
+    }
+
+    public void deleteFavouritePost(Long studentId, Long postId) {
+        favouriteRepository.deleteFavouritePost(studentId, postId);
+    }
 }

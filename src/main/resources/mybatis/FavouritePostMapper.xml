@@ -11,4 +11,12 @@
         select * from favourite_post where student_id = #{studentId}
     </select>
 
+    <insert id="add">
+        insert into favourite_post value (#{studentId}, #{postId})
+    </insert>
+
+    <delete id="delete">
+        delete from favourite_post where student_id = #{studentId} and post_id = #{postId}
+    </delete>
+
 </mapper>

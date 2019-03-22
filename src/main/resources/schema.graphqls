@@ -22,7 +22,7 @@ type Query {
     showPosts(number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
     showUserPosts(studentId: Long!, number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
     viewPost(postId: Long!): Post!
-    favouritePosts(studentId: Long!): [Post!]
+    favPosts(studentId: Long!): [Post!]
 
     showComments(postId: Long!, number: Long!, from: Long!): [Comment!]!
     showUserComments(studentId: Long!, number: Long!, from: Long!): [Comment!]!
@@ -52,6 +52,8 @@ type Mutation {
     createPost(studentId: Long!, title: String!, content: String!): Boolean!
     deletePost(studentId: Long!, postId: Long!): Boolean!
     updatePost(studentId: Long!, postId: Long!, title: String!, content: String!): Boolean!
+    addFavPost(studentId: Long!, postId: Long!): Boolean!
+    deleteFavPost(studentId: Long!, postId: Long!): Boolean!
 
     addComment(studentId: Long!, postId: Long!, content: String): Boolean!
     deleteComment(studentId: Long!, commentId: Long!): Boolean!
