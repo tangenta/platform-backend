@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -141,7 +142,7 @@ public class Query implements GraphQLQueryResolver {
         return statisticService.showAnswerStatisticByClass(studentId, classes);
     }
 
-    public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<Date> dates) {
+    public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<LocalDate> dates) {
         validationService.ensureUserExistence(studentId);
 //        authenticationService.ensureLoggedIn(studentId);
 

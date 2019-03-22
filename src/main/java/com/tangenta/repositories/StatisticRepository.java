@@ -7,6 +7,7 @@ import com.tangenta.data.pojo.mybatis.DoneTag;
 import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface StatisticRepository {
 
     DoneTag getDoneTagByKeys(Long studentId, Long questionId);
 
-    void insertDoneTag(Long studentId, Long questionId, Date doneDate);
+    void insertDoneTag(Long studentId, Long questionId, LocalDate doneDate);
 
     List<AnswerCountDatePair> countAndGroupByDate(Long studentId);
 }

@@ -16,10 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
@@ -63,37 +60,38 @@ public class Application implements WebMvcConfigurer {
         return GraphQLScalarType.newScalar()
                 .name("LocalDate")
                 .description("YYYY-MM-DD")
-                .coercing(new Coercing<Date, String>(){
+                .coercing(new Coercing<LocalDate, String>(){
                     @Override
                     public String serialize(Object dataFetcherResult) throws CoercingSerializeException {
-                        if (dataFetcherResult instanceof Date) {
-                            Date date = (Date)dataFetcherResult;
-                            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                            return DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
-                        } else {
-                            throw new CoercingSerializeException("Invalid value '" + dataFetcherResult + "' for Date");
-                        }
-                    }
-
-                    @Override
-                    public Date parseValue(Object input) throws CoercingParseValueException {
-                        if (input instanceof String) {
-                            String date = (String)input;
-                            try {
-                                LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-                                return Date.from(Instant.from(localDate.atStartOfDay(ZoneId.systemDefault())));
-                            } catch (DateTimeParseException e) {
-                                throw new CoercingParseValueException("Invalid value '" + input + "' for Date");
+                        try {
+                            if (dataFetcherResult instanceof LocalDate) {
+                                LocalDate localDate = (LocalDate)dataFetcherResult;
+                                return DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
                             }
-                        } else {
-                            throw new CoercingParseValueException("Invalid value '" + input + "' for Date");
+                        } catch (DateTimeException dte) {
+                            throw new CoercingSerializeException("format exception '"
+                                    + dte.getMessage() + "' for input " + dataFetcherResult);
                         }
+                        throw new CoercingSerializeException("Invalid value '" + dataFetcherResult + "' for Local Date");
                     }
 
                     @Override
-                    public Date parseLiteral(Object input) throws CoercingParseLiteralException {
+                    public LocalDate parseValue(Object input) throws CoercingParseValueException {
+                        try {
+                            if (input instanceof String) {
+                                String date = (String)input;
+                                return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+                            }
+                        } catch (DateTimeParseException e) {
+                            throw new CoercingParseValueException("Invalid value '" + input + "' for Local Date");
+                        }
+                        throw new CoercingParseValueException("Invalid value '" + input + "' for Local Date");
+                    }
+
+                    @Override
+                    public LocalDate parseLiteral(Object input) throws CoercingParseLiteralException {
                         if (!(input instanceof StringValue)) {
-                            throw new CoercingParseLiteralException("Invalid value '" + input + "' for Date");
+                            throw new CoercingParseLiteralException("Invalid value '" + input + "' for Local Date");
                         }
                         String value = ((StringValue) input).getValue();
 

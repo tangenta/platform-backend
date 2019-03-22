@@ -58,7 +58,7 @@ public class StatisticService {
             statisticRepository.updateQuestionStatistic(studentId, cls, type, qs.getTotal() + 1,
                     qs.getCorrect() + correctScore);
         }
-        statisticRepository.insertDoneTag(studentId, question.getQuestionId(), new Date());
+        statisticRepository.insertDoneTag(studentId, question.getQuestionId(), LocalDate.now());
 
     }
 
@@ -86,14 +86,13 @@ public class StatisticService {
                 .collect(Collectors.toList());
     }
 
-    public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<Date> dates) {
+    public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<LocalDate> dates) {
         List<AnswerCountDatePair> found =  statisticRepository.countAndGroupByDate(studentId).stream()
                 .filter(acPair -> dates.stream()
-                        .anyMatch(inputDate ->
-                                Utils.compareDateByDateField(inputDate, acPair.getDate()) == 0))
+                        .anyMatch(inputDate -> inputDate.equals(acPair.getDate())))
                 .collect(Collectors.toList());
         return dates.stream().map(date -> found.stream()
-                .filter(p -> Utils.compareDateByDateField(p.getDate(), date) == 0)
+                .filter(p -> p.getDate().equals(date))
                 .findFirst()
                 .orElse(new AnswerCountDatePair(0, date)))
                 .collect(Collectors.toList());

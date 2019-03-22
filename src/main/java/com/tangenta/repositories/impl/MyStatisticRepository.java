@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class MyStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public void insertDoneTag(Long studentId, Long questionId, Date doneDate) {
+    public void insertDoneTag(Long studentId, Long questionId, LocalDate doneDate) {
         doneTagMapper.insert(studentId, questionId, doneDate);
     }
 

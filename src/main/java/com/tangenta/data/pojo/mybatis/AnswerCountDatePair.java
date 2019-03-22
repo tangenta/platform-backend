@@ -1,15 +1,15 @@
 package com.tangenta.data.pojo.mybatis;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class AnswerCountDatePair {
     private int count;
-    private Date date;
+    private LocalDate date;
 
     public AnswerCountDatePair() {
     }
 
-    public AnswerCountDatePair(int number, Date date) {
+    public AnswerCountDatePair(int number, LocalDate date) {
         this.count = number;
         this.date = date;
     }
@@ -18,7 +18,7 @@ public class AnswerCountDatePair {
         return count;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 }

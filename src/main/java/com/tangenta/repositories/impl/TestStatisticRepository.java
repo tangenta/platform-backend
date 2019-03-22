@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,8 +31,8 @@ public class TestStatisticRepository implements StatisticRepository {
         add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
     }};
 
-    private static Date buildDate(int year, int month, int day) {
-        return new GregorianCalendar(year, month, day).getTime();
+    private static LocalDate buildDate(int year, int month, int day) {
+        return LocalDate.of(year, month, day);
     }
 
     private static List<DoneTag> mockDoneTag = new LinkedList<DoneTag>() {{
@@ -43,8 +44,8 @@ public class TestStatisticRepository implements StatisticRepository {
         add(new DoneTag(1L, 6L, buildDate(2018, 5, 15)));
         add(new DoneTag(1L, 7L, buildDate(2018, 5, 15)));
         add(new DoneTag(1L, 8L, buildDate(2018, 5, 16)));
-        add(new DoneTag(1L, 9L, new Date()));
-        add(new DoneTag(1L, 10L, new Date()));
+        add(new DoneTag(1L, 9L, LocalDate.now()));
+        add(new DoneTag(1L, 10L, LocalDate.now()));
     }};
 
 
@@ -117,7 +118,7 @@ public class TestStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public void insertDoneTag(Long studentId, Long questionId, Date doneDate) {
+    public void insertDoneTag(Long studentId, Long questionId, LocalDate doneDate) {
         mockDoneTag.add(new DoneTag(studentId, questionId, doneDate));
     }
 
