@@ -35,7 +35,7 @@ type StudentInfo {
     HMTCode: String
 }
 
-type Gender {
+enum Gender {
     MALE
     FEMALE
 }

@@ -61,6 +61,41 @@ type Mutation {
 
     follow(subjectId: Long!, objectId: Long!): Boolean!
     unFollow(subjectId: Long!, objectId: Long!): Boolean!
+
+    updateStudentInfo(studentId: Long!
+        studentName: String
+        gender: Gender
+        pictureId: Long
+        partyBranch: String
+        birthday: LocalDate
+        nation: String
+        nativePlace: String
+        politicalLandscape: String
+        college: String
+        major: String
+        currentClass: String
+        lengthOfSchooling: String
+        state: String
+        professionalDirection: String
+        admissionDate: LocalDate
+        dormitoryNumber: String
+        phone: String
+        mailCode: String
+        idNumber: String
+        academicLevel: String
+        joinLeagueDate: LocalDate
+        englishLevel: String
+        graduateSchool: String
+        familyCode: String
+        familyPhone: String
+        fatherName: String
+        fatherWorkPlace: String
+        fatherPhone: String
+        motherName: String
+        motherWorkPlace: String
+        motherPhone: String
+        familyAddress: String
+        HMTCode: String): Boolean!
 }
 
 schema {

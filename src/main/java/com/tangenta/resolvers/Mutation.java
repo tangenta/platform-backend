@@ -177,7 +177,7 @@ public class Mutation implements GraphQLMutationResolver {
                                      String fatherPhone, String motherName, String motherWorkPlace, String motherPhone,
                                      String familyAddress, String hmtCode, DataFetchingEnvironment env) {
         validationService.ensureUserExistence(studentId);
-        authenticationService.ensureAuthenticated(studentId, env);
+//        authenticationService.ensureAuthenticated(studentId, env);
         studentInfoService.update(studentId, studentName, gender, picture, partyBranch, birthday,
                 nation, nativePlace, politicalLandscape, college, major,
                 currentClass, lengthOfSchooling, state, professionalDirection,
