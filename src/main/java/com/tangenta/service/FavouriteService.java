@@ -11,14 +11,17 @@ import java.util.stream.Collectors;
 public class FavouriteService {
     private FavouriteRepository favouriteRepository;
     private PostService postService;
+    private PagingService pagingService;
 
-    public FavouriteService(FavouriteRepository favouriteRepository, PostService postService) {
+    public FavouriteService(FavouriteRepository favouriteRepository, PostService postService, PagingService pagingService) {
         this.favouriteRepository = favouriteRepository;
         this.postService = postService;
+        this.pagingService = pagingService;
     }
 
-    public List<Post> favouritePosts(Long studentId) {
-        return favouriteRepository.favouritePosts(studentId).stream()
+    public List<Post> favouritePosts(Long studentId, int number, int from) {
+        return pagingService.paging(favouriteRepository.favouritePosts(studentId), number, from)
+                .stream()
                 .map(fp -> postService.viewPost((fp.getPostId())))
                 .collect(Collectors.toList());
     }

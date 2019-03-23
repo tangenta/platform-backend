@@ -22,7 +22,7 @@ type Query {
     showPosts(number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
     showUserPosts(studentId: Long!, number: Long!, from: Long!, sortBy: SortMethod): [Post!]!
     viewPost(postId: Long!): Post!
-    favPosts(studentId: Long!): [Post!]
+    favPosts(studentId: Long!, number: Long!, from: Long!): [Post!]
 
     showComments(postId: Long!, number: Long!, from: Long!): [Comment!]!
     showUserComments(studentId: Long!, number: Long!, from: Long!): [Comment!]!

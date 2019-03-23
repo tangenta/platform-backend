@@ -8,6 +8,7 @@ public interface PostRepository {
     List<MPost> getAllPosts();
     void create(MPost partialMPost);
     MPost findById(Long postId);
+    List<MPost> findByUserId(Long studentId);
     void deleteById(Long postId);
     void update(Long postId, String title, String content);
 }

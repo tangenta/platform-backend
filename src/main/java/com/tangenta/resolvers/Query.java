@@ -82,24 +82,19 @@ public class Query implements GraphQLQueryResolver {
         return questionService.randomQuestion(classifications, types);
     }
 
-    public List<Post> showPosts(int numbers, int from, SortMethod sortBy, DataFetchingEnvironment env) {
-        List<Post> allMPosts = postService.allPost(numbers, from, sortBy);
+    public List<Post> showPosts(int number, int from, SortMethod sortBy, DataFetchingEnvironment env) {
+        List<Post> allPosts = postService.allPost(number, from, sortBy);
 
         String token = Utils.getAuthToken(env).orElse("");
-
-        return allMPosts.stream()
-                .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
-                        p.getViewNumber(), p.getReplyNumber(),
-                        userSecurityService.filterUserByToken(p.getUser(), token),
-                        p.getTitle()))
-                .collect(Collectors.toList());
+        return userSecurityService.filterUsersInPost(allPosts, token);
     }
 
-    public List<Post> showUserPosts(Long userId, int numbers, int from, SortMethod sortBy,
+    public List<Post> showUserPosts(Long studentId, int number, int from, SortMethod sortBy,
                                     DataFetchingEnvironment env) {
-        return showPosts(numbers, from, sortBy, env).stream()
-                .filter(p -> p.getUser().getStudentId().equals(userId))
-                .collect(Collectors.toList());
+        List<Post> allPosts = postService.allUserPosts(studentId, number, from, sortBy);
+
+        String token = Utils.getAuthToken(env).orElse("");
+        return userSecurityService.filterUsersInPost(allPosts, token);
     }
 
     public Post viewPost(Long postId, DataFetchingEnvironment env) {
@@ -112,10 +107,10 @@ public class Query implements GraphQLQueryResolver {
 
     }
 
-    public List<Post> favPosts(Long studentId, DataFetchingEnvironment env) {
+    public List<Post> favPosts(Long studentId, int number, int from,  DataFetchingEnvironment env) {
         validationService.ensureUserExistence(studentId);
 //        authenticationService.ensureAuthenticated(studentId, env);
-        return favouriteService.favouritePosts(studentId);
+        return favouriteService.favouritePosts(studentId, number, from);
     }
 
     public AnswerStatistic answerStatisticByClassAndType(Long studentId, List<QuestionClassification> classes, List<QuestionType> types) {

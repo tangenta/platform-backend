@@ -29,23 +29,16 @@ public class PostService {
 
     public List<Post> allPost(int numbers, int from, SortMethod sortBy) {
         List<MPost> allMPosts = postRepository.getAllPosts();
-        if (sortBy == null) sortBy = SortMethod.Time;
+        List<MPost> pagedMPosts = pagingService.paging(sort(allMPosts, sortBy), numbers, from);
 
-        Comparator<MPost> comparator;
-        switch (sortBy) {
-            case ReplyNumber: comparator = Comparator.comparingLong(MPost::getReplyNumber).thenComparing(MPost::getPostId); break;
-            case ViewNumber: comparator = Comparator.comparingLong(MPost::getViewNumber).thenComparing(MPost::getPostId); break;
-            case Time:
-            default: comparator = Comparator.comparing(MPost::getPublishTime).thenComparing(MPost::getPostId);
-        }
-        allMPosts.sort(comparator);
+        return mapMPostToPost(pagedMPosts);
+    }
 
-        return pagingService.paging(allMPosts, numbers, from).stream()
-                .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
-                        p.getViewNumber(), p.getReplyNumber(),
-                        userRepository.findById(p.getStudentId()),
-                        p.getTitle()))
-                .collect(Collectors.toList());
+    public List<Post> allUserPosts(Long studentId, int numbers, int from, SortMethod sortBy) {
+        List<MPost> allMPosts = postRepository.findByUserId(studentId);
+        List<MPost> pagedMPosts = pagingService.paging(sort(allMPosts, sortBy), numbers, from);
+
+        return mapMPostToPost(pagedMPosts);
     }
 
     public Post viewPost(Long postId) {
@@ -73,5 +66,27 @@ public class PostService {
 
     public void updatePost(Long postId, String title, String content) {
         postRepository.update(postId, title, content);
+    }
+
+
+    private static List<MPost> sort(List<MPost> allPosts, SortMethod sortBy) {
+        Comparator<MPost> comparator;
+        if (sortBy == null) sortBy = SortMethod.Time;
+        switch (sortBy) {
+            case ReplyNumber: comparator = Comparator.comparingLong(MPost::getReplyNumber).thenComparing(MPost::getPostId); break;
+            case ViewNumber: comparator = Comparator.comparingLong(MPost::getViewNumber).thenComparing(MPost::getPostId); break;
+            case Time:
+            default: comparator = Comparator.comparing(MPost::getPublishTime).thenComparing(MPost::getPostId);
+        }
+        allPosts.sort(comparator);
+        return allPosts;
+    }
+
+    private List<Post> mapMPostToPost(List<MPost> mPosts) {
+        return mPosts.stream().map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
+                p.getViewNumber(), p.getReplyNumber(),
+                userRepository.findById(p.getStudentId()),
+                p.getTitle()))
+                .collect(Collectors.toList());
     }
 }

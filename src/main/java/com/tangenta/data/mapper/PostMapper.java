@@ -17,6 +17,10 @@ public interface PostMapper {
     @ResultMap("baseResultMap")
     MPost findById(Long postId);
 
+    @Select("select * from post where Student_id = #{studentId}")
+    @ResultMap("baseResultMap")
+    List<MPost> findByStudentId(Long studentId);
+
     @Delete("delete from post where post_id = #{postId}")
     void deleteById(@Param("postId") long postId);
 

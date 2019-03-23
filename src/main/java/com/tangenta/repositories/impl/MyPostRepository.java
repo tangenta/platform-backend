@@ -33,6 +33,11 @@ public class MyPostRepository implements PostRepository {
     }
 
     @Override
+    public List<MPost> findByUserId(Long studentId) {
+        return postMapper.findByStudentId(studentId);
+    }
+
+    @Override
     public void deleteById(Long postId) {
         postMapper.deleteById(postId);
     }

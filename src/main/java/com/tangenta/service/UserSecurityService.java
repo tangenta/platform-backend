@@ -1,11 +1,14 @@
 package com.tangenta.service;
 
 import com.tangenta.data.pojo.User;
+import com.tangenta.data.pojo.graphql.Post;
+import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.exceptions.BusinessException;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserSecurityService {
@@ -27,5 +30,14 @@ public class UserSecurityService {
         List<User> resultUsers = new LinkedList<>();
         users.forEach(user -> resultUsers.add(filterUserByToken(user, token)));
         return resultUsers;
+    }
+
+    public List<Post> filterUsersInPost(List<Post> allPosts, String token) {
+        return allPosts.stream()       // filter User's private fields
+                .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),
+                        p.getViewNumber(), p.getReplyNumber(),
+                        filterUserByToken(p.getUser(), token),
+                        p.getTitle()))
+                .collect(Collectors.toList());
     }
 }

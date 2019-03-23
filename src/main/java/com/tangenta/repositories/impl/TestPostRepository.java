@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Profile("dev-test")
@@ -55,6 +56,13 @@ public class TestPostRepository implements PostRepository {
         return allMPost.stream()
                 .filter(p -> p.getPostId().equals(postId))
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public List<MPost> findByUserId(Long studentId) {
+        return allMPost.stream()
+                .filter(p -> p.getStudentId().equals(studentId))
+                .collect(Collectors.toList());
     }
 
     @Override
