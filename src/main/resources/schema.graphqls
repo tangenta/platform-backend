@@ -6,6 +6,7 @@ type Query {
     userById(studentId: Long!): User!
 
     randomQuestion(
+        studentId: Long!
         classes: [QuestionClassification!]!,
         types: [QuestionType!]!
     ): Question!
