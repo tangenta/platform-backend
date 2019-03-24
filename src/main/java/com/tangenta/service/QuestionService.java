@@ -50,13 +50,13 @@ public class QuestionService {
         List<MQuestion> questions = questionRepository.getQuestionsByClassAndType(classifications, types);
 
         // filter visited question
-        Stream<MQuestion> questionStream = studentId == null ?
-                questions.stream() :
+        List<MQuestion> filteredQuestions =  studentId == null ? questions :
                 questions.stream().filter(q ->
-                        statisticRepository.getDoneTagByKeys(studentId, q.getQuestionId()) == null);
+                        statisticRepository.getDoneTagByKeys(studentId, q.getQuestionId()) == null)
+                .collect(Collectors.toList());
 
-        MQuestion q = questionStream.
-                skip(random.nextInt(questions.size() + 1))
+        MQuestion q = filteredQuestions.stream()
+                .skip(random.nextInt(filteredQuestions.size()))
                 .findFirst().orElseThrow(() -> new BusinessException("题库已经没有题了"));
 
         List<String> solutions = null;
