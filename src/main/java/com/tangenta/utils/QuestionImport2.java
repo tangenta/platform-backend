@@ -5,7 +5,7 @@ import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.data.pojo.mybatis.QuestionSolution;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -21,11 +20,11 @@ public class QuestionImport2 {
 
     public static void readQuestions(String path, Consumer<List<MQuestion>> questionConsumer,
                             Consumer<List<QuestionSolution>> questionSolutionConsumer) throws IOException {
-        final Long[] questionId = {1L};
+        final Long[] questionId = {220L};
         List<MQuestion> questions = new LinkedList<>();
         List<QuestionSolution> questionSolutions = new LinkedList<>();
         Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8).stream()
-                .map(line -> line.split("\t"))
+                .map(line -> line.replace(' ', ' ').split("\t"))
                 .forEach(ln -> {
                     if (isChoice(ln)) {
                         String[] desOptions = splitDescription(descriptionField(ln));
@@ -114,11 +113,11 @@ public class QuestionImport2 {
     }
 
     private static List<Integer> mapAlphaToNumber(String alpha) {
-        return alpha.chars().map(i -> i - 'A').boxed().collect(Collectors.toList());
+        return alpha.trim().chars().map(i -> i - 'A').boxed().collect(Collectors.toList());
     }
 
     public static void generateCode() throws IOException {
-        QuestionImport2.readQuestions("D:\\questionData\\question.txt",
+        QuestionImport2.readQuestions("D:\\questionData\\question2.txt",
                 q -> q.forEach(question -> {
                     System.out.println(
                             "add(new MQuestion(" +
@@ -149,13 +148,14 @@ public class QuestionImport2 {
     public static void main(String[] args) throws IOException {
         generateCode();
 
-        // Test exception
-//        QuestionImport2.readQuestions("D:\\\\questionData\\\\question.txt",
+//         Test exception
+//        QuestionImport2.readQuestions("D:\\\\questionData\\\\question2.txt",
 //                q -> {}, qs -> qs.forEach(i -> System.out.println(i.getOption())));
 
-//        BufferedReader bufferedReader = new BufferedReader(new FileReader("D:\\\\questionData\\\\question.txt"));
+//        BufferedReader bufferedReader = new BufferedReader(new FileReader("D:\\\\questionData\\\\question2.txt"));
 //        String line = bufferedReader.readLine();
+//        System.out.println(line);
 //        String option = splitDescription(line.split("\t")[3])[1];
-//        System.out.println(Arrays.toString(option.split("[  ([a-zA-Z].)]")));
+//        System.out.println(Arrays.toString(option.split("[  ([a-zA-Z][.、])]")));
     }
 }
