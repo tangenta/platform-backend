@@ -78,8 +78,13 @@ public class Query implements GraphQLQueryResolver {
         return userSecurityService.filterUserByToken(rawUser, authToken);
     }
 
-    public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
-        return questionService.randomQuestion(classifications, types);
+    public Question randomQuestion(Long studentId, List<QuestionClassification> classifications,
+                                   List<QuestionType> types, DataFetchingEnvironment env) {
+        String token = Utils.getAuthToken(env).orElse("");
+        if (!authenticationService.authenticate(studentId, token)) {
+            studentId = null;
+        }
+        return questionService.randomQuestion(studentId, classifications, types);
     }
 
     public List<Post> showPosts(int number, int from, SortMethod sortBy, DataFetchingEnvironment env) {

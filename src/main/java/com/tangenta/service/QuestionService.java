@@ -9,6 +9,7 @@ import com.tangenta.data.pojo.mybatis.QuestionSolution;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.QuestionSolutionRepository;
+import com.tangenta.repositories.StatisticRepository;
 import com.tangenta.utils.AnswerConverter;
 import com.tangenta.utils.QuestionIdGenerator;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.tangenta.data.pojo.QuestionType.*;
 
@@ -31,20 +33,30 @@ public class QuestionService {
     private ValidationService validationService;
     private QuestionIdGenerator questionIdGenerator;
     private QuestionSolutionRepository questionSolutionRepository;
+    private StatisticRepository statisticRepository;
 
-    public QuestionService(QuestionRepository questionRepository,
-                           ValidationService validationService, QuestionIdGenerator questionIdGenerator, QuestionSolutionRepository questionSolutionRepository) {
+    public QuestionService(QuestionRepository questionRepository, ValidationService validationService,
+                           QuestionIdGenerator questionIdGenerator,
+                           QuestionSolutionRepository questionSolutionRepository,
+                           StatisticRepository statisticRepository) {
         this.questionRepository = questionRepository;
         this.validationService = validationService;
         this.questionIdGenerator = questionIdGenerator;
         this.questionSolutionRepository = questionSolutionRepository;
+        this.statisticRepository = statisticRepository;
     }
 
-    public Question randomQuestion(List<QuestionClassification> classifications, List<QuestionType> types) {
+    public Question randomQuestion(Long studentId, List<QuestionClassification> classifications, List<QuestionType> types) {
         List<MQuestion> questions = questionRepository.getQuestionsByClassAndType(classifications, types);
-        // TODO: filter visited questions
 
-        MQuestion q = questions.stream().skip(random.nextInt(questions.size() + 1))
+        // filter visited question
+        Stream<MQuestion> questionStream = studentId == null ?
+                questions.stream() :
+                questions.stream().filter(q ->
+                        statisticRepository.getDoneTagByKeys(studentId, q.getQuestionId()) == null);
+
+        MQuestion q = questionStream.
+                skip(random.nextInt(questions.size() + 1))
                 .findFirst().orElseThrow(() -> new BusinessException("题库已经没有题了"));
 
         List<String> solutions = null;
