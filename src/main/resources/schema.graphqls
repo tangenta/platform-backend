@@ -32,6 +32,7 @@ type Query {
     followers(studentId: Long!, number: Long!, from: Long!): [User!]!
 
     answersCountRecently(studentId: Long!, dates: [LocalDate!]!): [AnswerCountDatePair!]!
+    studentStatistic(studentId: Long!): StudentStatistic!
     studentInfo(studentId: Long!): StudentInfo!
 }
 

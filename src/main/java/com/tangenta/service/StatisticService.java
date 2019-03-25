@@ -4,27 +4,20 @@ import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.AnswerStatistic;
 import com.tangenta.data.pojo.graphql.Feedback;
-import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
-import com.tangenta.data.pojo.mybatis.DoneTag;
-import com.tangenta.data.pojo.mybatis.MQuestion;
-import com.tangenta.data.pojo.mybatis.QuestionStatistic;
+import com.tangenta.data.pojo.graphql.StudentStatistic;
+import com.tangenta.data.pojo.mybatis.*;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
-import com.tangenta.utils.Utils;
-import kotlin.reflect.jvm.internal.impl.resolve.scopes.StaticScopeForKotlinEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import static com.tangenta.utils.Utils.orElse;
 
 @Service
 public class StatisticService {
@@ -96,5 +89,23 @@ public class StatisticService {
                 .findFirst()
                 .orElse(new AnswerCountDatePair(0, date)))
                 .collect(Collectors.toList());
+    }
+
+    public StudentStatistic getStudentStatistic(Long studentId) {
+        MStatistic ms = statisticRepository.getUserStatisticByStudentId(studentId);
+        Long offline = orElse(ms.getOfflineLearningTime(), 0L);
+        Long online =  orElse(ms.getOnlineLearningTime(), 0L);
+        Long createQuesNum =  orElse(ms.getPostQuestionNumber(), 0L);
+        Long pasQuesNum =  orElse(ms.getPassQuestionNumber(), 0L);
+        Long answerQuestionNumber =  orElse(ms.getAnswerQuestionNumber(), 0L);
+        double attendanceRate =  orElse(ms.getAttendanceRate(), 0.0);
+        double paperScore =  orElse(ms.getPaperScore(), 0.0);
+        double homeworkScore =  orElse(ms.getHomeworkScore(), 0.0);
+        double annualScore = orElse(ms.getAnnualScore(), 0.0);
+
+
+        return new StudentStatistic(offline, online,
+                createQuesNum, pasQuesNum, attendanceRate,
+                paperScore, homeworkScore, annualScore, answerQuestionNumber);
     }
 }

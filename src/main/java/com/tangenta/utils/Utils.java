@@ -38,4 +38,8 @@ public class Utils {
         return dateToLocalDate(a).compareTo(dateToLocalDate(b));
     }
 
+    public static <T> T orElse(T obj, T def) {
+        return obj == null ? def : obj;
+    }
+
 }

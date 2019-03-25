@@ -39,3 +39,15 @@ enum Gender {
     MALE
     FEMALE
 }
+
+type StudentStatistic {
+    offlineLearningMin: Long!
+    onlineLearningMin: Long!
+    createQuestionNumber: Long!
+    passQuestionNumber: Long!
+    attendanceRate: Float!
+    paperScore: Float!
+    homeworkScore: Float!
+    annualScore: Float!
+    answerQuestionNumber: Long!
+}

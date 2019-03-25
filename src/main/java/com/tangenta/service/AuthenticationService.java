@@ -37,7 +37,7 @@ public class AuthenticationService {
 
     private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
     static {
-        executorService.scheduleAtFixedRate(() -> {
+        executorService.scheduleWithFixedDelay(() -> {
             long currentTime = System.currentTimeMillis();
             logger.info("start checking for expired user token...");
             synchronized (lock) {

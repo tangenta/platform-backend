@@ -25,6 +25,12 @@ import static com.tangenta.data.pojo.QuestionType.BlanksFilling;
 public class TestStatisticRepository implements StatisticRepository {
     private static Logger logger = LoggerFactory.getLogger(TestStatisticRepository.class);
 
+    private static List<MStatistic> allStatistic = new LinkedList<MStatistic>() {{
+        add(new MStatistic(1L, 10L, 20L, 2L, 2L, 1.0, 0.8, 0.9, 0.95, 0L, 20L));
+        add(new MStatistic(2L, 10L, 20L, 2L, 2L, 1.0, 0.8, 0.9, 0.95, 0L, 20L));
+        add(new MStatistic(3L, 10L, 20L, 2L, 2L, 1.0, 0.8, 0.9, 0.95, 0L, 20L));
+    }};
+
     private static List<QuestionStatistic> allQuestionStatistic = new LinkedList<QuestionStatistic>() {{
         add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
         add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
@@ -51,7 +57,9 @@ public class TestStatisticRepository implements StatisticRepository {
 
     @Override
     public MStatistic getUserStatisticByStudentId(Long studentId) {
-        throw new BusinessException("不支持操作");
+        return allStatistic.stream()
+                .filter(ms -> ms.getStudentId().equals(studentId))
+                .findFirst().orElse(null);
     }
 
     @Override

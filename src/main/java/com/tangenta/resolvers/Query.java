@@ -164,4 +164,11 @@ public class Query implements GraphQLQueryResolver {
 //        authenticationService.ensureAuthenticated(studentId, env);
         return studentInfoService.get(studentId);
     }
+
+    public StudentStatistic studentStatistic(Long studentId, DataFetchingEnvironment env) {
+        validationService.ensureUserExistence(studentId);
+//        authenticationService.ensureAuthenticated(studentId, env);
+
+        return statisticService.getStudentStatistic(studentId);
+    }
 }

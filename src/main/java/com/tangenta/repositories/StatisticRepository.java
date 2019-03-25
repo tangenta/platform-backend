@@ -30,4 +30,6 @@ public interface StatisticRepository {
     void insertDoneTag(Long studentId, Long questionId, LocalDate doneDate);
 
     List<AnswerCountDatePair> countAndGroupByDate(Long studentId);
+
+
 }
