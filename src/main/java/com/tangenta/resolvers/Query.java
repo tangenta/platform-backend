@@ -1,12 +1,10 @@
 package com.tangenta.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.tangenta.data.pojo.QuestionClassification;
-import com.tangenta.data.pojo.QuestionType;
-import com.tangenta.data.pojo.StudentInfo;
-import com.tangenta.data.pojo.User;
+import com.tangenta.data.pojo.*;
 import com.tangenta.data.pojo.graphql.*;
 import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
+import com.tangenta.repositories.AnnouncementRepository;
 import com.tangenta.repositories.PictureRepository;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.service.*;
@@ -24,10 +22,10 @@ import java.util.List;
 public class Query implements GraphQLQueryResolver {
     private static Logger logger = LoggerFactory.getLogger(Query.class);
 
-    @Value("image-resource-path")
+    @Value("${image-resource-path}")
     private String imageResourcePath;
 
-    @Value("hostname")
+    @Value("${hostname}")
     private String hostname;
 
     private final UserRepository userRepository;
@@ -44,6 +42,7 @@ public class Query implements GraphQLQueryResolver {
     private final FavouriteService favouriteService;
     private final StudentInfoService studentInfoService;
     private final PictureRepository pictureRepository;
+    private final AnnouncementRepository announcementRepository;
 
     public Query(UserRepository userRepository,
                  UserSecurityService userSecurityService, QuestionService questionService,
@@ -51,7 +50,7 @@ public class Query implements GraphQLQueryResolver {
                  PostService postService, CommentService commentService, FollowService followService,
                  ValidationService validationService, PagingService pagingService,
                  FavouriteService favouriteService, StudentInfoService studentInfoService,
-                 PictureRepository pictureRepository) {
+                 PictureRepository pictureRepository, AnnouncementRepository announcementRepository) {
         this.userRepository = userRepository;
         this.userSecurityService = userSecurityService;
         this.questionService = questionService;
@@ -65,6 +64,7 @@ public class Query implements GraphQLQueryResolver {
         this.favouriteService = favouriteService;
         this.studentInfoService = studentInfoService;
         this.pictureRepository = pictureRepository;
+        this.announcementRepository = announcementRepository;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -195,5 +195,9 @@ public class Query implements GraphQLQueryResolver {
             return "";
         }
         return hostname + imageResourcePath + filename;
+    }
+
+    public List<Announcement> announcements() {
+        return announcementRepository.allAnnouncements();
     }
 }

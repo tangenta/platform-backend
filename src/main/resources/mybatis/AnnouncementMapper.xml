@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangenta.data.mapper.AnnouncementMapper" >
+    <resultMap id="baseResultMap" type="com.tangenta.data.pojo.Announcement" >
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="creationTime" property="creationTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+</mapper>

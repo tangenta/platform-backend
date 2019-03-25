@@ -39,7 +39,7 @@ public class Application implements WebMvcConfigurer {
     @Value("${profileImage-dir}")
     private String profileImgPath;
 
-    @Value("image-resource-path")
+    @Value("${image-resource-path}")
     private String imageResourcePath;
 
     public static void main(String[] args) {

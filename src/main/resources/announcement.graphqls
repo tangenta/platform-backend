@@ -1,0 +1,5 @@
+type Announcement {
+    title: String!
+    content: String!
+    creationTime: String!
+}

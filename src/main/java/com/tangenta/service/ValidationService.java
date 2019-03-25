@@ -71,6 +71,9 @@ public class ValidationService {
     public void ensureUserExistence(String username) {
         if (userRepository.findByUsername(username) == null) throw new BusinessException("找不到该用户名");
     }
+    public boolean userExist(Long studentId) {
+        return userRepository.findById(studentId) != null;
+    }
 
     public void ensurePostExistence(Long postId) {
         if (postRepository.findById(postId) == null) throw new BusinessException("帖子不存在");

@@ -37,6 +37,8 @@ type Query {
 
     topStudents(number: Long!, from: Long!): [TopStudent!]!
     profileImageLocation(studentId: Long!): String!
+
+    announcements: [Announcement!]!
 }
 
 type Mutation {
