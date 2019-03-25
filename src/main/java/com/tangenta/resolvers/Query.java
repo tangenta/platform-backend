@@ -159,9 +159,16 @@ public class Query implements GraphQLQueryResolver {
 
     public List<AnswerStatistic> answerStatisticByClass(Long studentId, List<QuestionClassification> classes) {
         validationService.ensureUserExistence(studentId);
-        authenticationService.ensureLoggedIn(studentId);
+        authenticationService.ensureLoggedIn(studentId); // TODO: authenticated
 
         return statisticService.showAnswerStatisticByClass(studentId, classes);
+    }
+
+    public List<AnswerStatistic> answerStatisticByType(Long studentId, List<QuestionType> types) {
+        validationService.ensureUserExistence(studentId);
+        authenticationService.ensureLoggedIn(studentId);
+
+        return statisticService.showAnswerStatisticByType(studentId, types);
     }
 
     public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<LocalDate> dates) {

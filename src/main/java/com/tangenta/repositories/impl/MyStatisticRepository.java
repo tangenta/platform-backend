@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -49,8 +48,13 @@ public class MyStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public List<QuestionStatistic> getQuestionStatisticByStudentId(Long studentId) {
-        return questionStatisticMapper.findByStudentId(studentId);
+    public List<QuestionStatistic> getQuestionStatisticGroupByClasses(Long studentId) {
+        return questionStatisticMapper.findByStudentIdGroupByClass(studentId);
+    }
+
+    @Override
+    public List<QuestionStatistic> getQuestionStatisticGroupByTypes(Long studentId) {
+        return questionStatisticMapper.findByStudentIdGroupByType(studentId);
     }
 
     @Override

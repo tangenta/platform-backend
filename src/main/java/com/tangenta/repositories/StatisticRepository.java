@@ -19,7 +19,9 @@ public interface StatisticRepository {
     QuestionStatistic getByKeys(Long studentId, QuestionClassification classification,
                                 QuestionType type);
 
-    List<QuestionStatistic> getQuestionStatisticByStudentId(Long studentId);
+    List<QuestionStatistic> getQuestionStatisticGroupByClasses(Long studentId);
+
+    List<QuestionStatistic> getQuestionStatisticGroupByTypes(Long studentId);
 
     void insertQuestionStatistic(Long studentId, QuestionClassification classification,
                                  QuestionType type, Long total, Long correct);

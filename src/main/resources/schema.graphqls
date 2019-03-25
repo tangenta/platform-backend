@@ -17,6 +17,7 @@ type Query {
         types: [QuestionType!]!
     ): AnswerStatistic!
     answerStatisticByClass(studentId: Long!, classes: [QuestionClassification!]!): [AnswerStatistic!]!
+    answerStatisticByType(studentId: Long!, types: [QuestionType!]!): [AnswerStatistic!]!
 
     # Show `number` counts of posts from the post where postId=`from` sorted by `sortBy` method.
     # Default SortMethod is sorting by publish time
@@ -30,6 +31,7 @@ type Query {
 
     following(studentId: Long!, number: Long!, from: Long!): [User!]!
     followers(studentId: Long!, number: Long!, from: Long!): [User!]!
+
 
     answersCountRecently(studentId: Long!, dates: [LocalDate!]!): [AnswerCountDatePair!]!
     studentStatistic(studentId: Long!): StudentStatistic!

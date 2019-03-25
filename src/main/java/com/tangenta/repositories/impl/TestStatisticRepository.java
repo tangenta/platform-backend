@@ -17,8 +17,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.tangenta.data.pojo.QuestionClassification.Lilunjichu;
-import static com.tangenta.data.pojo.QuestionType.BlanksFilling;
+import static com.tangenta.data.pojo.QuestionClassification.*;
+import static com.tangenta.data.pojo.QuestionType.*;
 
 @Repository
 @Profile("dev-test")
@@ -81,6 +81,14 @@ public class TestStatisticRepository implements StatisticRepository {
 
     private static List<QuestionStatistic> allQuestionStatistic = new LinkedList<QuestionStatistic>() {{
         add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 3L, 1L));
+        add(new QuestionStatistic(1L, Lilunjichu, SingleChoice, 4L, 3L));
+        add(new QuestionStatistic(1L, Lilunjichu, MultipleChoice, 5L, 2L));
+        add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 6L, 2L));
+        add(new QuestionStatistic(1L, Lilunjichu, TrueOrFalse, 3L, 2L));
+        add(new QuestionStatistic(1L, Daodepingjia, BlanksFilling, 3L, 2L));
+        add(new QuestionStatistic(1L, Jiazhiguan, SingleChoice, 1L, 1L));
+        add(new QuestionStatistic(1L, Sixiangxianjinxing, SingleChoice, 1L, 1L));
+        add(new QuestionStatistic(1L, Jilvxing, MultipleChoice, 2L, 2L));
         add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
         add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
     }};
@@ -95,9 +103,9 @@ public class TestStatisticRepository implements StatisticRepository {
         add(new DoneTag(1L, 3L, buildDate(2018, 5, 12)));
         add(new DoneTag(1L, 4L, buildDate(2018, 5, 13)));
         add(new DoneTag(1L, 5L, buildDate(2018, 5, 14)));
-        add(new DoneTag(1L, 6L, buildDate(2018, 5, 15)));
-        add(new DoneTag(1L, 7L, buildDate(2018, 5, 15)));
-        add(new DoneTag(1L, 8L, buildDate(2018, 5, 16)));
+        add(new DoneTag(1L, 6L, buildDate(2019, 4, 24)));
+        add(new DoneTag(1L, 7L, buildDate(2019, 4, 25)));
+        add(new DoneTag(1L, 8L, buildDate(2019, 4, 25)));
         add(new DoneTag(1L, 9L, LocalDate.now()));
         add(new DoneTag(1L, 10L, LocalDate.now()));
     }};
@@ -125,7 +133,7 @@ public class TestStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public List<QuestionStatistic> getQuestionStatisticByStudentId(Long studentId) {
+    public List<QuestionStatistic> getQuestionStatisticGroupByClasses(Long studentId) {
         return allQuestionStatistic.stream()
                 .filter(qs -> qs.getStudentId().equals(studentId))
                 .collect(Collectors.groupingBy(
@@ -139,6 +147,23 @@ public class TestStatisticRepository implements StatisticRepository {
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<QuestionStatistic> getQuestionStatisticGroupByTypes(Long studentId) {
+        return allQuestionStatistic.stream()
+                .filter(qs -> qs.getStudentId().equals(studentId))
+                .collect(Collectors.groupingBy(
+                        QuestionStatistic::getType,
+                        Collectors.reducing(
+                                (QuestionStatistic a, QuestionStatistic b) ->
+                                        new QuestionStatistic(studentId, null, b.getType(),
+                                                a.getTotal() + b.getTotal(), a.getCorrect() + b.getCorrect())
+                        ))).values().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public void insertQuestionStatistic(Long studentId, QuestionClassification classification, QuestionType type, Long total, Long correct) {

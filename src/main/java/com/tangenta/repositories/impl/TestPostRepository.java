@@ -16,24 +16,24 @@ public class TestPostRepository implements PostRepository {
     private static Logger logger = LoggerFactory.getLogger(TestPostRepository.class);
     private static List<MPost> allMPost = new LinkedList<MPost>(){{
         add(new MPost(1L, new Date(), "It's a nice day",
-                1L, 0L, 1L, "title1"));
+                0L, 0L, 1L, "title1"));
         add(new MPost(2L, new Date(), "It's a good day",
-                1L, 0L, 2L, "title2"));
+                0L, 0L, 2L, "title2"));
         add(new MPost(3L, new GregorianCalendar(1990, Calendar.APRIL, 13).getTime(),
                 "It's a wonderful day1",
-                1L, 0L, 1L, "title4"));
+                0L, 1L, 1L, "title4"));
         add(new MPost(4L, new Date(),
                 "It's a wonderful day2",
-                1L, 0L, 1L, "title5"));
+                0L, 0L, 1L, "title5"));
         add(new MPost(5L, new GregorianCalendar(1990, Calendar.AUGUST, 13).getTime(),
                 "It's a wonderful day3",
-                1L, 0L, 1L, "title6"));
+                1L, 1L, 1L, "title6"));
         add(new MPost(6L, new GregorianCalendar(1991, Calendar.APRIL, 13).getTime(),
                 "It's a wonderful day4",
-                1L, 0L, 1L, "title7"));
+                3L, 0L, 1L, "title7"));
         add(new MPost(7L, new GregorianCalendar(1992, Calendar.APRIL, 13).getTime(),
                 "It's a wonderful day5",
-                1L, 0L, 1L, "title8"));
+                2L, 0L, 1L, "title8"));
         add(new MPost(8L, new GregorianCalendar(1993, Calendar.APRIL, 13).getTime(),
                 "It's a wonderful day6",
                 1L, 0L, 1L, "title9"));

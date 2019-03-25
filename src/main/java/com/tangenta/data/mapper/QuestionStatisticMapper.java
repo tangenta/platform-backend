@@ -14,8 +14,9 @@ public interface QuestionStatisticMapper {
                                        @Param("class") QuestionClassification classification,
                                        @Param("type") QuestionType type);
 
-    List<QuestionStatistic> findByStudentId(@Param("id") Long studentId);
+    List<QuestionStatistic> findByStudentIdGroupByClass(@Param("id") Long studentId);
 
+    List<QuestionStatistic> findByStudentIdGroupByType(@Param("id") Long studentId);
 //    void insert(@Param("id") Long studentId,
 //                @Param("class") QuestionClassification classification,
 //                @Param("type") QuestionType type,

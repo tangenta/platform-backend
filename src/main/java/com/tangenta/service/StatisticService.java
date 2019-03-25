@@ -82,12 +82,24 @@ public class StatisticService {
     }
 
     public List<AnswerStatistic> showAnswerStatisticByClass(Long studentId, List<QuestionClassification> classes) {
-        List<QuestionStatistic> questionStatistics = statisticRepository.getQuestionStatisticByStudentId(studentId);
+        List<QuestionStatistic> questionStatistics = statisticRepository.getQuestionStatisticGroupByClasses(studentId);
         return classes.stream()
                 .map(cls -> questionStatistics.stream()
                     .filter(qs -> qs.getClassification().equals(cls))
                     .findFirst()
                     .orElse(new QuestionStatistic(studentId, cls, null, 0L, 0L)))
+                .map(qs -> new AnswerStatistic(studentId, qs.getCorrect(), qs.getTotal()))
+                .collect(Collectors.toList());
+    }
+
+    public List<AnswerStatistic> showAnswerStatisticByType(Long studentId, List<QuestionType> types) {
+        List<QuestionStatistic> questionStatistics = statisticRepository.getQuestionStatisticGroupByTypes(studentId);
+        logger.info("{}, {}", questionStatistics, types);
+        return types.stream()
+                .map(type -> questionStatistics.stream()
+                        .filter(qs -> qs.getType().equals(type))
+                        .findFirst()
+                        .orElse(new QuestionStatistic(studentId, null,  type, 0L, 0L)))
                 .map(qs -> new AnswerStatistic(studentId, qs.getCorrect(), qs.getTotal()))
                 .collect(Collectors.toList());
     }
