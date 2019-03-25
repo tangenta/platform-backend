@@ -7,6 +7,7 @@ import graphql.language.StringValue;
 import graphql.schema.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.MultipartConfigElement;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -30,7 +32,15 @@ import java.util.Date;
 @SpringBootApplication
 public class Application implements WebMvcConfigurer {
     private static Logger logger = LoggerFactory.getLogger(Application.class);
-    private static String FILE_UPLOAD_TMP_PATH = Paths.get(System.getProperty("user.home"), "temp").toString();
+
+    @Value("${upload-temp-dir}")
+    private String fileUploadTmpPath;
+
+    @Value("${profileImage-dir}")
+    private String profileImgPath;
+
+    @Value("image-resource-path")
+    private String imageResourcePath;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -111,27 +121,26 @@ public class Application implements WebMvcConfigurer {
                 .build();
     }
 
-//    @Bean
-//    MultipartConfigElement multipartConfigElement() {
-//        MultipartConfigFactory factory = new MultipartConfigFactory();
-//        factory.setLocation(FILE_UPLOAD_TMP_PATH);
-//        File tmpFile = new File(FILE_UPLOAD_TMP_PATH);
-//        if (!tmpFile.exists()) {
-//            tmpFile.mkdirs();
-//        }
-//        logger.info("temp dir: '{}' is set.", FILE_UPLOAD_TMP_PATH);
-//        return factory.createMultipartConfig();
-//    }
+    @Bean
+    MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setLocation(fileUploadTmpPath);
+        File tmpFile = new File(fileUploadTmpPath);
+        if (!tmpFile.exists()) {
+            tmpFile.mkdirs();
+        }
+        logger.info("temp dir: '{}' is set.", fileUploadTmpPath);
+        return factory.createMultipartConfig();
+    }
 
-//    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-//            "classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/resources/picture/",
-//            "classpath:/static/", "classpath:/public/" };
-//
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
-//    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        logger.info("resource location: {}", Paths.get(profileImgPath).toUri().toString());
+        registry.addResourceHandler(imageResourcePath + "**")
+                .addResourceLocations(Paths.get(profileImgPath).toUri().toString());
+    }
+
 
     // uncomment it to load file data into database
 //    @Bean
@@ -156,7 +165,12 @@ public class Application implements WebMvcConfigurer {
 //                .add(ErrorContainer.class);
 //    }
 
-    //    @Override
+
+//    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
+//            "classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/resources/picture/",
+//            "classpath:/static/", "classpath:/public/" };
+//
+//    @Override
 //    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        logger.info("addResourceHandlers called.");
 //        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/");

@@ -18,4 +18,8 @@
     <select id="getByStudentId" resultMap="baseResultMap">
         select * from statistic where student_id = #{studentId}
     </select>
+    
+    <select id="allStatistics" resultMap="baseResultMap">
+        select * from statistic
+    </select>
 </mapper>

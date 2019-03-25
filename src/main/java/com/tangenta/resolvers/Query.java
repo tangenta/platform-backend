@@ -7,21 +7,28 @@ import com.tangenta.data.pojo.StudentInfo;
 import com.tangenta.data.pojo.User;
 import com.tangenta.data.pojo.graphql.*;
 import com.tangenta.data.pojo.mybatis.AnswerCountDatePair;
+import com.tangenta.repositories.PictureRepository;
 import com.tangenta.repositories.UserRepository;
 import com.tangenta.service.*;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class Query implements GraphQLQueryResolver {
     private static Logger logger = LoggerFactory.getLogger(Query.class);
+
+    @Value("image-resource-path")
+    private String imageResourcePath;
+
+    @Value("hostname")
+    private String hostname;
 
     private final UserRepository userRepository;
 
@@ -36,11 +43,15 @@ public class Query implements GraphQLQueryResolver {
     private final PagingService pagingService;
     private final FavouriteService favouriteService;
     private final StudentInfoService studentInfoService;
+    private final PictureRepository pictureRepository;
 
     public Query(UserRepository userRepository,
                  UserSecurityService userSecurityService, QuestionService questionService,
                  AuthenticationService authenticationService, StatisticService statisticService,
-                 PostService postService, CommentService commentService, FollowService followService, ValidationService validationService, PagingService pagingService, FavouriteService favouriteService, StudentInfoService studentInfoService) {
+                 PostService postService, CommentService commentService, FollowService followService,
+                 ValidationService validationService, PagingService pagingService,
+                 FavouriteService favouriteService, StudentInfoService studentInfoService,
+                 PictureRepository pictureRepository) {
         this.userRepository = userRepository;
         this.userSecurityService = userSecurityService;
         this.questionService = questionService;
@@ -53,6 +64,7 @@ public class Query implements GraphQLQueryResolver {
         this.pagingService = pagingService;
         this.favouriteService = favouriteService;
         this.studentInfoService = studentInfoService;
+        this.pictureRepository = pictureRepository;
     }
 
     public List<User> users(DataFetchingEnvironment env) {
@@ -114,7 +126,7 @@ public class Query implements GraphQLQueryResolver {
 
     public List<Post> favPosts(Long studentId, int number, int from,  DataFetchingEnvironment env) {
         validationService.ensureUserExistence(studentId);
-//        authenticationService.ensureAuthenticated(studentId, env);
+        authenticationService.ensureAuthenticated(studentId, env);
         return favouriteService.favouritePosts(studentId, number, from);
     }
 
@@ -147,28 +159,41 @@ public class Query implements GraphQLQueryResolver {
 
     public List<AnswerStatistic> answerStatisticByClass(Long studentId, List<QuestionClassification> classes) {
         validationService.ensureUserExistence(studentId);
-//        authenticationService.ensureLoggedIn(studentId);
+        authenticationService.ensureLoggedIn(studentId);
 
         return statisticService.showAnswerStatisticByClass(studentId, classes);
     }
 
     public List<AnswerCountDatePair> answersCountRecently(Long studentId, List<LocalDate> dates) {
         validationService.ensureUserExistence(studentId);
-//        authenticationService.ensureLoggedIn(studentId);
+        authenticationService.ensureLoggedIn(studentId);
 
         return statisticService.answersCountRecently(studentId, dates);
     }
 
     public StudentInfo studentInfo(Long studentId, DataFetchingEnvironment env) {
         validationService.ensureUserExistence(studentId);
-//        authenticationService.ensureAuthenticated(studentId, env);
+        authenticationService.ensureAuthenticated(studentId, env);
         return studentInfoService.get(studentId);
     }
 
     public StudentStatistic studentStatistic(Long studentId, DataFetchingEnvironment env) {
         validationService.ensureUserExistence(studentId);
-//        authenticationService.ensureAuthenticated(studentId, env);
+        authenticationService.ensureAuthenticated(studentId, env);
 
         return statisticService.getStudentStatistic(studentId);
+    }
+
+    public List<TopStudent> topStudents(int number, int from) {
+        return statisticService.topStudents(number, from);
+    }
+
+    public String profileImageLocation(Long studentId) {
+        validationService.ensureUserExistence(studentId);
+        String filename = pictureRepository.getUserPicture(studentId);
+        if (filename == null || filename.isEmpty()) {
+            return "";
+        }
+        return hostname + imageResourcePath + filename;
     }
 }

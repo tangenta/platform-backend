@@ -1,4 +1,4 @@
-package com.tangenta.utils;
+package com.tangenta.utils.mockData;
 
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;

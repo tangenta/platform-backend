@@ -2,21 +2,30 @@ package com.tangenta.service;
 
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
+import com.tangenta.data.pojo.StudentInfo;
 import com.tangenta.data.pojo.graphql.AnswerStatistic;
 import com.tangenta.data.pojo.graphql.Feedback;
 import com.tangenta.data.pojo.graphql.StudentStatistic;
+import com.tangenta.data.pojo.graphql.TopStudent;
 import com.tangenta.data.pojo.mybatis.*;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
+import com.tangenta.repositories.StudentInfoRepository;
+import com.tangenta.utils.Critic;
+import com.tangenta.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.ujmp.core.Matrix;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
+
 import static com.tangenta.utils.Utils.orElse;
 
 @Service
@@ -24,10 +33,14 @@ public class StatisticService {
     private static Logger logger = LoggerFactory.getLogger(StatisticService.class);
     private QuestionRepository questionRepository;
     private StatisticRepository statisticRepository;
+    private PagingService pagingService;
+    private StudentInfoRepository studentInfoRepository;
 
-    public StatisticService(QuestionRepository questionRepository, StatisticRepository statisticRepository) {
+    public StatisticService(QuestionRepository questionRepository, StatisticRepository statisticRepository, PagingService pagingService, StudentInfoRepository studentInfoRepository) {
         this.questionRepository = questionRepository;
         this.statisticRepository = statisticRepository;
+        this.pagingService = pagingService;
+        this.studentInfoRepository = studentInfoRepository;
     }
 
     public void storeUsersFeedback(Long studentId, Feedback feedback) {
@@ -107,5 +120,48 @@ public class StatisticService {
         return new StudentStatistic(offline, online,
                 createQuesNum, pasQuesNum, attendanceRate,
                 paperScore, homeworkScore, annualScore, answerQuestionNumber);
+    }
+
+    public List<TopStudent> topStudents(int number, int from) {
+        List<MStatistic> allStatistics = statisticRepository.allStatistics();
+        List<double[]> result = allStatistics.stream()
+                .map(s ->
+                    new double[]{s.getOfflineLearningTime(), s.getOnlineLearningTime(),
+                    s.getPostQuestionNumber(), s.getPassQuestionNumber(), s.getAttendanceRate(),
+                    s.getPaperScore(), s.getHomeworkScore(), s.getAnnualScore(), s.getAnswerQuestionNumber(),
+                    s.getAnswerQuestionScore()}
+                ).collect(Collectors.toList());
+        double[][] dresult = new double[allStatistics.size()][];
+        for (int i = 0; i != allStatistics.size(); ++i) {
+            dresult[i] = result.get(i);
+        }
+
+        Matrix matrix = Matrix.Factory.importFromArray(dresult);
+        boolean[] booleanArr = new boolean[10];
+        Arrays.fill(booleanArr, true);
+        double[] weights = Critic.CRITIC(matrix, booleanArr);
+
+        allStatistics.sort(Comparator.comparingDouble((MStatistic ma) -> score(weights, ma)).reversed());
+        return pagingService.paging(allStatistics, number, from).stream()
+                .map(ms -> {
+                    StudentInfo studentInfo = studentInfoRepository.findById(ms.getStudentId());
+                    return new TopStudent(Utils.orElse(studentInfo.getStudentName(), "unknown"),
+                            Utils.orElse(studentInfo.getPartyBranch(), "unknown"), (long)score(weights, ms));
+                })
+                .collect(Collectors.toList());
+    }
+
+    private static double score(double[] weights, MStatistic m) {
+        return weights[0] * m.getOfflineLearningTime() +
+                weights[1] * m.getOnlineLearningTime() +
+                weights[2] * m.getPostQuestionNumber() +
+                weights[3] * m.getPassQuestionNumber() +
+                weights[4] * m.getAttendanceRate() +
+                weights[5] * m.getPaperScore() +
+                weights[6] * m.getHomeworkScore() +
+                weights[7] * m.getAnnualScore() +
+                weights[8] * m.getAnswerQuestionNumber() +
+                weights[9] * m.getAnswerQuestionScore();
+
     }
 }

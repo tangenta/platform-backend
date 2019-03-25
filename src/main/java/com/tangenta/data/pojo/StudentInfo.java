@@ -45,6 +45,17 @@ public class StudentInfo {
         this.studentId = studentId;
     }
 
+    public StudentInfo(String studentName, String partyBranch) {
+        this.studentName = studentName;
+        this.partyBranch = partyBranch;
+    }
+
+    public StudentInfo(Long studentId, String studentName, String partyBranch) {
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.partyBranch = partyBranch;
+    }
+
     public StudentInfo(Long studentId, String studentName, Gender gender, Long picture, String partyBranch, LocalDate birthday,
                        String nation, String nativePlace, String politicalLandscape, String college, String major,
                        String currentClass, String lengthOfSchooling, String state, String professionalDirection,

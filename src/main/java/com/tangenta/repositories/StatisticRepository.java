@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface StatisticRepository {
+    List<MStatistic> allStatistics();
+
     MStatistic getUserStatisticByStudentId(Long studentId);
 
     QuestionStatistic getByKeys(Long studentId, QuestionClassification classification,

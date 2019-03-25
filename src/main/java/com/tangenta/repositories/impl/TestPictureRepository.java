@@ -13,9 +13,9 @@ import java.util.List;
 public class TestPictureRepository implements PictureRepository {
     private class UserPicture {
         Long studentId;
-        byte[] picture;
+        String picture;
 
-        UserPicture(Long studentId, byte[] picture) {
+        UserPicture(Long studentId, String picture) {
             this.studentId = studentId;
             this.picture = picture;
         }
@@ -23,7 +23,7 @@ public class TestPictureRepository implements PictureRepository {
     private static List<UserPicture> allPictures = new LinkedList<>();
 
     @Override
-    public byte[] getUserPicture(Long studentId) {
+    public String getUserPicture(Long studentId) {
         return allPictures.stream()
                 .filter(p -> p.studentId.equals(studentId))
                 .map(p -> p.picture)
@@ -31,7 +31,7 @@ public class TestPictureRepository implements PictureRepository {
     }
 
     @Override
-    public void setUserPicture(Long studentId, byte[] blob) {
+    public void setUserPicture(Long studentId, String filename) {
         Iterator<UserPicture> iter = allPictures.iterator();
         while (iter.hasNext()) {
             UserPicture up = iter.next();
@@ -40,6 +40,6 @@ public class TestPictureRepository implements PictureRepository {
                 break;
             }
         }
-        allPictures.add(new UserPicture(studentId, blob));
+        allPictures.add(new UserPicture(studentId, filename));
     }
 }

@@ -15,13 +15,13 @@ public class MyPictureRepository implements PictureRepository {
     }
 
     @Override
-    public byte[] getUserPicture(Long studentId) {
-        return userPictureMapper.get(studentId);
+    public String getUserPicture(Long studentId) {
+        return userPictureMapper.getFilename(studentId);
     }
 
     @Override
-    public void setUserPicture(Long studentId, byte[] blob) {
-        if (userPictureMapper.get(studentId) == null) {
+    public void setUserPicture(Long studentId, String blob) {
+        if (userPictureMapper.getFilename(studentId) == null) {
             userPictureMapper.set(studentId, blob);
         } else {
             userPictureMapper.update(studentId, blob);
