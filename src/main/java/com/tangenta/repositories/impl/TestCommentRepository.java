@@ -13,15 +13,7 @@ import java.util.stream.Collectors;
 @Profile("dev-test")
 public class TestCommentRepository implements CommentRepository {
     private static List<MComment> allComments = new LinkedList<MComment>() {{
-        add(new MComment(1L, 1L, 1L, "I am the king of singer yo", new Date()));
-        add(new MComment(2L, 2L, 1L, "I don't think so", new Date()));
-        add(new MComment(3L, 3L, 1L, "What are you talking about?", new Date()));
-        add(new MComment(4L, 1L, 2L, "Will you marry me?",
-                new GregorianCalendar(2020, Calendar.APRIL, 13).getTime()));
-        add(new MComment(5L, 1L, 3L, "Just give me a reason, just a little bit enough",
-                new GregorianCalendar(2020, Calendar.APRIL, 14).getTime()));
-        add(new MComment(6L, 1L, 4L, "Oh, look what you made me dooo",
-                new GregorianCalendar(2020, Calendar.APRIL, 13).getTime()));
+
     }};
     private static Long currentMaxId = 3L;
 

@@ -15,28 +15,19 @@ import java.util.stream.Collectors;
 public class TestPostRepository implements PostRepository {
     private static Logger logger = LoggerFactory.getLogger(TestPostRepository.class);
     private static List<MPost> allMPost = new LinkedList<MPost>(){{
-        add(new MPost(1L, new Date(), "It's a nice day",
-                0L, 0L, 1L, "title1"));
-        add(new MPost(2L, new Date(), "It's a good day",
-                0L, 0L, 2L, "title2"));
+        add(new MPost(1L, new Date(), "“不忘初心，方得始终。”九十六年前的使命尚未完成，入党宣誓时的声音不会褪去。坚持学习党的理论确保党旗永葆红色，坚决抵制诱惑不忘初心确保党旗永不变色，是沉甸甸压在每一名共产党员肩上的责任，更是每一名党员的天职。请各位党员就如何保持初心发表一下自己的看法。",
+                0L, 0L, 1L, "“不忘初心”跟党走"));
+        add(new MPost(2L, new Date(), "榜样让我们筑牢终身的信仰；榜样让我们专注脚下的道路；榜样让我们凝聚无悔的担当。我们共产党人要坚定信仰，坚持党的领导不动摇，传承和发扬优秀共产党员的精神品质，坚守平凡的岗位，努力学习、加强创新，以服务群众和担当作为为使命，不忘初心，继续前进。请大家谈谈身边的榜样事迹。",
+                0L, 0L, 2L, "向榜样学习，继续前进"));
         add(new MPost(3L, new GregorianCalendar(1990, Calendar.APRIL, 13).getTime(),
-                "It's a wonderful day1",
-                0L, 1L, 1L, "title4"));
+                "看齐意识是基础，坚持在政治上看齐，始终与党中央保持高度一致。在落实决策部署上看齐,确保党的路线方针政策贯彻执行，做到政令畅通。在工作上看齐，在律己上看齐，加强自我约束，自觉发挥好表率作用。党员干部要自觉增强看齐意识，始终做到经常看齐、主动看齐、全面看齐，确保党和国家的事业沿着正确方向阔步前进。",
+                0L, 1L, 1L, "增强看齐意识，做合格党员"));
         add(new MPost(4L, new Date(),
-                "It's a wonderful day2",
-                0L, 0L, 1L, "title5"));
+                "“三严三实”丰富和发展了党的建设理论，明确了领导干部的修身之本、为政之道、成事之要，体现了党要管党、从严治党的基本要求，是世界观和方法论的有机统一、内在自律和外在约束的有机统一，充分彰显了我们党在作风建设上一鼓作气、一抓到底的鲜明立场和坚定决心，为加强新形势下党的思想政治建设和作风建设提供了重要遵循，也是各级领导干部修身用权律己的基本遵循、干事创业的行为准则。",
+                0L, 0L, 1L, "“三严三实”的深刻内涵"));
         add(new MPost(5L, new GregorianCalendar(1990, Calendar.AUGUST, 13).getTime(),
-                "It's a wonderful day3",
-                1L, 1L, 1L, "title6"));
-        add(new MPost(6L, new GregorianCalendar(1991, Calendar.APRIL, 13).getTime(),
-                "It's a wonderful day4",
-                3L, 0L, 1L, "title7"));
-        add(new MPost(7L, new GregorianCalendar(1992, Calendar.APRIL, 13).getTime(),
-                "It's a wonderful day5",
-                2L, 0L, 1L, "title8"));
-        add(new MPost(8L, new GregorianCalendar(1993, Calendar.APRIL, 13).getTime(),
-                "It's a wonderful day6",
-                1L, 0L, 1L, "title9"));
+                "清正廉洁是各级党委政府在人民群众心中形象的最好诠释。在“八项规定”出台至今，各地缩减三公消费成效明显，腐败浪费风气逐渐扭转，趁节日发放奖金、礼品现象骤减，人民大众对政府官员的公仆形象逐渐认可。由俭入奢易，由奢入俭难，作风建设永远在路上。请大家就作风建设提出自己的建议。",
+                1L, 1L, 1L, "让廉洁之风刮一会儿"));
     }};
     private static Long postId = 4L;
 
