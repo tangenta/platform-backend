@@ -22,7 +22,7 @@ public class FavouriteService {
     public List<Post> favouritePosts(Long studentId, int number, int from) {
         return pagingService.paging(favouriteRepository.favouritePosts(studentId), number, from)
                 .stream()
-                .map(fp -> postService.viewPost((fp.getPostId())))
+                .map(fp -> postService.viewPostTraceless((fp.getPostId())))
                 .collect(Collectors.toList());
     }
 

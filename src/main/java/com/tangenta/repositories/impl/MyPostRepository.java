@@ -46,4 +46,14 @@ public class MyPostRepository implements PostRepository {
     public void update(Long postId, String title, String content) {
         postMapper.update(postId, title, content);
     }
+
+    @Override
+    public void increaseViewNumber(Long postId) {
+        postMapper.increaseViewNumber(postId);
+    }
+
+    @Override
+    public void increaseReplyNumber(Long postId) {
+        postMapper.increaseReplyNumber(postId);
+    }
 }

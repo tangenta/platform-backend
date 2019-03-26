@@ -17,4 +17,12 @@
         insert into post (title, content, viewNumber, replyNumber, Student_id, publishTime)
         value (#{p.title}, #{p.content}, #{p.viewNumber}, #{p.replyNumber}, #{p.studentId}, #{p.publishTime});
     </insert>
+
+    <update id="increaseViewNumber">
+        update post set viewNumber = viewNumber + 1 where post_id = #{postId}
+    </update>
+
+    <update id="increaseReplyNumber">
+        update post set replyNumber = replyNumber + 1 where post_id = #{postId}
+    </update>
 </mapper>

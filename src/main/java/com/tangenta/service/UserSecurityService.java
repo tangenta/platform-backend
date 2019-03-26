@@ -32,6 +32,13 @@ public class UserSecurityService {
         return resultUsers;
     }
 
+    public Post filterUserInPost(Post post, String token) {
+        return new Post(post.getPostId(), post.getPublishTime(), post.getContent(),
+                post.getViewNumber(), post.getReplyNumber(),
+                filterUserByToken(post.getUser(), token),
+                post.getTitle());
+    }
+
     public List<Post> filterUsersInPost(List<Post> allPosts, String token) {
         return allPosts.stream()       // filter User's private fields
                 .map(p -> new Post(p.getPostId(), p.getPublishTime(), p.getContent(),

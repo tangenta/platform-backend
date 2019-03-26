@@ -85,5 +85,39 @@ public class TestPostRepository implements PostRepository {
         allMPost.add(newPost);
     }
 
+    @Override
+    public void increaseViewNumber(Long postId) {
+        Iterator<MPost> iter = allMPost.iterator();
+        MPost newPost = null;
+
+        while (iter.hasNext()) {
+            MPost p = iter.next();
+            if (p.getPostId().equals(postId)) {
+                newPost = new MPost(p.getPostId(), p.getPublishTime(), p.getContent(),
+                        p.getViewNumber() + 1, p.getReplyNumber(), p.getStudentId(), p.getTitle());
+                iter.remove();
+                break;
+            }
+        }
+        allMPost.add(newPost);
+    }
+
+    @Override
+    public void increaseReplyNumber(Long postId) {
+        Iterator<MPost> iter = allMPost.iterator();
+        MPost newPost = null;
+
+        while (iter.hasNext()) {
+            MPost p = iter.next();
+            if (p.getPostId().equals(postId)) {
+                newPost = new MPost(p.getPostId(), p.getPublishTime(), p.getContent(),
+                        p.getViewNumber(), p.getReplyNumber() + 1, p.getStudentId(), p.getTitle());
+                iter.remove();
+                break;
+            }
+        }
+        allMPost.add(newPost);
+    }
+
 
 }

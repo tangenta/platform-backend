@@ -11,4 +11,6 @@ public interface PostRepository {
     List<MPost> findByUserId(Long studentId);
     void deleteById(Long postId);
     void update(Long postId, String title, String content);
+    void increaseViewNumber(Long postId);
+    void increaseReplyNumber(Long postId);
 }

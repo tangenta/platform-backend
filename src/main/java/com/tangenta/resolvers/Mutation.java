@@ -141,6 +141,7 @@ public class Mutation implements GraphQLMutationResolver {
         validationService.ensurePostExistence(postId);
 
         commentService.addComment(studentId, postId, content);
+        postService.increaseReplyNumber(postId);
         return true;
     }
 

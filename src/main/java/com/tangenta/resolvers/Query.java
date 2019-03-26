@@ -119,9 +119,7 @@ public class Query implements GraphQLQueryResolver {
 
         String token = Utils.getAuthToken(env).orElse("");
         Post p = postService.viewPost(postId);
-        return new Post(p.getPostId(), p.getPublishTime(), p.getContent(), p.getViewNumber(),
-                p.getReplyNumber(), userSecurityService.filterUserByToken(p.getUser(), token), p.getTitle());
-
+        return userSecurityService.filterUserInPost(p, token);
     }
 
     public List<Post> favPosts(Long studentId, int number, int from,  DataFetchingEnvironment env) {

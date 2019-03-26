@@ -42,7 +42,13 @@ public class PostService {
     }
 
     public Post viewPost(Long postId) {
+        postRepository.increaseViewNumber(postId);
+        return viewPostTraceless(postId);
+    }
+
+    public Post viewPostTraceless(Long postId) {
         MPost p = postRepository.findById(postId);
+
         User user = userRepository.findById(p.getStudentId());
         return new Post(p.getPostId(), p.getPublishTime(), p.getContent(), p.getViewNumber(),
                 p.getReplyNumber(), user, p.getTitle());
@@ -69,6 +75,10 @@ public class PostService {
     }
 
 
+    public void increaseReplyNumber(Long postId) {
+        postRepository.increaseReplyNumber(postId);
+    }
+
     private static List<MPost> sort(List<MPost> allPosts, SortMethod sortBy) {
         Comparator<MPost> comparator;
         if (sortBy == null) sortBy = SortMethod.Time;
@@ -89,4 +99,5 @@ public class PostService {
                 p.getTitle()))
                 .collect(Collectors.toList());
     }
+
 }

@@ -28,4 +28,8 @@ public interface PostMapper {
     void update(@Param("postId") Long postId,
                 @Param("title") String title,
                 @Param("content") String content);
+
+    void increaseViewNumber(Long postId);
+
+    void increaseReplyNumber(Long postId);
 }
