@@ -55,5 +55,5 @@ type StudentStatistic {
 type TopStudent {
     name: String!
     group: String!
-    score: Long!
+    score: Float!
 }

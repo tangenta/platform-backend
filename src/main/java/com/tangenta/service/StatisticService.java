@@ -158,7 +158,7 @@ public class StatisticService {
                 .map(ms -> {
                     StudentInfo studentInfo = studentInfoRepository.findById(ms.getStudentId());
                     return new TopStudent(Utils.orElse(studentInfo.getStudentName(), "unknown"),
-                            Utils.orElse(studentInfo.getPartyBranch(), "unknown"), (long)score(weights, ms));
+                            Utils.orElse(studentInfo.getPartyBranch(), "unknown"), score(weights, ms));
                 })
                 .collect(Collectors.toList());
     }

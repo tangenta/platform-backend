@@ -3,9 +3,9 @@ package com.tangenta.data.pojo.graphql;
 public class TopStudent {
     private String name;
     private String group;
-    private Long score;
+    private Double score;
 
-    public TopStudent(String name, String group, Long score) {
+    public TopStudent(String name, String group, Double score) {
         this.name = name;
         this.group = group;
         this.score = score;
@@ -19,7 +19,7 @@ public class TopStudent {
         return group;
     }
 
-    public Long getScore() {
+    public Double getScore() {
         return score;
     }
 }
