@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,14 +99,14 @@ public class TestStatisticRepository implements StatisticRepository {
     }
 
     private static List<DoneTag> mockDoneTag = new LinkedList<DoneTag>() {{
-        add(new DoneTag(1L, 1L, buildDate(2018, 5, 12)));
-        add(new DoneTag(1L, 2L, buildDate(2018, 5, 12)));
-        add(new DoneTag(1L, 3L, buildDate(2018, 5, 12)));
-        add(new DoneTag(1L, 4L, buildDate(2018, 5, 13)));
-        add(new DoneTag(1L, 5L, buildDate(2018, 5, 14)));
-        add(new DoneTag(1L, 6L, buildDate(2019, 4, 24)));
-        add(new DoneTag(1L, 7L, buildDate(2019, 4, 25)));
-        add(new DoneTag(1L, 8L, buildDate(2019, 4, 25)));
+        add(new DoneTag(1L, 1L, buildDate(2019, 3, 23)));
+        add(new DoneTag(1L, 2L, buildDate(2019, 3, 23)));
+        add(new DoneTag(1L, 3L, buildDate(2019, 3, 23)));
+        add(new DoneTag(1L, 4L, buildDate(2019, 3, 23)));
+        add(new DoneTag(1L, 5L, buildDate(2019, 3, 23)));
+        add(new DoneTag(1L, 6L, buildDate(2019, 3, 24)));
+        add(new DoneTag(1L, 7L, buildDate(2019, 3, 25)));
+        add(new DoneTag(1L, 8L, buildDate(2019, 3, 25)));
         add(new DoneTag(1L, 9L, LocalDate.now()));
         add(new DoneTag(1L, 10L, LocalDate.now()));
     }};
