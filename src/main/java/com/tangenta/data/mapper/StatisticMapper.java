@@ -10,4 +10,7 @@ import java.util.List;
 public interface StatisticMapper {
     List<MStatistic> allStatistics();
     MStatistic getByStudentId(@Param("studentId") Long studentId);
+    void increaseCreateQuestion(@Param("studentId") Long studentId);
+    void increasePassQuestion(@Param("studentId") Long studentId);
+    void update(@Param("m") MStatistic mStatistic);
 }

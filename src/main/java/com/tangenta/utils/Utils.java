@@ -9,7 +9,11 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Utils {
     private static Logger logger = LoggerFactory.getLogger(Utils.class);
@@ -40,6 +44,22 @@ public class Utils {
 
     public static <T> T orElse(T obj, T def) {
         return obj == null ? def : obj;
+    }
+
+    public static <T> void substitute(List<T> allItems,  Predicate<T> pred,  Function<T, T> transformer) {
+        Iterator<T> iter = allItems.iterator();
+        T newObject = null;
+        while (iter.hasNext()) {
+            T i = iter.next();
+            if (pred.test(i)) {
+                newObject = transformer.apply(i);
+                iter.remove();
+                break;
+            }
+        }
+        if (newObject != null) {
+            allItems.add(newObject);
+        }
     }
 
 }

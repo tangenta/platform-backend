@@ -8,6 +8,7 @@ import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.StatisticRepository;
+import com.tangenta.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.tangenta.data.pojo.QuestionClassification.*;
@@ -125,6 +128,31 @@ public class TestStatisticRepository implements StatisticRepository {
     }
 
     @Override
+    public void increaseQuestionCreation(Long studentId) {
+        Utils.substitute(allStatistic, m -> m.getStudentId().equals(studentId),
+                m -> new MStatistic(m.getStudentId(), m.getOfflineLearningTime(),
+                        m.getOnlineLearningTime(), m.getPostQuestionNumber() + 1, m.getPassQuestionNumber(),
+                        m.getAttendanceRate(), m.getPaperScore(), m.getHomeworkScore(), m.getAnnualScore(),
+                        m.getAnswerQuestionNumber(), m.getAnswerQuestionScore()));
+    }
+
+    @Override
+    public void increaseQuestionPassing(Long studentId) {
+        Utils.substitute(allStatistic, m -> m.getStudentId().equals(studentId),
+                m -> new MStatistic(m.getStudentId(), m.getOfflineLearningTime(),
+                        m.getOnlineLearningTime(), m.getPostQuestionNumber(), m.getPassQuestionNumber() + 1,
+                        m.getAttendanceRate(), m.getPaperScore(), m.getHomeworkScore(), m.getAnnualScore(),
+                        m.getAnswerQuestionNumber(), m.getAnswerQuestionScore()));
+    }
+
+    @Override
+    public void updateStatistic(MStatistic mStatistic) {
+        Utils.substitute(allStatistic,
+                m -> m.getStudentId().equals(mStatistic.getStudentId()),
+                m -> mStatistic);
+    }
+
+    @Override
     public QuestionStatistic getByKeys(Long studentId, QuestionClassification classification, QuestionType type) {
         for (QuestionStatistic qs: allQuestionStatistic) {
             if (qs.getStudentId().equals(studentId) && qs.getClassification().equals(classification)
@@ -173,35 +201,23 @@ public class TestStatisticRepository implements StatisticRepository {
 
     @Override
     public void updateQuestionStatistic(Long studentId, QuestionClassification classification, QuestionType type, Long total, Long correct) {
-        QuestionStatistic copied = null;
-
-        Iterator<QuestionStatistic> iter = allQuestionStatistic.iterator();
-        while (iter.hasNext()) {
-            QuestionStatistic qs = iter.next();
-            if (qs.getStudentId().equals(studentId) && qs.getClassification().equals(classification)
-                    && qs.getType().equals(type)) {
-                copied = new QuestionStatistic(qs.getStudentId(), qs.getClassification(), qs.getType(),
-                        total, correct);
-                iter.remove();
-                break;
-            }
-        }
-        if (copied == null) {
-            throw new BusinessException("找不到更新对象");
-        } else {
-            allQuestionStatistic.add(copied);
-        }
-
+        Utils.substitute(allQuestionStatistic,
+                qs -> qs.getStudentId().equals(studentId) &&
+                        qs.getClassification().equals(classification) &&
+                        qs.getType().equals(type),
+                qs -> new QuestionStatistic(qs.getStudentId(), qs.getClassification(), qs.getType(),
+                        total, correct));
     }
 
     @Override
     public DoneTag getDoneTagByKeys(Long studentId, Long questionId) {
+        DoneTag result = null;
         for (DoneTag dt: mockDoneTag) {
             if (dt.getStudentId().equals(studentId) && dt.getQuestionId().equals(questionId)) {
-                return dt;
+                result = dt;
             }
         }
-        return null;
+        return result;
     }
 
     @Override
@@ -220,4 +236,5 @@ public class TestStatisticRepository implements StatisticRepository {
                 new AnswerCountDatePair(count.intValue(), date)));
         return answerCountDatePairs;
     }
+
 }

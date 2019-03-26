@@ -43,6 +43,21 @@ public class MyStatisticRepository implements StatisticRepository {
     }
 
     @Override
+    public void increaseQuestionCreation(Long studentId) {
+        statisticMapper.increaseCreateQuestion(studentId);
+    }
+
+    @Override
+    public void increaseQuestionPassing(Long studentId) {
+        statisticMapper.increasePassQuestion(studentId);
+    }
+
+    @Override
+    public void updateStatistic(MStatistic mStatistic) {
+        statisticMapper.update(mStatistic);
+    }
+
+    @Override
     public QuestionStatistic getByKeys(Long studentId, QuestionClassification classification, QuestionType type) {
         return questionStatisticMapper.findByKeys(studentId, classification, type);
     }

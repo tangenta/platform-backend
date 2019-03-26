@@ -7,7 +7,7 @@
         <result column="onlineLearningTime" property="onlineLearningTime" jdbcType="NUMERIC"/>
         <result column="postQuestionNumber" property="postQuestionNumber" jdbcType="NUMERIC" />
         <result column="passQuestionNumber" property="passQuestionNumber" jdbcType="NUMERIC" />
-        <result column="attendenceRate" property="attendanceRate" jdbcType="NUMERIC" />
+        <result column="attendanceRate" property="attendanceRate" jdbcType="NUMERIC" />
         <result column="paperScore" property="paperScore" jdbcType="NUMERIC" />
         <result column="homeworkScore" property="homeworkScore" jdbcType="NUMERIC"/>
         <result column="annualScore" property="annualScore" jdbcType="NUMERIC"/>
@@ -22,4 +22,29 @@
     <select id="allStatistics" resultMap="baseResultMap">
         select * from statistic
     </select>
+
+    <update id="increaseCreateQuestion">
+        update statistic set postQuestionNumber = postQuestionNumber + 1
+          where student_id = #{studentId}
+    </update>
+
+    <update id="increasePassQuestion">
+        update statistic set passQuestionNumber = passQuestionNumber + 1
+        where student_id = #{studentId}
+    </update>
+
+    <update id="update">
+        update statistic set
+          offlineLearningTime = #{m.offlineLearningTime},
+          onlineLearningTime = #{m.onlineLearningTime},
+          postQuestionNumber = #{m.postQuestionNumber},
+          passQuestionNumber = #{m.passQuestionNumber},
+          attendanceRate = #{m.attendanceRate},
+          paperScore = #{m.paperScore},
+          homeworkScore = #{m.homeworkScore},
+          annualScore = #{m.annualScore},
+          answerQuestionNumber = #{m.answerQuestionNumber},
+          answerQuestionScore= #{m.answerQuestionScore}
+        where student_id = #{m.studentId}
+    </update>
 </mapper>

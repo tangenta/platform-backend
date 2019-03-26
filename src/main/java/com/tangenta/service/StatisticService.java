@@ -23,6 +23,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
@@ -36,11 +39,18 @@ public class StatisticService {
     private PagingService pagingService;
     private StudentInfoRepository studentInfoRepository;
 
+    private volatile double[] weights = null;
+
+    private final ScheduledThreadPoolExecutor weightsUpdater = new ScheduledThreadPoolExecutor(1);
+
     public StatisticService(QuestionRepository questionRepository, StatisticRepository statisticRepository, PagingService pagingService, StudentInfoRepository studentInfoRepository) {
         this.questionRepository = questionRepository;
         this.statisticRepository = statisticRepository;
         this.pagingService = pagingService;
         this.studentInfoRepository = studentInfoRepository;
+        weightsUpdater.scheduleWithFixedDelay(() ->
+                weights = updatedWeight(statisticRepository.allStatistics()),
+                0, 5, TimeUnit.MINUTES);
     }
 
     public void storeUsersFeedback(Long studentId, Feedback feedback) {
@@ -128,7 +138,6 @@ public class StatisticService {
         double homeworkScore =  orElse(ms.getHomeworkScore(), 0.0);
         double annualScore = orElse(ms.getAnnualScore(), 0.0);
 
-
         return new StudentStatistic(offline, online,
                 createQuesNum, pasQuesNum, attendanceRate,
                 paperScore, homeworkScore, annualScore, answerQuestionNumber);
@@ -136,7 +145,7 @@ public class StatisticService {
 
     public List<TopStudent> topStudents(int number, int from) {
         List<MStatistic> allStatistics = statisticRepository.allStatistics();
-        double[] weights = updateWeight(allStatistics);
+        if (weights == null) weights = updatedWeight(allStatistics);
 
         allStatistics.sort(Comparator.comparingDouble((MStatistic ma) -> score(weights, ma)).reversed());
         return pagingService.paging(allStatistics, number, from).stream()
@@ -150,11 +159,12 @@ public class StatisticService {
 
     public Double studentScore(Long studentId) {
         MStatistic statistic = statisticRepository.getUserStatisticByStudentId(studentId);
-        double[] weights = updateWeight(statisticRepository.allStatistics());
+
+        if (weights == null) weights = updatedWeight(statisticRepository.allStatistics());
         return score(weights, statistic);
     }
 
-    private static double[] updateWeight(List<MStatistic> allStatistics) {
+    private double[] updatedWeight(List<MStatistic> allStatistics) {
         List<double[]> result = allStatistics.stream()
                 .map(s ->
                         new double[]{s.getOfflineLearningTime(), s.getOnlineLearningTime(),
@@ -162,10 +172,12 @@ public class StatisticService {
                                 s.getPaperScore(), s.getHomeworkScore(), s.getAnnualScore(), s.getAnswerQuestionNumber(),
                                 s.getAnswerQuestionScore()}
                 ).collect(Collectors.toList());
+
         double[][] dresult = new double[allStatistics.size()][];
         for (int i = 0; i != allStatistics.size(); ++i) {
             dresult[i] = result.get(i);
         }
+
         Matrix matrix = Matrix.Factory.importFromArray(dresult);
         boolean[] booleanArr = new boolean[10];
         Arrays.fill(booleanArr, true);
