@@ -136,22 +136,7 @@ public class StatisticService {
 
     public List<TopStudent> topStudents(int number, int from) {
         List<MStatistic> allStatistics = statisticRepository.allStatistics();
-        List<double[]> result = allStatistics.stream()
-                .map(s ->
-                    new double[]{s.getOfflineLearningTime(), s.getOnlineLearningTime(),
-                    s.getPostQuestionNumber(), s.getPassQuestionNumber(), s.getAttendanceRate(),
-                    s.getPaperScore(), s.getHomeworkScore(), s.getAnnualScore(), s.getAnswerQuestionNumber(),
-                    s.getAnswerQuestionScore()}
-                ).collect(Collectors.toList());
-        double[][] dresult = new double[allStatistics.size()][];
-        for (int i = 0; i != allStatistics.size(); ++i) {
-            dresult[i] = result.get(i);
-        }
-
-        Matrix matrix = Matrix.Factory.importFromArray(dresult);
-        boolean[] booleanArr = new boolean[10];
-        Arrays.fill(booleanArr, true);
-        double[] weights = Critic.CRITIC(matrix, booleanArr);
+        double[] weights = updateWeight(allStatistics);
 
         allStatistics.sort(Comparator.comparingDouble((MStatistic ma) -> score(weights, ma)).reversed());
         return pagingService.paging(allStatistics, number, from).stream()
@@ -161,6 +146,30 @@ public class StatisticService {
                             Utils.orElse(studentInfo.getPartyBranch(), "unknown"), score(weights, ms));
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Double studentScore(Long studentId) {
+        MStatistic statistic = statisticRepository.getUserStatisticByStudentId(studentId);
+        double[] weights = updateWeight(statisticRepository.allStatistics());
+        return score(weights, statistic);
+    }
+
+    private static double[] updateWeight(List<MStatistic> allStatistics) {
+        List<double[]> result = allStatistics.stream()
+                .map(s ->
+                        new double[]{s.getOfflineLearningTime(), s.getOnlineLearningTime(),
+                                s.getPostQuestionNumber(), s.getPassQuestionNumber(), s.getAttendanceRate(),
+                                s.getPaperScore(), s.getHomeworkScore(), s.getAnnualScore(), s.getAnswerQuestionNumber(),
+                                s.getAnswerQuestionScore()}
+                ).collect(Collectors.toList());
+        double[][] dresult = new double[allStatistics.size()][];
+        for (int i = 0; i != allStatistics.size(); ++i) {
+            dresult[i] = result.get(i);
+        }
+        Matrix matrix = Matrix.Factory.importFromArray(dresult);
+        boolean[] booleanArr = new boolean[10];
+        Arrays.fill(booleanArr, true);
+        return Critic.CRITIC(matrix, booleanArr);
     }
 
     private static double score(double[] weights, MStatistic m) {

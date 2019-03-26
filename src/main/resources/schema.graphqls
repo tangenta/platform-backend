@@ -36,6 +36,7 @@ type Query {
     answersCountRecently(studentId: Long!, dates: [LocalDate!]!): [AnswerCountDatePair!]!
     studentStatistic(studentId: Long!): StudentStatistic!
     studentInfo(studentId: Long!): StudentInfo!
+    studentScore(studentId: Long!): Float!
 
     topStudents(number: Long!, from: Long!): [TopStudent!]!
     profileImageLocation(studentId: Long!): String!

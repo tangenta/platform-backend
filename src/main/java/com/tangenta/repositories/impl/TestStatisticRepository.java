@@ -85,10 +85,10 @@ public class TestStatisticRepository implements StatisticRepository {
         add(new QuestionStatistic(1L, Lilunjichu, MultipleChoice, 5L, 2L));
         add(new QuestionStatistic(1L, Lilunjichu, BlanksFilling, 6L, 2L));
         add(new QuestionStatistic(1L, Lilunjichu, TrueOrFalse, 3L, 2L));
-        add(new QuestionStatistic(1L, Daodepingjia, BlanksFilling, 3L, 2L));
-        add(new QuestionStatistic(1L, Jiazhiguan, SingleChoice, 1L, 1L));
-        add(new QuestionStatistic(1L, Sixiangxianjinxing, SingleChoice, 1L, 1L));
-        add(new QuestionStatistic(1L, Jilvxing, MultipleChoice, 2L, 2L));
+        add(new QuestionStatistic(1L, Daodepingjia, BlanksFilling, 15L, 5L));
+        add(new QuestionStatistic(1L, Jiazhiguan, SingleChoice, 15L, 8L));
+        add(new QuestionStatistic(1L, Sixiangxianjinxing, SingleChoice, 17L, 12L));
+        add(new QuestionStatistic(1L, Jilvxing, MultipleChoice, 13L, 8L));
         add(new QuestionStatistic(2L, Lilunjichu, BlanksFilling, 1L, 1L));
         add(new QuestionStatistic(3L, Lilunjichu, BlanksFilling, 2L, 1L));
     }};
