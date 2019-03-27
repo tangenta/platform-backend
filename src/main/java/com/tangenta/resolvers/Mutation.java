@@ -61,8 +61,11 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     public boolean register(String username, String password, String email) {
+        validationService.ensureUserNonExist(username);
         validationService.ensureValidEmailAddress(email);
         validationService.ensureNoDuplication(username, email);
+        validationService.ensurePasswordValid(password);
+
         registerService.beginRegisterProcess(username, password, email);
         return true;
     }

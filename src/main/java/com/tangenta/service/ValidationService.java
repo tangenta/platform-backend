@@ -1,5 +1,7 @@
 package com.tangenta.service;
 
+import com.google.common.base.CharMatcher;
+import com.google.common.io.CharStreams;
 import com.tangenta.data.pojo.User;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.exceptions.BusinessException;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 @Service
 public class ValidationService {
@@ -71,6 +75,10 @@ public class ValidationService {
     public void ensureUserExistence(String username) {
         if (userRepository.findByUsername(username) == null) throw new BusinessException("找不到该用户名");
     }
+    public void ensureUserNonExist(String username) {
+        if (userRepository.findByUsername(username) != null) throw new BusinessException("该用户名已被占用");
+    }
+
     public boolean userExist(Long studentId) {
         return userRepository.findById(studentId) != null;
     }
@@ -105,6 +113,17 @@ public class ValidationService {
         if (favouriteRepository.favouritePosts(studentId).stream()
                 .noneMatch(fp -> fp.getPostId().equals(postId))) {
             throw new BusinessException("未收藏该帖子");
+        }
+    }
+
+    public void ensurePasswordValid(String password) {
+        if (password.length() < 6) throw new BusinessException("密码少于6位");
+        for (int i = 0; i != password.length(); ++i) {
+            char ch = password.charAt(i);
+            if (!CharMatcher.forPredicate(c -> Character.isLetter(c) ||
+                    Character.isDigit(c) ||
+                    c.equals('_')).matchesAllOf(password))
+                throw new BusinessException("密码应由字母、数字、下划线组成");
         }
     }
 }
