@@ -1,5 +1,6 @@
 package com.tangenta.service;
 
+import com.tangenta.aop.OnlineTimeRecorder;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.utils.Utils;
 import graphql.schema.DataFetchingEnvironment;
@@ -11,31 +12,30 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.concurrent.ThreadSafe;
 import java.time.Duration;
-import java.time.temporal.Temporal;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Function;
-import java.util.function.Supplier;
+
+import static com.tangenta.utils.Utils.wrapWithLock;
 
 @Service
 public class AuthenticationService {
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     @Value("${session-clear-delay-minutes}")
     private int CLEAR_SESSION_RATE_IN_MINUTES;
 
     @Value("${session-max-life-minutes}")
     private int SESSION_MAX_LIFE_IN_MINUTES;
 
-
     private static Id_Token_Time authPack = new Id_Token_Time();
-
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private final OnlineTimeRecorder onlineTimeRecorder;
+
+    public AuthenticationService(OnlineTimeRecorder onlineTimeRecorder) {
+        this.onlineTimeRecorder = onlineTimeRecorder;
+    }
 
     @PostConstruct
     void launchScheduleThread() {
@@ -45,7 +45,11 @@ public class AuthenticationService {
 
             while (!authPack.isEmpty() && Duration.ofMillis(currentTime - authPack.oldestAccessTime())
                     .compareTo(Duration.ofMinutes(SESSION_MAX_LIFE_IN_MINUTES)) > 0) {
+
+                Long lastAccessTime = authPack.oldestAccessTime();
                 Long id = authPack.removeOldest();
+                onlineTimeRecorder.loggedOut(id, lastAccessTime);
+                // TODO: record online learning time
                 logger.info("revoke token for student id = {}", id);
             }
 
@@ -54,10 +58,12 @@ public class AuthenticationService {
     }
 
     public String allocateToken(Long studentId) {
-        authPack.removeById(studentId);
         String newToken = UUID.randomUUID().toString();
         long creationTime = System.currentTimeMillis();
+
+        authPack.removeById(studentId);
         authPack.insert(studentId, creationTime, newToken);
+        onlineTimeRecorder.loggingIn(studentId);
         return newToken;
     }
 
@@ -71,8 +77,12 @@ public class AuthenticationService {
     }
 
     public boolean logout(Long studentId, String token) {
+        Long lastAccessTime = authPack.lastAccessTimeById(studentId);
         authPack.removeById(studentId);
-        return authenticate(studentId, token);
+        boolean ret = authenticate(studentId, token);
+        if (ret) onlineTimeRecorder.loggedOut(studentId, lastAccessTime);
+
+        return ret;
     }
 
     public void ensureLoggedIn(Long studentId) {
@@ -93,16 +103,12 @@ public class AuthenticationService {
                 new Date(newAccessTime).toString());
     }
 
+
     @ThreadSafe private static class Id_Token_Time {
         private final Map<Long, TokenTimeTuple> idTokensMap = new HashMap<>();
         private final SortedMap<Long, Long> timeIdMap = new TreeMap<>();
         private final ReentrantReadWriteLock rwk = new ReentrantReadWriteLock();
-        private static <L extends Lock, T> T wrapWithLock(L lock, Supplier<T> criticalStmt) {
-            lock.lock();
-            T ret = criticalStmt.get();
-            lock.unlock();
-            return ret;
-        }
+
 
         private class TokenTimeTuple {
             String token;
@@ -157,11 +163,25 @@ public class AuthenticationService {
             );
         }
 
+        Long oldestId() {
+            return wrapWithLock(rwk.readLock(), () -> {
+                return timeIdMap.get(timeIdMap.firstKey());
+            });
+        }
+
         String getById(Long id) {
             return wrapWithLock(rwk.readLock(), () -> {
                 TokenTimeTuple tuple = idTokensMap.get(id);
                 if (tuple == null) return "";
                 return tuple.token;
+            });
+        }
+
+        Long lastAccessTimeById(Long id) {
+            return wrapWithLock(rwk.readLock(), () -> {
+               TokenTimeTuple tuple = idTokensMap.get(id);
+               if (tuple == null) return 0L;
+               return tuple.time;
             });
         }
 

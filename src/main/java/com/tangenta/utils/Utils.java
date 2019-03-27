@@ -12,8 +12,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class Utils {
     private static Logger logger = LoggerFactory.getLogger(Utils.class);
@@ -60,6 +62,13 @@ public class Utils {
         if (newObject != null) {
             allItems.add(newObject);
         }
+    }
+
+    public static <L extends Lock, T> T wrapWithLock(L lock, Supplier<T> criticalStmt) {
+        lock.lock();
+        T ret = criticalStmt.get();
+        lock.unlock();
+        return ret;
     }
 
 }
