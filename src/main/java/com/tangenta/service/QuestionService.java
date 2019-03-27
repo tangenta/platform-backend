@@ -86,7 +86,7 @@ public class QuestionService {
 
     public void createQuestion(Long studentId, String questionDescription, QuestionType type,
                                QuestionClassification classification, String correctAnswer,
-                               String answerDescription, Optional<List<String>> solutions) {
+                               String answerDescription, List<String> solutions) {
         String trimQuestion = questionDescription.trim();
         String trimAnswer = correctAnswer.trim();
         validationService.ensureNonEmptyString(trimQuestion, "问题描述");
@@ -97,13 +97,15 @@ public class QuestionService {
         MQuestion partialQuestion = new MQuestion(newQuestionId, trimQuestion, type, classification,
                 trimAnswer, answerDescription, false, studentId);
         questionRepository.createQuestion(partialQuestion);
+        statisticRepository.increaseQuestionCreation(studentId);
 
         if (type.equals(SingleChoice) || type.equals(MultipleChoice)) {
-            List<String> nonNullSolutions = solutions.filter(s -> !s.isEmpty())
-                    .orElseThrow(() -> new BusinessException("选择题必须包含选项"));
+            if (solutions == null || solutions.isEmpty())
+                throw new BusinessException("选择题必须包含选项");
 
-            if (!nonNullSolutions.contains(correctAnswer)) throw new BusinessException("正确答案必须包含在选项中");
-            nonNullSolutions.forEach(s -> {
+            if (!solutions.contains(correctAnswer))
+                throw new BusinessException("正确答案必须包含在选项中");
+            solutions.forEach(s -> {
                 questionSolutionRepository.createQuestionSolution(newQuestionId, s);
             });
         }

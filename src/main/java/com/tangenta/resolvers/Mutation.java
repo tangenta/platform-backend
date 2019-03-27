@@ -90,7 +90,7 @@ public class Mutation implements GraphQLMutationResolver {
 
     public boolean createQuestion(Long studentId, String questionDescription, QuestionType type,
                                   QuestionClassification classification, String correctAnswer,
-                                  String answerDescription, Optional<List<String>> choices) {
+                                  String answerDescription, List<String> choices) {
 
         authenticationService.ensureLoggedIn(studentId);
         questionService.createQuestion(studentId, questionDescription, type,
