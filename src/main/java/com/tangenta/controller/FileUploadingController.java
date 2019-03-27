@@ -26,7 +26,7 @@ public class FileUploadingController {
     private PictureRepository pictureRepository;
     private ValidationService validationService;
 
-    @Value("${profileImage-dir}")
+    @Value("${profile-image-dir}")
     private String profileImgPath;
 
     public FileUploadingController(PictureRepository pictureRepository, ValidationService validationService) {

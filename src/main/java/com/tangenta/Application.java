@@ -37,7 +37,7 @@ public class Application implements WebMvcConfigurer {
     @Value("${upload-temp-dir}")
     private String fileUploadTmpPath;
 
-    @Value("${profileImage-dir}")
+    @Value("${profile-image-dir}")
     private String profileImgPath;
 
     @Value("${image-resource-path}")
