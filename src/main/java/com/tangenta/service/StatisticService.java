@@ -1,5 +1,6 @@
 package com.tangenta.service;
 
+import com.tangenta.aop.WeightProvider;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.StudentInfo;
@@ -12,20 +13,14 @@ import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
 import com.tangenta.repositories.StudentInfoRepository;
-import com.tangenta.utils.Critic;
 import com.tangenta.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.ujmp.core.Matrix;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
@@ -38,19 +33,14 @@ public class StatisticService {
     private StatisticRepository statisticRepository;
     private PagingService pagingService;
     private StudentInfoRepository studentInfoRepository;
+    private WeightProvider weightProvider;
 
-    private volatile double[] weights = null;
-
-    private final ScheduledThreadPoolExecutor weightsUpdater = new ScheduledThreadPoolExecutor(1);
-
-    public StatisticService(QuestionRepository questionRepository, StatisticRepository statisticRepository, PagingService pagingService, StudentInfoRepository studentInfoRepository) {
+    public StatisticService(QuestionRepository questionRepository, StatisticRepository statisticRepository, PagingService pagingService, StudentInfoRepository studentInfoRepository, WeightProvider weightProvider) {
         this.questionRepository = questionRepository;
         this.statisticRepository = statisticRepository;
         this.pagingService = pagingService;
         this.studentInfoRepository = studentInfoRepository;
-        weightsUpdater.scheduleWithFixedDelay(() ->
-                weights = updatedWeight(statisticRepository.allStatistics()),
-                0, 5, TimeUnit.MINUTES);
+        this.weightProvider = weightProvider;
     }
 
     public void storeUsersFeedback(Long studentId, Feedback feedback) {
@@ -145,7 +135,7 @@ public class StatisticService {
 
     public List<TopStudent> topStudents(int number, int from) {
         List<MStatistic> allStatistics = statisticRepository.allStatistics();
-        if (weights == null) weights = updatedWeight(allStatistics);
+        double[] weights = weightProvider.fetch();
 
         allStatistics.sort(Comparator.comparingDouble((MStatistic ma) -> score(weights, ma)).reversed());
         return pagingService.paging(allStatistics, number, from).stream()
@@ -159,29 +149,7 @@ public class StatisticService {
 
     public Double studentScore(Long studentId) {
         MStatistic statistic = statisticRepository.getUserStatisticByStudentId(studentId);
-
-        if (weights == null) weights = updatedWeight(statisticRepository.allStatistics());
-        return score(weights, statistic);
-    }
-
-    private double[] updatedWeight(List<MStatistic> allStatistics) {
-        List<double[]> result = allStatistics.stream()
-                .map(s ->
-                        new double[]{s.getOfflineLearningTime(), s.getOnlineLearningTime(),
-                                s.getPostQuestionNumber(), s.getPassQuestionNumber(), s.getAttendanceRate(),
-                                s.getPaperScore(), s.getHomeworkScore(), s.getAnnualScore(), s.getAnswerQuestionNumber(),
-                                s.getAnswerQuestionScore()}
-                ).collect(Collectors.toList());
-
-        double[][] dresult = new double[allStatistics.size()][];
-        for (int i = 0; i != allStatistics.size(); ++i) {
-            dresult[i] = result.get(i);
-        }
-
-        Matrix matrix = Matrix.Factory.importFromArray(dresult);
-        boolean[] booleanArr = new boolean[10];
-        Arrays.fill(booleanArr, true);
-        return Critic.CRITIC(matrix, booleanArr);
+        return score(weightProvider.fetch(), statistic);
     }
 
     private static double score(double[] weights, MStatistic m) {
