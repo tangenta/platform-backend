@@ -62,7 +62,7 @@ public class QuestionImport2 {
     }
 
     private static String[] splitDescription(String description) {
-        int splitIndex = description.indexOf('A');
+        int splitIndex = description.indexOf("A.");
         String[] result = new String[2];
         result[0] = description.substring(0, splitIndex);
         result[1] = description.substring(splitIndex);
@@ -70,7 +70,8 @@ public class QuestionImport2 {
     }
 
     private static List<String> splitOptions(String options) {
-        return Arrays.stream(options.split("[  ([a-zA-Z].)]"))
+        return Arrays.stream(options.split("[a-gA-G]\\."))
+                .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .collect(Collectors.toList());
     }
