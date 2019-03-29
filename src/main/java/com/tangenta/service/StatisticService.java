@@ -14,15 +14,18 @@ import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
 import com.tangenta.repositories.StudentInfoRepository;
 import com.tangenta.utils.Utils;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.tangenta.utils.Utils.orElse;
 
@@ -136,6 +139,8 @@ public class StatisticService {
     public List<TopStudent> topStudents(int number, int from) {
         List<MStatistic> allStatistics = statisticRepository.allStatistics();
         double[] weights = weightProvider.fetch();
+//        logger.info("current weights: {}", Arrays.toString(weights));
+
 
         allStatistics.sort(Comparator.comparingDouble((MStatistic ma) -> score(weights, ma)).reversed());
         return pagingService.paging(allStatistics, number, from).stream()
@@ -162,8 +167,6 @@ public class StatisticService {
                 weights[5] * m.getPaperScore() +
                 weights[6] * m.getHomeworkScore() +
                 weights[7] * m.getAnnualScore() +
-                weights[8] * m.getAnswerQuestionNumber() +
-                weights[9] * m.getAnswerQuestionScore();
-
+                weights[8] * m.getAnswerQuestionNumber();
     }
 }

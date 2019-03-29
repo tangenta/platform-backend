@@ -3,6 +3,7 @@ package com.tangenta.utils;
 import org.ujmp.core.DenseMatrix;
 import org.ujmp.core.Matrix;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -151,8 +152,13 @@ public class Critic {
 
 
     //CRITIC赋值
-    static public double[] CRITIC(Matrix itemMatrix, boolean[] maxIsBetter) {
-        itemMatrix = itemMatrix.transpose();
+    static public double[] CRITIC(double[][] matrix) {
+
+        Matrix itemMatrix = Matrix.Factory.importFromArray(matrix);
+//        itemMatrix = itemMatrix.transpose();
+
+        boolean[] maxIsBetter = new boolean[10];
+        Arrays.fill(maxIsBetter, true);
 
         double resultWeight[] = new double[(int) itemMatrix.getRowCount()];
         itemMatrix = RemovalSingularity(itemMatrix);
