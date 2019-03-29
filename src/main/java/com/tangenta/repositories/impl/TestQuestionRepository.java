@@ -4,7 +4,6 @@ import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.mybatis.MQuestion;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.repositories.QuestionRepository;
-import com.tangenta.utils.QuestionIdGenerator;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 @Repository
 @Profile("dev-test")
 public class TestQuestionRepository implements QuestionRepository {
-    public static final Long currentMaxLength = 219L;
 
     @Override
     public List<MQuestion> getAllQuestions() {
@@ -575,4 +573,6 @@ public class TestQuestionRepository implements QuestionRepository {
         add(new MQuestion(528L, "五大发展理念指_________、协调发展、绿色发展、开放发展和共享发展。   ", QuestionType.BlanksFilling, QuestionClassification.Sixiangxianjinxing, "创新发展 ", "略", true, 0L));
         add(new MQuestion(529L, "实现社会主义现代化、创造人民美好生活的必由之路是___________。  ", QuestionType.BlanksFilling, QuestionClassification.Sixiangxianjinxing, "中国特色社会主义道路", "略", true, 0L));
     }};
+
+    public static final Long currentMaxLength = (long)allQuestions.size();
 }

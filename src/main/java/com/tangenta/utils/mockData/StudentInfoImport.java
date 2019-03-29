@@ -34,7 +34,7 @@ public class StudentInfoImport {
     for(int i = 0;i<partyBranch.length;i++)
         partyBranch[i] = "第" + (i+1) + "支部";
     for (int i = 0;i<50;i++) {
-        studentInfos.add(new StudentInfo((long)i, studentName[i], partyBranch[i]));
+        studentInfos.add(new StudentInfo(2017000000L+(long)i, studentName[i], partyBranch[i]));
 //        System.out.println(studentInfos.get(i).toString());
     }
 

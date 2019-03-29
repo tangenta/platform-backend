@@ -22,7 +22,7 @@ public class OnlineTimeRecorder {
     }
 
     public void loggedOut(Long studentId, Long lastAccessTime) {
-        MStatistic m = statisticRepository.getUserStatisticByStudentId(studentId);
+        MStatistic m = statisticRepository.getUserStatisticByStudentId(studentId).orElse(new MStatistic());
         long increasedMinutes = Duration.ofMillis(lastAccessTime - timeRecord.get(studentId)).toMinutes();
 
         MStatistic newMStatistic = new MStatistic(studentId, m.getOfflineLearningTime(),

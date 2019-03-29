@@ -11,16 +11,17 @@ import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.QuestionSolutionRepository;
 import com.tangenta.repositories.StatisticRepository;
 import com.tangenta.utils.AnswerConverter;
-import com.tangenta.utils.QuestionIdGenerator;
+import com.tangenta.utils.generator.IdGenerator;
+import com.tangenta.utils.generator.QuestionIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.tangenta.data.pojo.QuestionType.*;
 
@@ -31,12 +32,12 @@ public class QuestionService {
 
     private QuestionRepository questionRepository;
     private ValidationService validationService;
-    private QuestionIdGenerator questionIdGenerator;
+    private IdGenerator questionIdGenerator;
     private QuestionSolutionRepository questionSolutionRepository;
     private StatisticRepository statisticRepository;
 
     public QuestionService(QuestionRepository questionRepository, ValidationService validationService,
-                           QuestionIdGenerator questionIdGenerator,
+                           @Qualifier("questionIdGenerator") IdGenerator questionIdGenerator,
                            QuestionSolutionRepository questionSolutionRepository,
                            StatisticRepository statisticRepository) {
         this.questionRepository = questionRepository;

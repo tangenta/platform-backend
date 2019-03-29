@@ -117,7 +117,7 @@ public class StatisticService {
     }
 
     public StudentStatistic getStudentStatistic(Long studentId) {
-        MStatistic ms = statisticRepository.getUserStatisticByStudentId(studentId);
+        MStatistic ms = statisticRepository.getUserStatisticByStudentId(studentId).orElse(new MStatistic());
         Long offline = orElse(ms.getOfflineLearningTime(), 0L);
         Long online =  orElse(ms.getOnlineLearningTime(), 0L);
         Long createQuesNum =  orElse(ms.getPostQuestionNumber(), 0L);
@@ -148,7 +148,8 @@ public class StatisticService {
     }
 
     public Double studentScore(Long studentId) {
-        MStatistic statistic = statisticRepository.getUserStatisticByStudentId(studentId);
+        MStatistic statistic = statisticRepository.getUserStatisticByStudentId(studentId)
+                .orElse(new MStatistic());
         return score(weightProvider.fetch(), statistic);
     }
 

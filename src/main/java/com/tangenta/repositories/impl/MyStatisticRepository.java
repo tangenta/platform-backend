@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Profile("dev")
@@ -38,8 +39,8 @@ public class MyStatisticRepository implements StatisticRepository {
     }
 
     @Override
-    public MStatistic getUserStatisticByStudentId(Long studentId) {
-        return statisticMapper.getByStudentId(studentId);
+    public Optional<MStatistic> getUserStatisticByStudentId(Long studentId) {
+        return Optional.ofNullable(statisticMapper.getByStudentId(studentId));
     }
 
     @Override

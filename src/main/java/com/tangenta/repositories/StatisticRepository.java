@@ -10,10 +10,11 @@ import com.tangenta.data.pojo.mybatis.QuestionStatistic;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface StatisticRepository {
     List<MStatistic> allStatistics();
-    MStatistic getUserStatisticByStudentId(Long studentId);
+    Optional<MStatistic> getUserStatisticByStudentId(Long studentId);
     void increaseQuestionCreation(Long studentId);
     void increaseQuestionPassing(Long studentId);
     void updateStatistic(MStatistic mStatistic);

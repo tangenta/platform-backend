@@ -3,7 +3,6 @@ package com.tangenta.repositories.impl;
 import com.tangenta.data.mapper.QuestionSolutionMapper;
 import com.tangenta.data.pojo.mybatis.QuestionSolution;
 import com.tangenta.repositories.QuestionSolutionRepository;
-import com.tangenta.utils.QuestionIdGenerator;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 

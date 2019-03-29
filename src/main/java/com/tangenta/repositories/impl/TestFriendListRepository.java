@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Profile("dev-test")
 public class TestFriendListRepository implements FriendListRepository {
     private static List<FriendRelationship> allFriendRelationships = new ArrayList<FriendRelationship>() {{
-        add(new FriendRelationship(1L, 2L));
-        add(new FriendRelationship(1L, 3L));
+        add(new FriendRelationship(2017000001L, 2017000002L));
+        add(new FriendRelationship(2017000001L, 2017000003L));
     }};
 
     @Override

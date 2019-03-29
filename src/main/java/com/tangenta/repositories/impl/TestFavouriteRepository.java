@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @Profile("dev-test")
 public class TestFavouriteRepository implements FavouriteRepository {
     private static List<FavouritePost> allFavPosts = new ArrayList<FavouritePost>() {{
-        add(new FavouritePost(1L, 1L));
-        add(new FavouritePost(1L, 2L));
-        add(new FavouritePost(1L, 3L));
+        add(new FavouritePost(2017000001L, 1L));
+        add(new FavouritePost(2017000001L, 2L));
+        add(new FavouritePost(2017000001L, 3L));
     }};
 
     @Override

@@ -6,23 +6,20 @@ import com.tangenta.repositories.UserRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 @Profile("dev-test")
 public class TestUserRepository implements UserRepository {
     static private List<User> allUsers = new LinkedList<User>() {{
-        add(new User(1L, "mike", "pass",
+        add(new User(2017000001L, "mike", "pass",
                 "mike@email.com", new Date().toString()));
-        add(new User(2L, "sara", "word",
+        add(new User(2017000002L, "sara", "word",
                 "sara@email.com", new Date().toString()));
-        add(new User(3L, "jack", "password",
+        add(new User(2017000003L, "jack", "password",
                 "jack@email.com", new Date().toString()));
     }};
-    static private Long id = 4L;
+    static public final Long currentMaxId = 2019000000L;
 
     @Override
     public List<User> getAllUsers() {
@@ -60,7 +57,7 @@ public class TestUserRepository implements UserRepository {
     @Override
     public void createUser(User partialUser) {
         allUsers.add(
-                new User(id++, partialUser.getUsername(), partialUser.getPassword(),
+                new User(partialUser.getStudentId(), partialUser.getUsername(), partialUser.getPassword(),
                         partialUser.getEmail(), new Date().toString())
         );
     }

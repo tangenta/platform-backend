@@ -64,16 +64,13 @@ public class DataToObject {
         double max = 95.0;
         long Min = 75;
         long Max = 95;
-        long[] id = new long[userNumber];
+        long id = 2017000001L;
         long[][] learningTime = new long[userNumber][2];
         long[][] gongXiandu = new long[userNumber][2];
         double[][] B = new double[userNumber][6];
         double[][] A = new double[userNumber][3];
 
 //一级
-
-        for(long i = 0;i<userNumber;i++)
-            id[(int) i] = i;
 
         learningTime = Data(userNumber, Min, Max, learningTime);
 
@@ -107,7 +104,7 @@ public class DataToObject {
 
         ArrayList<MStatistic> mStatistics = new ArrayList<>();
         for (int i = 0; i < userNumber; i++)
-            mStatistics = DataToObject.getData(id[i], learningTime[i][0], learningTime[i][1], gongXiandu[i][0], gongXiandu[i][1],
+            mStatistics = DataToObject.getData(id++, learningTime[i][0], learningTime[i][1], gongXiandu[i][0], gongXiandu[i][1],
                     B[i][1], B[i][2], B[i][3], B[i][4], (long) A[i][1], (long) A[i][2], mStatistics);
 
 

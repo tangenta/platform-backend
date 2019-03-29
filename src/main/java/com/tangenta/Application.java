@@ -1,8 +1,12 @@
 package com.tangenta;
 
-import com.tangenta.data.mapper.QuestionIdFetchingMapper;
+import com.tangenta.data.mapper.InitDataMapper;
+import com.tangenta.data.mapper.UserMapper;
 import com.tangenta.repositories.impl.TestQuestionRepository;
-import com.tangenta.utils.QuestionIdGenerator;
+import com.tangenta.repositories.impl.TestUserRepository;
+import com.tangenta.utils.generator.IdGenerator;
+import com.tangenta.utils.generator.QuestionIdGenerator;
+import com.tangenta.utils.generator.StudentIdGenerator;
 import graphql.language.StringValue;
 import graphql.schema.*;
 import org.slf4j.Logger;
@@ -22,12 +26,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.MultipartConfigElement;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 @EnableAspectJAutoProxy
 @SpringBootApplication
@@ -43,6 +45,9 @@ public class Application implements WebMvcConfigurer {
     @Value("${image-resource-path}")
     private String imageResourcePath;
 
+    @Value("${student-id-padding-digit-number}")
+    private int studentIdPaddingNumber;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -57,19 +62,33 @@ public class Application implements WebMvcConfigurer {
         return new TomcatServletWebServerFactory();
     }
 
-    @Bean
+    @Bean("questionIdGenerator")
     @Profile("dev")
-    QuestionIdGenerator initQuestionIdGeneratorDev(QuestionIdFetchingMapper questionIdFetchingMapper) {
-        Long maxQuestionId = questionIdFetchingMapper.getMaxQuestionId();
+    IdGenerator initQuestionIdGeneratorDev(InitDataMapper initDataMapper) {
+        Long maxQuestionId = initDataMapper.getMaxQuestionId();
         QuestionIdGenerator ret = new QuestionIdGenerator(maxQuestionId == null ? 0L : maxQuestionId);
         logger.info("QuestionIdGenerator set up. Current max id: {}", ret.currentId());
         return ret;
     }
 
-    @Bean
+    @Bean("questionIdGenerator")
     @Profile("dev-test")
-    QuestionIdGenerator initQuestionIdGeneratorDevTest() {
+    IdGenerator initQuestionIdGeneratorDevTest() {
         return new QuestionIdGenerator(TestQuestionRepository.currentMaxLength);
+    }
+
+    @Bean("studentIdGenerator")
+    @Profile("dev")
+    IdGenerator initStudentIdGeneratorDev(InitDataMapper initDataMapper) {
+        Long maxStudentId = initDataMapper.getMaxStudentId(LocalDate.now().getYear(), studentIdPaddingNumber);
+        if (maxStudentId == null) maxStudentId = 0L;
+        return new StudentIdGenerator(maxStudentId);
+    }
+
+    @Bean("studentIdGenerator")
+    @Profile("dev-test")
+    IdGenerator initStudentIdGeneratorDevTest() {
+        return new StudentIdGenerator(TestUserRepository.currentMaxId);
     }
 
     @Bean
@@ -128,6 +147,7 @@ public class Application implements WebMvcConfigurer {
         factory.setLocation(fileUploadTmpPath);
         File tmpFile = new File(fileUploadTmpPath);
         if (!tmpFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             tmpFile.mkdirs();
         }
         logger.info("temp dir: '{}' is set.", fileUploadTmpPath);
@@ -142,63 +162,6 @@ public class Application implements WebMvcConfigurer {
                 .addResourceLocations(Paths.get(profileImgPath).toUri().toString());
     }
 
+    //TODO: restore file system user profile images
 
-    // uncomment it to load file data into database
-//    @Bean
-//    QuestionImport initQuestionImport(QuestionMapper questionMapper, QuestionSolutionMapper questionSolutionMapper) {
-//        QuestionImport questionImport = new QuestionImport();
-//        try {
-//            QuestionImport2.readQuestions("D:\\questionData\\question.txt",
-//                    q -> q.forEach(questionMapper::createQuestion),
-//                    qs -> qs.forEach(i -> questionSolutionMapper.createQuestionSolution(i.getQuestionId(), i.getOption())));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return questionImport;
-//    }
-
-
-//    @Bean
-//    SchemaParserDictionary schemaParserDictionary() {
-//        return new SchemaParserDictionary()
-//                .add(LoginPayload.class)
-//                .add(RegisterPayload.class)
-//                .add(ErrorContainer.class);
-//    }
-
-
-//    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
-//            "classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/resources/picture/",
-//            "classpath:/static/", "classpath:/public/" };
-//
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        logger.info("addResourceHandlers called.");
-//        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/");
-//    }
-
-//    @Override
-//    public void configureViewResolvers(ViewResolverRegistry registry) {
-//        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//        resolver.setPrefix("/WEB-INF/jsp/html/");
-//        resolver.setSuffix(".jsp");
-//        resolver.setViewClass(JstlView.class);
-//        registry.viewResolver(resolver);
-//    }
-//
-//    @Override
-//    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-//        configurer.enable();
-//    }
-//
-//    @Bean
-//    ConfigurationCustomizer myBatisConfigurationCustomizer() {
-//        return new ConfigurationCustomizer() {
-//            @Override
-//            public void customize(Configuration configuration) {
-//                org.apache.ibatis.logging.LogFactory.useLog4JLogging();
-//
-//            }
-//        };
-//    }
 }
