@@ -1,5 +1,6 @@
 package com.tangenta.repositories.impl;
 
+import com.tangenta.data.pojo.Gender;
 import com.tangenta.data.pojo.StudentInfo;
 import com.tangenta.repositories.StudentInfoRepository;
 import org.springframework.context.annotation.Profile;
@@ -13,7 +14,7 @@ import java.util.List;
 @Profile("dev-test")
 public class TestStudentInfoRepository implements StudentInfoRepository {
     private static List<StudentInfo> allStudentInfo = new ArrayList<StudentInfo>(){{
-        add(new StudentInfo(2017000001L, "谷寄翠", "第1支部"));
+        add(new StudentInfo(2017000001L, "谷寄翠", Gender.FEMALE, null, "第1支部", null, "中国", "广东", "共青团员", "华南师范大学", "计算机", "软件四班", "全日制", "学籍状态", "培养方向", null, "101", "1231234567", "200120", "201721343423", "本科", null, "六级", "广州中学", "201220", "1231234567", "无", "无", "无", "无", "无", "无", "无", "无"));
         add(new StudentInfo(2017000002L, "陆青雪", "第2支部"));
         add(new StudentInfo(2017000003L, "狄雪艳", "第3支部"));
         add(new StudentInfo(2017000004L, "刘凝思", "第4支部"));

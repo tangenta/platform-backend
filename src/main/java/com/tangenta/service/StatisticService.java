@@ -14,18 +14,15 @@ import com.tangenta.repositories.QuestionRepository;
 import com.tangenta.repositories.StatisticRepository;
 import com.tangenta.repositories.StudentInfoRepository;
 import com.tangenta.utils.Utils;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.tangenta.utils.Utils.orElse;
 

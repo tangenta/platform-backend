@@ -56,6 +56,8 @@ public class QuestionService {
                         statisticRepository.getDoneTagByKeys(studentId, q.getQuestionId()) == null)
                 .collect(Collectors.toList());
 
+        if (filteredQuestions.isEmpty()) throw new BusinessException("题库已经没有题了");
+
         MQuestion q = filteredQuestions.stream()
                 .skip(random.nextInt(filteredQuestions.size()))
                 .findFirst().orElseThrow(() -> new BusinessException("题库已经没有题了"));

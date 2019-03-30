@@ -20,7 +20,7 @@ public class QuestionImport2 {
 
     public static void readQuestions(String path, Consumer<List<MQuestion>> questionConsumer,
                             Consumer<List<QuestionSolution>> questionSolutionConsumer) throws IOException {
-        final Long[] questionId = {220L};
+        final Long[] questionId = {530L};
         List<MQuestion> questions = new LinkedList<>();
         List<QuestionSolution> questionSolutions = new LinkedList<>();
         Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8).stream()
@@ -118,7 +118,7 @@ public class QuestionImport2 {
     }
 
     public static void generateCode() throws IOException {
-        QuestionImport2.readQuestions("D:\\questionData\\question2.txt",
+        QuestionImport2.readQuestions("D:\\questionData\\question3.txt",
                 q -> q.forEach(question -> {
                     System.out.println(
                             "add(new MQuestion(" +

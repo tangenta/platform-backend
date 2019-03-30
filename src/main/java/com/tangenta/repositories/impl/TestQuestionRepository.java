@@ -572,6 +572,26 @@ public class TestQuestionRepository implements QuestionRepository {
         add(new MQuestion(527L, "四个自信指_______、理论自信、制度自信、文化自信。  ", QuestionType.BlanksFilling, QuestionClassification.Sixiangxianjinxing, "道路自信", "略", true, 0L));
         add(new MQuestion(528L, "五大发展理念指_________、协调发展、绿色发展、开放发展和共享发展。   ", QuestionType.BlanksFilling, QuestionClassification.Sixiangxianjinxing, "创新发展 ", "略", true, 0L));
         add(new MQuestion(529L, "实现社会主义现代化、创造人民美好生活的必由之路是___________。  ", QuestionType.BlanksFilling, QuestionClassification.Sixiangxianjinxing, "中国特色社会主义道路", "略", true, 0L));
+        add(new MQuestion(530L, "党的最根本的党规党法是________  。", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "《党章》", "略", true, 0L));
+        add(new MQuestion(531L, "中国共产党的象征和标志是_________  。", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "党徽和党旗", "略", true, 0L));
+        add(new MQuestion(532L, "中国共产党党徽为_________  组成的图案。 ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "镰刀和锤头 ", "略", true, 0L));
+        add(new MQuestion(533L, "中国共产党党旗为旗面缀有 __________  图案的红旗。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "黄色党徽", "略", true, 0L));
+        add(new MQuestion(534L, "党章规定，发展党员，必须经过党的支部， 坚持_________ 的原则。 ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "个别吸收 ", "略", true, 0L));
+        add(new MQuestion(535L, "发展党员工作应当贯彻党的基本理论、基本路线、基本纲领、基本经验、基 本要求，按照__________、优化结构、提高质量、发挥作用的总要求，坚持党章规 定的党员标准，始终把政治标准放在首位。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "控制总量", "略", true, 0L));
+        add(new MQuestion(536L, "年满 十八周岁  的中国工人、农民、军人、知识分子和其他社会阶层的先进分子，承认 __________ ，愿意 参加党的一个组织并在其中积极工作  、执行  党的决议和按期的交纳党费  ，可以申请加入中国共产党。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "党的纲领和章程 ", "略", true, 0L));
+        add(new MQuestion(537L, "入党积极分子经过 _________  以上的培养教育后，经支委会讨论同意，可列为发展对象。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "一年", "略", true, 0L));
+        add(new MQuestion(538L, "申请入党的人，要填写 __________ 。要有两名正式党员作 入党介绍人  ，要经过 支部大会研究  通过和 上级党组织  批准。要经过 预备期  的考察，才能成为正式党员。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "入党志愿书 ", "略", true, 0L));
+        add(new MQuestion(539L, "预备党员的预备期为 ___________  。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "一年", "略", true, 0L));
+        add(new MQuestion(540L, "预备党员的预备期，从 __________________  算起。 ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "支部大会通过他为预备党员之日", "略", true, 0L));
+        add(new MQuestion(541L, "预备党员的权利，除了没有 表决权  、选举权  和 被选举权  以外，其他的权利同正式党员一样。预备党员的 _________ 同正式党员一样。 ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "义务 ", "略", true, 0L));
+        add(new MQuestion(542L, "党员的党龄，从 ________ 算起。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "预备期满转为正式党员之日 ", "略", true, 0L));
+        add(new MQuestion(543L, "每个党员，不论职务高低，都必须编入党的一个支部、小组或其他特定组织，参加党的 组织生活  ，接受 __________  的监督。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "党内外群众", "略", true, 0L));
+        add(new MQuestion(544L, "党员有退党的自由。党员要求退党，应当经 _________  讨论后宣布除名，并报上级党组织备案。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "支部大会", "略", true, 0L));
+        add(new MQuestion(545L, "党支部召开党员大会进行选举时，有选举权的实到人数超过应到会人数的 ________ ，会议方能有效。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, " 45", "略", true, 0L));
+        add(new MQuestion(546L, "党员无正当理由，连续 _________  不参加党的组织生活，或不交纳党费，或不   做党所分配的工作，就被认为是自行脱党。 ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "六个月", "略", true, 0L));
+        add(new MQuestion(547L, "党章规定党的全国代表大会 _________ 举行一次。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "五年 ", "略", true, 0L));
+        add(new MQuestion(548L, "党的中央委员会全体会议由中央政治局召集，每年至少举行_______ 次，党的地方各级委员会全体会议，每年至少召开 两  次。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, " 一 ", "略", true, 0L));
+        add(new MQuestion(549L, "党的省、自治区、直辖市、设区的市和自治州的委员会委员和候补委员必须有 _________ 以上的党龄。党的县（旗）、自治县、不设区的市和市辖区的委员会委员和候补委员必须有 三年  以上的党龄。  ", QuestionType.BlanksFilling, QuestionClassification.Lilunjichu, "五年 ", "略", true, 0L));
     }};
 
     public static final Long currentMaxLength = (long)allQuestions.size();
