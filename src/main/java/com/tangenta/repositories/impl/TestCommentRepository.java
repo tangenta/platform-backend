@@ -1,8 +1,11 @@
 package com.tangenta.repositories.impl;
 
 import com.tangenta.data.pojo.mybatis.MComment;
+import com.tangenta.data.pojo.mybatis.MStatistic;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.repositories.CommentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 @Repository
 @Profile("dev-test")
 public class TestCommentRepository implements CommentRepository {
+    private static Logger logger = LoggerFactory.getLogger(TestCommentRepository.class);
     private static List<MComment> allComments = new LinkedList<MComment>() {{
 
     }};

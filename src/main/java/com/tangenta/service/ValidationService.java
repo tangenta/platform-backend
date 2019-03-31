@@ -98,6 +98,7 @@ public class ValidationService {
     }
 
     public void ensureCommentBelongToStudent(Long commentId, Long studentId) {
+        logger.info("comment: {}", commentRepository.findById(commentId));
         if (!commentRepository.findById(commentId).getStudentId().equals(studentId))
             throw new BusinessException("评论所有者不匹配");
     }

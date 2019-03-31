@@ -25,4 +25,8 @@
     <update id="increaseReplyNumber">
         update post set replyNumber = replyNumber + 1 where post_id = #{postId}
     </update>
+
+    <update id="decreaseReplyNumber">
+        update post set replyNumber = replyNumber - 1 where post_id = #{postId}
+    </update>
 </mapper>

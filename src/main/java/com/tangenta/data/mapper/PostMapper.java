@@ -32,4 +32,6 @@ public interface PostMapper {
     void increaseViewNumber(Long postId);
 
     void increaseReplyNumber(Long postId);
+
+    void decreaseReplyNumber(Long postid);
 }

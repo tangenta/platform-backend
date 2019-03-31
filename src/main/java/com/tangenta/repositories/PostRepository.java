@@ -13,4 +13,5 @@ public interface PostRepository {
     void update(Long postId, String title, String content);
     void increaseViewNumber(Long postId);
     void increaseReplyNumber(Long postId);
+    void decreaseReplyNumber(Long postId);
 }

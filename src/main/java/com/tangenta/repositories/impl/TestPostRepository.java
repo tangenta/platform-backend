@@ -2,6 +2,7 @@ package com.tangenta.repositories.impl;
 
 import com.tangenta.data.pojo.mybatis.MPost;
 import com.tangenta.repositories.PostRepository;
+import com.tangenta.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -117,6 +118,13 @@ public class TestPostRepository implements PostRepository {
             }
         }
         allMPost.add(newPost);
+    }
+
+    @Override
+    public void decreaseReplyNumber(Long postId) {
+        Utils.substitute(allMPost, p -> p.getPostId().equals(postId),
+                p -> new MPost(p.getPostId(), p.getPublishTime(), p.getContent(),
+                        p.getViewNumber(), p.getReplyNumber() - 1, p.getStudentId(), p.getTitle()));
     }
 
 

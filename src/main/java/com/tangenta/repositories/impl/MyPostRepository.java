@@ -56,4 +56,9 @@ public class MyPostRepository implements PostRepository {
     public void increaseReplyNumber(Long postId) {
         postMapper.increaseReplyNumber(postId);
     }
+
+    @Override
+    public void decreaseReplyNumber(Long postId) {
+        postMapper.decreaseReplyNumber(postId);
+    }
 }

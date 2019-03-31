@@ -5,6 +5,7 @@ import com.tangenta.data.pojo.Gender;
 import com.tangenta.data.pojo.QuestionClassification;
 import com.tangenta.data.pojo.QuestionType;
 import com.tangenta.data.pojo.graphql.Feedback;
+import com.tangenta.data.pojo.mybatis.MComment;
 import com.tangenta.exceptions.BusinessException;
 import com.tangenta.service.*;
 import com.tangenta.types.LoginPayload;
@@ -120,7 +121,7 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     public boolean addFavPost(Long studentId, Long postId, DataFetchingEnvironment env) {
-//        authenticationService.ensureAuthenticated(studentId, env);
+        authenticationService.ensureAuthenticated(studentId, env);
         validationService.ensureUserExistence(studentId);
         validationService.ensureUserExistence(postId);
         validationService.ensureFavNotExist(studentId, postId);
@@ -130,7 +131,7 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     public boolean deleteFavPost(Long studentId, Long postId, DataFetchingEnvironment env) {
-//        authenticationService.ensureAuthenticated(studentId, env);
+        authenticationService.ensureAuthenticated(studentId, env);
         validationService.ensureUserExistence(studentId);
         validationService.ensureUserExistence(postId);
         validationService.ensureFavExist(studentId, postId);
@@ -151,9 +152,11 @@ public class Mutation implements GraphQLMutationResolver {
     public boolean deleteComment(Long studentId, Long commentId) {
         authenticationService.ensureLoggedIn(studentId);
         validationService.ensureCommentExistence(commentId);
-        validationService.ensureCommentBelongToStudent(studentId, commentId);
+        validationService.ensureCommentBelongToStudent(commentId, studentId);
 
+        MComment comment = commentService.findCommentById(commentId);
         commentService.deleteComment(commentId);
+        postService.decreaseReplyNumber(comment.getPostId());
         return true;
     }
 

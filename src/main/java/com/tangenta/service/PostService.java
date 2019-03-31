@@ -79,6 +79,10 @@ public class PostService {
         postRepository.increaseReplyNumber(postId);
     }
 
+    public void decreaseReplyNumber(Long postId) {
+        postRepository.decreaseReplyNumber(postId);
+    }
+
     private static List<MPost> sort(List<MPost> allPosts, SortMethod sortBy) {
         Comparator<MPost> comparator;
         if (sortBy == null) sortBy = SortMethod.Time;

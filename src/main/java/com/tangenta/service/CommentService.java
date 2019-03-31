@@ -23,6 +23,9 @@ public class CommentService {
         this.pagingService = pagingService;
     }
 
+    public MComment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId);
+    }
 
     public void addComment(Long studentId, Long postId, String content) {
         commentRepository.addComment(studentId, postId, content, new Date());
